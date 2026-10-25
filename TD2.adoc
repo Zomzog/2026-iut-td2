@@ -1,0 +1,286 @@
+== TD2
+
+/!\ Un controller advice est dejà fourni dans le projet pour gérer les erreurs de validation.
+
+== Exo 21 - Validation par annotation
+
+À l'aide d'annotations, ajouter une validation pour que l'appel au endpoint POST /api/v1/pets
+retourne un code 400 si le nom est vide ou si l'âge est inférieur à 0.
+
+La classe de test Exo21 de PetControllerTest doit passer sans y apporter de modifications.
+
+== Exo 22 - Méta-annotation
+
+Le PetId doit obligatoirement être un entier supérieur à 0 dans l'URL des endpoints GET /api/v1/pets/{petId} et PUT /api/v1/pets/{petId}.
+
+Créer une méta-annotation pour que les appels GET et PUT partagent la même règle de validation du petId dans l'URL.
+
+Les classes de test Exo20 et Exo22 de PetControllerTest doivent passer sans y apporter de modifications.
+
+== Exo 23 - Request params dans un objet
+
+Les "request params" peuvent être groupés dans un objet.
+Il ne faut pas lui ajouter d'annotation (même pas @RequestParam) sans lui fournir d'annotation.
+
+Créer une classe AgeRange pour remplacer les paramètres de GET /api/v1/pets.
+
+La classe de test Exo23 de PetControllerTest doit passer sans y apporter de modifications.
+
+== Exo 24 - Validateur personnalisé
+
+Créer une annotation @ValidAgeRange pour valider que l'âge minimum est inférieur à l'âge maximum s'ils sont fournis.
+
+Optionnellement, on peut aussi vérifier qu'ils sont supérieurs ou égaux à 0 s'ils sont fournis.
+
+.Tableau de vérité de la validation
+[%collapsible]
+====
+
+|===
+|
+[.right]#maxAge →#
+
+minAge ↓ | null | -1 | 0 | 1 | 10
+| null | OK | ERR | OK | OK | OK
+| -1 | ERR | ERR | ERR | ERR | ERR
+| 0 | OK | ERR | OK | OK | OK
+| 1 | OK | ERR | ERR | OK | OK
+| 10 | OK | ERR | ERR | ERR | OK
+|===
+
+====
+
+.Pseudo Code
+[%collapsible]
+====
+(value.minAge == null || value.minAge >= 0) &&
+(value.maxAge == null || value.maxAge >= 0) &&
+(value.minAge == null || value.maxAge == null || value.minAge <= value.maxAge)
+====
+
+Les classes de test Exo23 et Exo24 de PetControllerTest doivent passer sans y apporter de modifications.
+
+== Exo 25 - Gestion d'exception personnalisée dans un controller advice
+
+À l'aide du "controller advice" ErrorHandler, renvoyer une erreur 418 en cas d'exception ImATeapotException.
+
+La classe de test Exo25 de PetControllerTest doit passer sans y apporter de modifications.
+
+== Exo 26 - Surcharger la gestion d'une exception de Spring
+
+Dans le controller advice ErrorHandler, qui étend la gestion des erreurs de Spring.
+
+Pour trouver la bonne exception à surcharger,
+il faut mettre un point d'arrêt dans la méthode handleException de ResponseEntityExceptionHandler
+et lancer le test Exo26 de PetControllerTest en debug.
+
+.solution
+[%collapsible]
+====
+Dans le cas du test Exo26, on envoie un type PONY qui n'est pas dans l'enum et donne donc lieu à une exception HttpMessageNotReadableException.
+====
+
+Surcharger la gestion de cette erreur par ResponseEntityExceptionHandler pour remplacer la réponse et l'avoir sous la forme :
+[source,json]
+----
+{
+  "status": 400,
+  "message": "message de l'exception"
+}
+----
+
+La classe de test Exo26 de PetControllerTest doit passer sans y apporter de modifications.
+
+== Exo 27 - Banner.txt pour afficher ses properties
+
+Ajouter le fichier src/main/resources/application.yml
+
+[source,yml]
+----
+custom:
+    app-name: "mon application"
+    app-version: "1.0.1"
+    git:
+        branch: "main"
+        commit: "123456"
+----
+
+Ajouter un fichier banner.txt dans src/main/resources avec le contenu
+
+[source]
+----
+${custom.app-name} ${custom.app-version} ${custom.git.branch} ${custom.git.commit}
+----
+
+== Exo 28 - Injection des properties avec des @Value
+
+En utilisant des @Value, créer un endpoint GET /api/v1/info qui renvoie la réponse suivante en json
+
+[source,json]
+----
+{
+    "app-name": "mon application",
+    "app-version": "1.0",
+    "git": {
+        "branch": "master",
+        "commit": "123456"
+    }
+}
+----
+
+Un objet Info est fourni dans la partie Domain pour faciliter la sérialisation.
+
+La classe de test Exo28 de InfoTest doit passer sans y apporter de modifications.
+
+== Exo 29 - ConfigurationProperties
+
+Remplacer l'utilisation des @Value par l'approche avec un @ConfigurationProperties.
+
+La classe de test Exo28 de InfoTest doit toujours passer sans y apporter de modifications.
+
+== Exo 30 - Profiles
+
+Ajouter le fichier src/main/resources/application-dev.yml
+
+[source,yml]
+----
+custom:
+    app-version: "1.0.2-SNAPSHOT"
+    git:
+        branch: "feature/TICKET"
+        commit: "654321"
+----
+
+La classe de test Exo30 de InfoTest doit passer sans y apporter de modifications.
+
+== Exo 31 - Ajout d'un max-range
+
+Pour ne pas surcharger la base de données, il est souvent utile de limiter l'écart entre deux valeurs.
+
+Ajouter un paramètre variable "maxRange" dans l'annotation @ValidAgeRange.
+
+Modifier la validation pour garantir que l'écart entre l'âge minimum et l'âge maximum est inférieur à ce max.
+
+La valeur de l'écart est pour le moment en dur dans le validateur et fixée à 100.
+
+== Exo 32 - Validateur en tant que Bean
+
+Spring s'occupe de la création du validator,
+on peut y injecter le max-range depuis le fichier de configuration (custom.api.pets.max-range=100).
+
+Utiliser un @Value pour le faire.
+
+/!\ Dans ce contexte, on ne peut pas utiliser lateinit.
+Il faut fournir une valeur par défaut directement sur le champ.
+
+== Exo 33 - Base de données H2 en mémoire
+
+Ajouter dans le fichier src/main/resources/application.yml la configuration suivante
+
+[source,yaml]
+----
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+  h2:
+    console:
+      enabled: true
+----
+
+La base de données H2 est une base de données en mémoire.
+Pour y accéder, il faut se rendre sur l'URL http://localhost:8080/h2-console
+
+À chaque démarrage de l'application, la base de données est réinitialisée.
+
+Pour le constater, vous pouvez lancer la requête suivante avant de relancer le service :
+
+[source,sql]
+----
+CREATE TABLE TEST(ID INT PRIMARY KEY, NAME VARCHAR(255));
+----
+
+== Exo 34 - Base de données H2 persistante
+
+Modifier le fichier src/main/resources/application.yml avec pour datasource.url jdbc:h2:file:./data/testdb
+
+Les données sont stockées dans un fichier data/testdb.mv.db à la racine du projet.
+
+Entre deux démarrages de l'application, les données sont conservées.
+
+== Exo 35 - Un CRUD avec une BDD
+
+Créer une Entity (au sens JPA) HumanEntity qui correspond aux attributs de HumanDto.
+
+Créer un repository HumanRepository qui étend JpaRepository.
+
+À l'aide de ce repository, dans DatabaseProxy, implémentez les fonctions suivantes :
+
+- saveHuman
+
+- findHumanById
+
+- findAllHumans
+
+Le test `exo 35` doit passer.
+
+== Exo 36 - OneToOne
+
+Modifier HumanDto pour lui ajouter un attribut contact
+
+[source,kotlin]
+----
+data class HumanDto(val humanId: Int?, val name: String, val contact: ContactDto)
+----
+
+Créer une Entity (au sens JPA) ContactEntity qui correspond aux attributs de ContactDto.
+
+À l'aide d'un @OneToOne, lier HumanEntity et ContactEntity de manière unidirectionnelle
+(ie on peut faire human.contact.email, mais pas contact.human.name).
+
+Le test `exo 36` doit passer.
+
+== Exo 37 OneToOne bidirectionnel
+
+Modifier le OneToOne pour qu'il soit bidirectionnel.
+
+Le test `exo 36` doit passer.
+
+== Exo 38
+
+Modifier HumanDto pour lui ajouter un attribut pets
+
+[source,kotlin]
+----
+data class HumanDto(val humanId: Int?, val name: String, val contact: ContactDto, val pets: List<PetDto>)
+----
+
+Créer une Entity (au sens JPA) PetEntity qui correspond aux attributs de PetDto.
+
+À l'aide d'un @OneToMany, lier HumanEntity et PetEntity de manière unidirectionnelle.
+
+Le test `exo 38` doit passer.
+
+== Exo 39
+
+Modifier le OneToMany pour qu'il soit bidirectionnel.
+
+Le test `exo 38` doit passer.
+
+== Exo 40
+
+Ajouter un nouveau endpoint DELETE "/api/v1/humans/{humanId}/pets/{petId}" et les services requis.
+
+Ce endpoint permet de supprimer un pet.
+
+Le test `exo 40` doit passer.
+
+== Exo Bonus
+
+Créer une configuration application-postgres.yml où la base h2 est remplacée par une base postgresql.
+
+Pour lancer une base postgres sur le port 5432, vous pouvez utiliser la commande suivante :
+`podman run --name postgres -e POSTGRES_USER=username -e POSTGRES_PASSWORD=password -p 5432:5432 -v /tmp/data -d postgres`
+
