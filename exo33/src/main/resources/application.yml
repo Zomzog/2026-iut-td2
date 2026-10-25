@@ -1,5 +1,0 @@
-spring:
-  application.name: exo33
-  jpa:
-    hibernate:
-      ddl-auto: create
