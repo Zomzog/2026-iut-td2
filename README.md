@@ -393,11 +393,32 @@ Dans l'IDE, ajouter `--spring.profiles.active=dev` aux arguments du programme de
 
 Pour ne pas surcharger la base de données, il est souvent utile de limiter l'écart entre deux valeurs.
 
-Ajouter un paramètre variable "maxRange" dans l'annotation @ValidAgeRange.
+Ajouter un paramètre `maxRange` à l'annotation @ValidAgeRange, avec `Int.MAX_VALUE` comme valeur par défaut (pas de limite).
 
-Modifier la validation pour garantir que l'écart entre l'âge minimum et l'âge maximum est inférieur à ce max.
+Modifier la validation de `PetSearch` pour garantir que l'écart entre l'âge minimum et l'âge maximum
+(quand les deux sont fournis) est inférieur ou égal à `maxRange`.
 
-La valeur de l'écart est pour le moment en dur dans le validateur et fixée à 100.
+Utiliser `@ValidAgeRange(maxRange = 100)` sur `PetSearch`.
+
+<details>
+<summary>Indice</summary>
+
+Le validateur reçoit l'annotation dans la méthode `initialize(constraintAnnotation)` de `ConstraintValidator` :
+c'est là qu'on lit `maxRange` pour le garder dans le validateur.
+
+</details>
+
+Compléter aussi `ValidAgeRangeValidatorTest` avec des cas sur `maxRange`.
+
+> **TIP:** Kotlin permet de créer une instance d'annotation :
+> `ValidAgeRangeValidator().apply { initialize(ValidAgeRange(maxRange = 5)) }`.
+
+La classe de test Exo10 de PetControllerTest doit passer sans y apporter de modifications,
+sans casser les classes Exo3b et ValidAgeRangeValidatorTest.
+
+```bash
+./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.PetControllerTest$Exo10'
+```
 
 ## Exo 11 - Validateur en tant que Bean
 

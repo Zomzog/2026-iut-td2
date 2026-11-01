@@ -266,6 +266,38 @@ class PetControllerTest {
 
 
     @Nested
+    inner class Exo10 {
+        private fun search(body: String) = mockMvc.post("/api/v1/pets/search") {
+            contentType = APPLICATION_JSON
+            content = body
+        }
+
+        @Test
+        fun `range equal to max range`() {
+            search("""{ "minAge": 0, "maxAge": 100 }""")
+                .andExpect {
+                    status { isOk() }
+                }
+        }
+
+        @Test
+        fun `range greater than max range`() {
+            search("""{ "minAge": 0, "maxAge": 101 }""")
+                .andExpect {
+                    status { isBadRequest() }
+                }
+        }
+
+        @Test
+        fun `range greater than max range with a high min`() {
+            search("""{ "minAge": 1000, "maxAge": 1101 }""")
+                .andExpect {
+                    status { isBadRequest() }
+                }
+        }
+    }
+
+    @Nested
     inner class Exo4 {
 
         @Test

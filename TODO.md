@@ -267,10 +267,17 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
 
 ### Exo 10 — `maxRange` (ancien 31)
 
-- [ ] **E10-1** · `maxRange` est un **paramètre de l'annotation** (comme `@MinMax(0, 10)` dans la slide),
+- [x] **E10-1** · `maxRange` est un **paramètre de l'annotation** (comme `@MinMax(0, 10)` dans la slide),
   pas une valeur en dur dans le validateur. `[décidé en principe]` À rattacher au nouveau design de
   l'exo 3 (validation globale sur body). `[à trancher]`
-- [ ] **E10-2** · Écrire le test fourni : écart > max → 400. Réécrire l'énoncé (« valeur à 100 »).
+  **FAIT (2026-11-01) :** `maxRange` est un paramètre de `@ValidAgeRange` (défaut `Int.MAX_VALUE`) posé sur `PetSearch`
+  (`@ValidAgeRange(maxRange = 100)`), validateur lit la valeur dans `initialize`. Vérifié hors dépôt. L'étudiant
+  complète son `ValidAgeRangeValidatorTest` (exo 3c) avec des cas `maxRange` : `ValidAgeRange(maxRange = 5)` est
+  instanciable en Kotlin (vérifié).
+- [x] **E10-2** · Écrire le test fourni : écart > max → 400. Réécrire l'énoncé (« valeur à 100 »).
+  **FAIT (2026-11-01) :** nouvelle classe de test `Exo10` (3 tests : écart = 100 → 200 ; écart 101 → 400 ; écart 101 avec
+  `minAge` élevé → 400). Rouge sur `main` (2 tests), vert avec la solution. Énoncé réécrit : plus de « valeur en dur à
+  100 dans le validateur », la valeur est dans l'annotation.
 
 ### Exo 11 — validateur comme bean (ancien 32) ⭐
 
