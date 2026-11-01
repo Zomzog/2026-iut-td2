@@ -39,15 +39,6 @@ class PetControllerTest {
                     jsonPath("$.name") { value("Kraken") }
                 }
         }
-
-        @Test
-        fun `error case`() {
-
-            mockMvc.get("/api/v1/pets/0")
-                .andExpect {
-                    status { isBadRequest() }
-                }
-        }
     }
 
     @Nested
@@ -108,6 +99,14 @@ class PetControllerTest {
 
     @Nested
     inner class Exo1 {
+
+        @Test
+        fun `invalid path id on get`() {
+            mockMvc.get("/api/v1/pets/0")
+                .andExpect {
+                    status { isBadRequest() }
+                }
+        }
 
         @Test
         fun `happy path`() {

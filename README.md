@@ -53,7 +53,25 @@ Le PetId doit obligatoirement être un entier supérieur à 0 dans l'URL des end
 
 Créer une méta-annotation pour que les appels GET et PUT partagent la même règle de validation du petId dans l'URL.
 
-Les classes de test Base et Exo1 de PetControllerTest doivent passer sans y apporter de modifications.
+<details>
+<summary>Indice</summary>
+
+Le cours montre le principe avec `MinMax` (slide « Meta annotation »).
+
+Créer l'annotation `PetId` qui regroupe la contrainte `@Min`, puis la poser sur le paramètre `petId` des deux endpoints,
+à côté de `@PathVariable`.
+
+</details>
+
+> **NOTE:** il n'y a pas besoin d'ajouter `@Validated` sur le controller : depuis Spring Framework 6.1,
+> la validation des paramètres d'un endpoint est native. Le 400 est renvoyé par Spring (`HandlerMethodValidationException`).
+
+La classe de test Exo1 de PetControllerTest doit passer sans y apporter de modifications.
+La classe Base, qui teste le fonctionnement de départ de GET /api/v1/pets/{petId}, doit rester verte.
+
+```bash
+./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.PetControllerTest$Exo1'
+```
 
 ## Exo 2 - Request params dans un objet
 

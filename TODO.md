@@ -104,11 +104,19 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
 
 ### Exo 1 — méta-annotation sur `petId` (ancien 22)
 
-- [ ] **E1-1** · Énoncé : renvoyer à la slide « Meta annotation » (`MinMax`) ; GET et PUT partagent la
+- [x] **E1-1** · Énoncé : renvoyer à la slide « Meta annotation » (`MinMax`) ; GET et PUT partagent la
   même annotation sur `petId` (entier > 0).
-- [ ] **E1-2** · Vérifier que `Base` + `Exo1` passent sans `@Validated` (`HandlerMethodValidationException`
+  **FAIT (2026-11-01) :** README exo 1 : indice repliable (renvoi à la slide « Meta annotation », annotation
+  `PetId` à poser sur `petId` de GET et PUT) + note « pas de `@Validated` sur le controller ».
+- [x] **E1-2** · Vérifier que `Base` + `Exo1` passent sans `@Validated` (`HandlerMethodValidationException`
   → 400 automatique). `[spike]`
-- [ ] **E1-3** · Corriger la citation des classes de test dans l'énoncé (fait : « Base et Exo1 »).
+  **FAIT (2026-11-01) :** spike hors dépôt avec la méta-annotation de la slide (`@Constraint(validatedBy = [])` +
+  `@Min(1)`, cible `VALUE_PARAMETER`) : `Base` + `Exo1` verts **sans `@Validated`** ; sans l'annotation,
+  `Exo1` est rouge. Le 400 vient de `HandlerMethodValidationException`, géré par `ResponseEntityExceptionHandler`.
+- [x] **E1-3** · Corriger la citation des classes de test dans l'énoncé (fait : « Base et Exo1 »).
+  **FAIT (2026-11-01) :** le test `Base > error case` (GET `/pets/0` → 400) dépendait de l'exo 1 : déplacé dans
+  `Exo1` (`invalid path id on get`). `Base` ne garde que le cas nominal et est vert au départ ; l'énoncé ne cite
+  plus que `Exo1` (+ « `Base` doit rester verte »), avec la commande Gradle de l'exo.
 
 ### Exo 2 — request params dans un objet (ancien 23) ⭐
 
