@@ -318,9 +318,15 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
 
 ### Exo 13 — H2 dans un fichier (ancien 34)
 
-- [ ] **E13-1** · Passer à `jdbc:h2:file:./data/testdb`. Vérification manuelle + **test unitaire** qui
+- [x] **E13-1** · Passer à `jdbc:h2:file:./data/testdb`. Vérification manuelle + **test unitaire** qui
   vérifie que `./data/testdb.mv.db` existe après démarrage du contexte. `[décidé]`
-- [ ] **E13-2** · `data/` dans `.gitignore` (déjà fait).
+  **FAIT (2026-11-01) :** `Exo13Test` (`@SpringBootTest`, 2 tests : l'URL de la datasource commence par `jdbc:h2:file:` ;
+  `data/testdb.mv.db` existe après ouverture d'une connexion). Rouge sur `main` et avec l'URL `mem`, vert avec l'URL
+  `file` (vérifié hors dépôt ; le fichier est créé dans `exo12/data/`). Vérification manuelle en 3 étapes dans le README
+  (`CREATE TABLE` + `INSERT`, redémarrage, `SELECT`), et un WARNING sur le verrou H2 (arrêter l'app avant les tests).
+  Le chemin est dans le dossier du module (`exo12/data/`), plus « à la racine du projet ».
+- [x] **E13-2** · `data/` dans `.gitignore` (déjà fait).
+  **FAIT (2026-11-01) :** `data/` était déjà dans le `.gitignore` (copié du TD1) ; rien à ajouter.
 
 ### Exo 14 — Entity + `JpaRepository` (ancien 35)
 

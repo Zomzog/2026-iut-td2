@@ -500,9 +500,32 @@ Pour le vérifier :
 
 Modifier le fichier src/main/resources/application.yml avec pour datasource.url jdbc:h2:file:./data/testdb
 
-Les données sont stockées dans un fichier data/testdb.mv.db à la racine du projet.
+Les données sont stockées dans un fichier data/testdb.mv.db, dans le dossier du module (`exo12/data/`).
 
 Entre deux démarrages de l'application, les données sont conservées.
+
+Pour le vérifier :
+
+1. Lancer l'application et ouvrir la console H2 avec le JDBC URL `jdbc:h2:file:./data/testdb`
+   (utilisateur `sa`, mot de passe `password`).
+2. Lancer les requêtes suivantes :
+
+   ```sql
+   CREATE TABLE TEST(ID INT PRIMARY KEY, NAME VARCHAR(255));
+   INSERT INTO TEST VALUES (1, 'Joe');
+   ```
+
+3. Arrêter puis relancer l'application, se reconnecter à la console et lancer `SELECT * FROM TEST` :
+   la ligne `Joe` est toujours là.
+
+La classe de test Exo13Test vérifie que la base est bien stockée dans un fichier. Elle doit passer sans y apporter de modifications.
+
+```bash
+./gradlew :exo12:test --tests 'iut.nantes.exo12.Exo13Test'
+```
+
+> **WARNING:** H2 verrouille le fichier de la base tant que l'application tourne.
+> Arrêter l'application avant de lancer les tests, sinon ils échouent avec `Database may be already in use`.
 
 ## Exo 14 - Un CRUD avec une BDD
 
