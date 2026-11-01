@@ -100,11 +100,55 @@ elle doit continuer à passer après sans y apporter de modifications.
 ./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.PetControllerTest$Exo2'
 ```
 
-## Exo 3 - Validateur personnalisé
+## Exo 3 - Validateur personnalisé sur un champ
 
-Créer une annotation @ValidAgeRange pour valider que l'âge minimum est inférieur à l'âge maximum s'ils sont fournis.
+Les contraintes de Jakarta (`@NotBlank`, `@Min`...) ne couvrent pas tous les besoins : on peut créer les siennes.
 
-Optionnellement, on peut aussi vérifier qu'ils sont supérieurs ou égaux à 0 s'ils sont fournis.
+Créer une annotation `@Capitalized` et son validateur, pour refuser un nom de pet qui ne commence pas par une majuscule
+("kraken" est refusé, "Kraken" est accepté). L'appliquer à la propriété `name` de `PetDto`.
+
+Un nom vide est déjà refusé par `@NotBlank` : le validateur `Capitalized` doit accepter une valeur vide.
+
+<details>
+<summary>Indice</summary>
+
+Le cours montre la création d'une annotation et de son `ConstraintValidator` (slides « Constraint Annotation » et « Custom annotation »).
+
+Attention à la cible : dans le cours l'annotation est posée sur un paramètre de fonction (`VALUE_PARAMETER`).
+Ici elle est posée sur une propriété de `PetDto`, que Bean Validation lit sur le champ :
+l'annotation doit accepter la cible `AnnotationTarget.FIELD`.
+
+</details>
+
+La classe de test Exo3 de PetControllerTest doit passer sans y apporter de modifications.
+
+```bash
+./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.PetControllerTest$Exo3'
+```
+
+## Exo 3b - Validation globale d'un body
+
+Certaines règles portent sur plusieurs champs à la fois : on valide alors l'objet dans son ensemble.
+
+Le endpoint POST /api/v1/pets/search est fourni : il reçoit un body `PetSearch(minAge, maxAge)` et renvoie
+les pets dont l'âge est dans cet intervalle.
+
+Créer une annotation `@ValidAgeRange` et son validateur `ValidAgeRangeValidator`, pour valider un `PetSearch` :
+
+- `minAge` est inférieur ou égal à `maxAge` s'ils sont fournis,
+- `minAge` et `maxAge` sont supérieurs ou égaux à 0 s'ils sont fournis.
+
+Poser l'annotation sur la classe `PetSearch`. Le endpoint doit répondre 400 pour un body invalide.
+
+<details>
+<summary>Indice</summary>
+
+L'annotation se pose cette fois sur une classe : sa cible est `AnnotationTarget.CLASS`,
+et le validateur est un `ConstraintValidator<ValidAgeRange, PetSearch>`.
+
+Comme pour l'exo 0, le paramètre `@RequestBody` du endpoint doit être annoté avec `@Valid`.
+
+</details>
 
 <details>
 <summary>Tableau de vérité de la validation</summary>
@@ -130,7 +174,24 @@ Optionnellement, on peut aussi vérifier qu'ils sont supérieurs ou égaux à 0 
 
 </details>
 
-Les classes de test Exo2 et Exo3 de PetControllerTest doivent passer sans y apporter de modifications.
+La classe de test Exo3b de PetControllerTest doit passer sans y apporter de modifications.
+
+```bash
+./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.PetControllerTest$Exo3b'
+```
+
+## Exo 3c - Tester le validateur
+
+Le tableau de vérité ci-dessus décrit toutes les règles de `ValidAgeRangeValidator`.
+
+Créer une classe de tests unitaires `ValidAgeRangeValidatorTest` (dans `src/test/kotlin/iut/nantes/exo0/validation/`)
+qui vérifie le validateur pour chaque case du tableau et couvre à 100% `ValidAgeRangeValidator`.
+Ces tests n'ont pas besoin de Spring : on appelle directement `isValid`.
+
+> **TIP:** un `@ParameterizedTest` évite d'écrire un test par case. Avec `@CsvSource`, la valeur `null` s'écrit avec
+> `nullValues = ["null"]`. Le second paramètre de `isValid` (le contexte) peut être `null` si votre validateur ne l'utilise pas.
+
+> **TIP:** pour mesurer la couverture dans IntelliJ, clic droit sur la classe de test puis **Run 'ValidAgeRangeValidatorTest' with Coverage**.
 
 ## Exo 4 - Gestion d'exception personnalisée dans un controller advice
 

@@ -44,10 +44,19 @@ class PetController(val database : MutableMap<Int, PetDto> = mutableMapOf()){
 
     @GetMapping("/api/v1/pets")
     fun getPets(@RequestParam minAge: Int?, @RequestParam maxAge: Int?): ResponseEntity<List<PetDto>> {
-       var result: List<PetDto> = database.values.toList()
+        return ResponseEntity.ok(filterByAge(minAge, maxAge))
+    }
+
+    @PostMapping("/api/v1/pets/search")
+    fun searchPets(@RequestBody search: PetSearch): ResponseEntity<List<PetDto>> {
+        return ResponseEntity.ok(filterByAge(search.minAge, search.maxAge))
+    }
+
+    private fun filterByAge(minAge: Int?, maxAge: Int?): List<PetDto> {
+        var result: List<PetDto> = database.values.toList()
         if (minAge != null) result = result.filter { it.age >= minAge }
         if (maxAge != null) result = result.filter { it.age <= maxAge }
-        return ResponseEntity.ok(result)
+        return result
     }
 }
 

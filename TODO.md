@@ -142,23 +142,42 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
 
 ### Exo 3 — `@ValidAgeRange` (ancien 24) — à réécrire, voire couper en 2
 
-- [ ] **E3-1** · **Validation sur un body, pas sur des query params** `[décidé]` : d'abord une
+- [x] **E3-1** · **Validation sur un body, pas sur des query params** `[décidé]` : d'abord une
   validation champ par champ, puis une validation globale (« MaxRange »). L'exo ne dépend plus de
   l'exo 2.
-- [ ] **E3-2** · **Partie 1, champ par champ** : annotation personnalisée sur un champ de `PetDto`
+  **FAIT (2026-11-01) :** l'ancien exo 24 est coupé en **Exo 3** (champ), **Exo 3b** (body global) et **Exo 3c**
+  (test du validateur). Numérotation **provisoire** (3 / 3b / 3c) : à refaire en G-09 pour ne pas décaler
+  tout le README maintenant. L'exo 3b ne dépend plus de l'exo 2.
+- [x] **E3-2** · **Partie 1, champ par champ** : annotation personnalisée sur un champ de `PetDto`
   (`ConstraintValidator<…, String>`, mécanique de la slide « Custom annotation »). Proposition :
   `@Capitalized` sur `name`. `[à trancher]` (l'idée de l'utilisateur ?)
-- [ ] **E3-3** · **Partie 2, validation globale** : contrainte de classe (`@Target(CLASS)`) sur un body
+  **FAIT (2026-11-01) :** choix retenu `@Capitalized` sur `PetDto.name` (ma proposition, à valider). Vérifié par
+  spike : le validateur accepte le vide (laisse `@NotBlank` décider) ; **la cible doit être `FIELD`** : avec
+  `VALUE_PARAMETER` comme dans la slide `MinMax`, le test est rouge. Indice ajouté dans l'énoncé. Point à
+  mettre dans `Cours 2.md` : la slide « Custom annotation » ne montre que la cible `VALUE_PARAMETER`.
+- [x] **E3-3** · **Partie 2, validation globale** : contrainte de classe (`@Target(CLASS)`) sur un body
   `AgeRange(minAge, maxAge)`, avec le tableau de vérité de 2025 (min ≤ max, ≥ 0). La slide ne montre pas
   la cible de classe : prévoir un indice repliable de deux lignes. Exception attendue :
   `MethodArgumentNotValidException` (400). `[spike]`
-- [ ] **E3-4** · **Endpoint qui porte le body** `[à trancher]` : proposition `POST /api/v1/pets/search`
+  **FAIT (2026-11-01) :** contrainte `@Target(CLASS)` sur `PetSearch`, validateur
+  `ConstraintValidator<ValidAgeRange, PetSearch>`, `@Valid` sur le `@RequestBody` → 400 vérifié par spike.
+  Les deux règles (min ≤ max, ≥ 0) sont obligatoires (plus « optionnelles ») car les tests les exigent.
+- [x] **E3-4** · **Endpoint qui porte le body** `[à trancher]` : proposition `POST /api/v1/pets/search`
   avec `{ "minAge": …, "maxAge": … }` (recherche par POST) ; alternatives : contrainte transversale sur
   `PetDto` (`kind` × `age`), ou nouveau body dédié.
-- [ ] **E3-5** · **Nouvel exo : test du validateur écrit par l'étudiant** `[décidé : exo distinct]` —
+  **FAIT (2026-11-01) :** option A retenue (ma recommandation, à valider) : `POST /api/v1/pets/search`,
+  body `PetSearch(minAge, maxAge)`, fourni dans le squelette (endpoint + classe, sans `@Valid`). Nom
+  `PetSearch` choisi pour ne pas entrer en conflit avec l'`AgeRange` de l'exo 2. `GET /pets` et le POST
+  partagent `filterByAge`. **Impact exo 10 :** `maxRange` s'ajoutera à `@ValidAgeRange` sur `PetSearch`.
+- [x] **E3-5** · **Nouvel exo : test du validateur écrit par l'étudiant** `[décidé : exo distinct]` —
   `@ParameterizedTest` sur le tableau de vérité, test unitaire pur (sans Spring).
-- [ ] **E3-6** · Réécrire les tests `Exo2` / `Exo3` en conséquence (un test par cas du tableau, 400 sur
+  **FAIT (2026-11-01) :** exo 3c dans le README (`ValidAgeRangeValidatorTest`, 100% de couverture, `@ParameterizedTest`
+  + `@CsvSource`, TIP couverture IntelliJ). Vérifié : `@ParameterizedTest` compile avec les dépendances de test
+  actuelles et le validateur s'appelle avec un contexte `null`. Pas de test fourni (l'étudiant l'écrit).
+- [x] **E3-6** · Réécrire les tests `Exo2` / `Exo3` en conséquence (un test par cas du tableau, 400 sur
   body invalide).
+  **FAIT (2026-11-01) :** ancien `Exo3` (GET avec query params) remplacé par `Exo3` (2 tests : nom capitalisé /
+  minuscule) et `Exo3b` (6 tests : sans bornes, max seul, min = max, min > max, min < 0, max < 0).
 
 ### Exo 4 — gestion d'exception personnalisée (ancien 25)
 
