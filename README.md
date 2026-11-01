@@ -360,6 +360,9 @@ La classe de test Exo7 de InfoTest doit toujours passer sans y apporter de modif
 
 ## Exo 9 - Profiles
 
+Un profil permet de changer la configuration selon l'environnement : le fichier `application-dev.yml` n'est lu
+que si le profil `dev` est actif, et ses valeurs remplacent celles de `application.yml`.
+
 Ajouter le fichier src/main/resources/application-dev.yml
 
 ```yaml
@@ -371,6 +374,20 @@ custom:
 ```
 
 La classe de test Exo9 de InfoTest doit passer sans y apporter de modifications.
+
+```bash
+./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.InfoTest$Exo9'
+```
+
+Pour le voir sur l'application, la lancer avec le profil `dev` :
+
+```bash
+SPRING_PROFILES_ACTIVE=dev ./gradlew :exo0:bootRun
+curl localhost:8080/api/v1/info
+```
+
+La réponse contient `"appVersion":"1.0.2-SNAPSHOT"`, mais garde `"appName":"mon application"` qui n'est pas redéfini dans le profil.
+Dans l'IDE, ajouter `--spring.profiles.active=dev` aux arguments du programme de la configuration de lancement.
 
 ## Exo 10 - Ajout d'un max-range
 

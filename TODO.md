@@ -260,7 +260,10 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
 
 ### Exo 9 — profils (ancien 30)
 
-- [ ] **E9-1** · `application-dev.yml` ; `InfoTest.Exo9` (ancien `Exo30`) avec `@ActiveProfiles("dev")`.
+- [x] **E9-1** · `application-dev.yml` ; `InfoTest.Exo9` (ancien `Exo30`) avec `@ActiveProfiles("dev")`.
+  **FAIT (2026-11-01) :** README : phrase sur les profils, commande du test, lancement `SPRING_PROFILES_ACTIVE=dev ./gradlew
+  :exo0:bootRun` + `curl` (vérifié hors dépôt : profil `dev` actif, `appVersion` = `1.0.2-SNAPSHOT`, `appName` conservé).
+  `InfoTest.Exo9` vert avec `application-dev.yml` (et `Exo7` reste vert).
 
 ### Exo 10 — `maxRange` (ancien 31)
 
