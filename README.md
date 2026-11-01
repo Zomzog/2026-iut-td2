@@ -195,9 +195,26 @@ Ces tests n'ont pas besoin de Spring : on appelle directement `isValid`.
 
 ## Exo 4 - Gestion d'exception personnalisée dans un controller advice
 
+Quand PUT /api/v1/pets/{petId} vise un pet qui n'existe pas, le controller lance `ImATeapotException`.
+Pour l'instant rien ne l'intercepte : l'erreur remonte jusqu'à Spring.
+
 À l'aide du "controller advice" ErrorHandler, renvoyer une erreur 418 en cas d'exception ImATeapotException.
+La réponse est un `ProblemDetail`, le format standard des erreurs HTTP (`application/problem+json`, avec un champ `status`).
+
+<details>
+<summary>Indice</summary>
+
+Dans `ErrorHandler`, une méthode annotée `@ExceptionHandler(ImATeapotException::class)` peut retourner directement un `ProblemDetail`.
+
+`ProblemDetail.forStatus(418)` crée le `ProblemDetail` pour un statut donné.
+
+</details>
 
 La classe de test Exo4 de PetControllerTest doit passer sans y apporter de modifications.
+
+```bash
+./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.PetControllerTest$Exo4'
+```
 
 ## Exo 5 - Surcharger la gestion d'une exception de Spring
 

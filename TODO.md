@@ -181,13 +181,22 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
 
 ### Exo 4 — gestion d'exception personnalisée (ancien 25)
 
-- [ ] **E4-1** · L'étudiant écrit `@ExceptionHandler(ImATeapotException::class)` dans `ErrorHandler` et
+- [x] **E4-1** · L'étudiant écrit `@ExceptionHandler(ImATeapotException::class)` dans `ErrorHandler` et
   retourne un `ProblemDetail` de statut 418. `[décidé]`
-- [ ] **E4-2** · Test : statut 418, content-type `application/problem+json`, `$.status`. Remplacer
+  **FAIT (2026-11-01) :** README exo 4 : contexte (le controller lance l'exception, personne ne l'intercepte), consigne
+  `ProblemDetail`, indice repliable (`@ExceptionHandler` + `ProblemDetail.forStatus(418)`). Solution vérifiée
+  hors dépôt (`handleTeapot` retourne `ProblemDetail.forStatus(418)`).
+- [x] **E4-2** · Test : statut 418, content-type `application/problem+json`, `$.status`. Remplacer
   `isIAmATeapot()` (déprécié dans le test actuel).
-- [ ] **E4-3** · Indice : `ImATeapotException` peut aussi hériter de `ErrorResponseException` (gérée sans
+  **FAIT (2026-11-01) :** test `Exo4` : `status { isEqualTo(418) }` (fini `isIAmATeapot`, déprécié), content-type
+  `application/problem+json`, `$.status` = 418. Rouge sur `main` (l'exception remonte en `ServletException`).
+- [x] **E4-3** · Indice : `ImATeapotException` peut aussi hériter de `ErrorResponseException` (gérée sans
   handler).
-- [ ] **E4-4** · Retirer du squelette le handler `Exception` qui répond « Failure: … » en 500. `[décidé]`
+  **FAIT (2026-11-01) :** variante vérifiée hors dépôt : `ImATeapotException : ErrorResponseException(HttpStatusCode.valueOf(418))`
+  sans aucun handler → test vert. Non mise dans l'énoncé (reste une piste pour la correction ou un bonus).
+- [x] **E4-4** · Retirer du squelette le handler `Exception` qui répond « Failure: … » en 500. `[décidé]`
+  **FAIT (2026-11-01) :** handler `Exception` (« Failure: … » en 500) retiré ; `ErrorHandler` est une classe vide qui étend
+  `ResponseEntityExceptionHandler`.
 
 ### Exo 5 — surcharge de `HttpMessageNotReadableException` (ancien 26)
 

@@ -282,7 +282,9 @@ class PetControllerTest {
                 """.trimIndent()
             }
                 .andExpect {
-                    status { isIAmATeapot() }
+                    status { isEqualTo(418) }
+                    content { contentType("application/problem+json") }
+                    jsonPath("$.status") { value(418) }
                 }
         }
     }

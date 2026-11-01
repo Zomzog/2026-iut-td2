@@ -1,13 +1,7 @@
 package iut.nantes.exo0.config
 
-import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
-import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 
 @ControllerAdvice
-class ErrorHandler: ResponseEntityExceptionHandler() {
-
-    @ExceptionHandler(Exception::class)
-    fun fallback(e: Exception) = ResponseEntity.internalServerError().body("Failure: ${e.message}")
-}
+class ErrorHandler: ResponseEntityExceptionHandler()
