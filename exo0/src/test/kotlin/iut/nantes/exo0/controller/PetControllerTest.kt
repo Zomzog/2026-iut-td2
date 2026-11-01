@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Nested
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest
 import org.springframework.http.MediaType.APPLICATION_JSON
+import org.springframework.test.context.TestPropertySource
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
@@ -291,6 +292,31 @@ class PetControllerTest {
         @Test
         fun `range greater than max range with a high min`() {
             search("""{ "minAge": 1000, "maxAge": 1101 }""")
+                .andExpect {
+                    status { isBadRequest() }
+                }
+        }
+    }
+
+    @Nested
+    @TestPropertySource(properties = ["custom.api.pets.max-range=5"])
+    inner class Exo11 {
+        private fun search(body: String) = mockMvc.post("/api/v1/pets/search") {
+            contentType = APPLICATION_JSON
+            content = body
+        }
+
+        @Test
+        fun `range equal to configured max range`() {
+            search("""{ "minAge": 0, "maxAge": 5 }""")
+                .andExpect {
+                    status { isOk() }
+                }
+        }
+
+        @Test
+        fun `range greater than configured max range`() {
+            search("""{ "minAge": 0, "maxAge": 6 }""")
                 .andExpect {
                     status { isBadRequest() }
                 }

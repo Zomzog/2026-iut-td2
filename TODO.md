@@ -281,10 +281,18 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
 
 ### Exo 11 — validateur comme bean (ancien 32) ⭐
 
-- [ ] **E11-1** · Bonus. La valeur vient de la config `custom.api.pets.max-range`, injectée par
+- [x] **E11-1** · Bonus. La valeur vient de la config `custom.api.pets.max-range`, injectée par
   constructeur (plus de remarque sur `lateinit`, `T2-28`).
-- [ ] **E11-2** · Test : `@SpringBootTest(properties = ["custom.api.pets.max-range=5"])`. Correction à
+  **FAIT (2026-11-01) :** README : exo 11 en bonus (encadré), trois étapes (clé `custom.api.pets.max-range: 100` dans
+  `application.yml`, retirer `maxRange` de l'annotation, `@Value` dans le constructeur du validateur), indice
+  d'échappement `\$`. La remarque 2025 sur `lateinit` disparaît (`T2-28`). Vérifié hors dépôt : l'injection par
+  constructeur dans un `ConstraintValidator` fonctionne, `Exo3b` et `Exo10` restent verts.
+- [x] **E11-2** · Test : `@SpringBootTest(properties = ["custom.api.pets.max-range=5"])`. Correction à
   écrire (aucun commit en 2025).
+  **FAIT (2026-11-01) :** test `Exo11` dans `PetControllerTest` avec `@TestPropertySource("custom.api.pets.max-range=5")` (imbriqué
+  dans le `@WebMvcTest`, plutôt qu'un `@SpringBootTest` à part) : écart 5 → 200, écart 6 → 400. Rouge sur `main`
+  (écart 6), vert avec la solution. La correction est à écrire dans le commit `Exo11` de `correction` (aucun
+  commit de 2025).
 
 ## Module `exo12` — JPA
 

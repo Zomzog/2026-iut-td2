@@ -420,15 +420,32 @@ sans casser les classes Exo3b et ValidAgeRangeValidatorTest.
 ./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.PetControllerTest$Exo10'
 ```
 
-## Exo 11 - Validateur en tant que Bean
+## Exo 11 (bonus) - Validateur en tant que Bean
 
-Spring s'occupe de la création du validator,
-on peut y injecter le max-range depuis le fichier de configuration (custom.api.pets.max-range=100).
+> **Bonus :** cet exo est optionnel, aucun exo suivant n'en dépend.
 
-Utiliser un @Value pour le faire.
+Spring s'occupe de la création des validateurs (`ConstraintValidator`), ce qui permet d'y injecter des valeurs de Spring.
+Ici, on veut que le max-range vienne du fichier de configuration plutôt que de l'annotation.
 
-> **WARNING:** dans ce contexte, on ne peut pas utiliser lateinit.
-> Il faut fournir une valeur par défaut directement sur le champ.
+- Ajouter `custom.api.pets.max-range: 100` dans le fichier `application.yml`.
+- Supprimer le paramètre `maxRange` de l'annotation `@ValidAgeRange` (et son utilisation sur `PetSearch`).
+- Dans `ValidAgeRangeValidator`, injecter la valeur par le constructeur avec un `@Value`.
+
+<details>
+<summary>Indice</summary>
+
+Comme à l'exo 7, il faut échapper le `$` en Kotlin : `@Value("\${custom.api.pets.max-range}")`.
+
+</details>
+
+Adapter `ValidAgeRangeValidatorTest` : le validateur reçoit maintenant sa valeur dans son constructeur.
+
+La classe de test Exo11 de PetControllerTest doit passer sans y apporter de modifications
+(elle fixe `custom.api.pets.max-range` à 5), sans casser les classes Exo3b et Exo10.
+
+```bash
+./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.PetControllerTest$Exo11'
+```
 
 ## Exo 12 - Base de données H2 en mémoire
 
