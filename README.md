@@ -273,6 +273,9 @@ La classe de test Exo5Bonus de PetControllerTest doit passer sans y apporter de 
 
 ## Exo 6 - Banner.txt pour afficher ses properties
 
+Au démarrage, Spring Boot affiche une bannière dans la console. Elle peut être remplacée par un fichier `banner.txt`,
+et ce fichier peut contenir des valeurs du fichier de configuration sous la forme `${nom.de.la.propriété}`.
+
 Ajouter le fichier src/main/resources/application.yml
 
 ```yaml
@@ -289,6 +292,15 @@ Ajouter un fichier banner.txt dans src/main/resources avec le contenu
 ```text
 ${custom.app-name} ${custom.app-version} ${custom.git.branch} ${custom.git.commit}
 ```
+
+Pour vérifier, lancer l'application (`Exo0Application.kt`, ou `./gradlew :exo0:bootRun`) :
+la première ligne affichée dans la console doit être
+
+```text
+mon application 1.0.1 main 123456
+```
+
+(Arrêter l'application avec `Ctrl+C` ou le bouton stop de l'IDE.)
 
 ## Exo 7 - Injection des properties avec des @Value
 

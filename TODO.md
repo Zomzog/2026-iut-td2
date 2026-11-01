@@ -64,7 +64,7 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
   `origin/td2-correction` du dépôt 2025 (`git cherry-pick -n`), adaptés à la nouvelle numérotation.
 - [ ] **G-05** · **Nettoyage des restes de 2025** — `exo12/src/test/…/PetControllerTest.kt` : tests
   `exo 41` / `exo 44` (TD3) à retirer ; `application.yml` d'`exo0` : résidus `r2dbc` et `flyway`
-  (`T2-02`) ; imports morts ; classe `PetControllerTest` d'`exo12` qui teste `/humans` (`T2-07`).
+  (`T2-02`, **fait** à l'exo 6 : fichier supprimé) ; imports morts ; classe `PetControllerTest` d'`exo12` qui teste `/humans` (`T2-07`).
 - [ ] **G-06** · **Relecture énoncé ↔ build (`T0-33`)** — coordonnées de dépendances identiques à celles
   de la correction, `curl` copiés-collés et exécutés, aucun paramètre de suivi dans les liens, noms de
   classes cohérents entre consigne et TIP, `rootProject.name = "td2"`.
@@ -228,9 +228,14 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
 
 ### Exo 6 — `banner.txt` (ancien 27)
 
-- [ ] **E6-1** · Garder comme **exo express** avec un indice. `[décidé]` Donner le `application.yml`
+- [x] **E6-1** · Garder comme **exo express** avec un indice. `[décidé]` Donner le `application.yml`
   (`custom.*`) et la ligne du `banner.txt`.
-- [ ] **E6-2** · Décrire dans l'énoncé la vérification attendue (ce qu'on voit au démarrage).
+  **FAIT (2026-11-01) :** README : une phrase de contexte (bannière Spring Boot, `${...}` dans `banner.txt`), les deux
+  fichiers à créer donnés tels quels. Le `application.yml` du squelette (résidus `r2dbc` / `flyway`, nom `exo0`) est
+  **supprimé** : l'énoncé le fait créer à l'étudiant (c'était déjà le texte de 2025, mais le fichier existait).
+- [x] **E6-2** · Décrire dans l'énoncé la vérification attendue (ce qu'on voit au démarrage).
+  **FAIT (2026-11-01) :** vérification décrite : première ligne de la console = `mon application 1.0.1 main 123456`
+  (testé hors dépôt avec `./gradlew :exo0:bootRun`). Pas de test automatisé : `@SpringBootTest` coupe la bannière.
 
 ### Exo 7 — `@Value` (ancien 28)
 
