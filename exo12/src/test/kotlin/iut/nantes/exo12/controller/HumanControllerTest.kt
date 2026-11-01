@@ -3,6 +3,7 @@ package iut.nantes.exo12.controller
 import com.jayway.jsonpath.JsonPath
 import iut.nantes.exo12.DatabaseProxy
 import org.hamcrest.Matchers.hasItem
+import org.hamcrest.Matchers.not
 import org.junit.jupiter.api.Nested
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -24,10 +25,10 @@ class HumanControllerTest {
     lateinit var databaseProxy: DatabaseProxy
 
     /** Crée un human via l'API et retourne son identifiant. */
-    private fun createHuman(name: String = "Joe"): Int {
+    private fun createHuman(name: String = "Joe", petKind: String = "DOG"): Int {
         val body = mockMvc.post("/api/v1/humans") {
             contentType = APPLICATION_JSON
-            content = humanJson(name)
+            content = humanJson(name, petKind = petKind)
         }.andExpect {
             status { isCreated() }
         }.andReturn().response.contentAsString
@@ -157,7 +158,34 @@ class HumanControllerTest {
         }
     }
 
-    private fun humanJson(name: String = "Joe", petName: String = "Java") = """
+    @Nested
+    inner class ExoBonusQueries {
+        @Test
+        fun `search by name`() {
+            createHuman("Zorglub")
+            createHuman("Averell")
+
+            mockMvc.get("/api/v1/humans?name=zorg").andExpect {
+                status { isOk() }
+                jsonPath("$[*].name") { value(hasItem("Zorglub")) }
+                jsonPath("$[*].name") { value(not(hasItem("Averell"))) }
+            }
+        }
+
+        @Test
+        fun `search by pet kind`() {
+            createHuman("Catlover", petKind = "CAT")
+            createHuman("Doglover", petKind = "DOG")
+
+            mockMvc.get("/api/v1/humans?petKind=CAT").andExpect {
+                status { isOk() }
+                jsonPath("$[*].name") { value(hasItem("Catlover")) }
+                jsonPath("$[*].name") { value(not(hasItem("Doglover"))) }
+            }
+        }
+    }
+
+    private fun humanJson(name: String = "Joe", petName: String = "Java", petKind: String = "DOG") = """
         {
             "name": "$name",
             "contact": {
@@ -167,7 +195,7 @@ class HumanControllerTest {
                 {
                     "name": "$petName",
                     "age": 3,
-                    "kind": "DOG"
+                    "kind": "$petKind"
                 }
             ]
         }

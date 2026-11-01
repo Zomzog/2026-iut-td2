@@ -412,7 +412,16 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
 
 ### Bonus
 
-- [ ] **EB-1** · Profil Postgres : `application-postgres.yml`, commande `podman run` **et** alternative
+- [x] **EB-1** · Profil Postgres : `application-postgres.yml`, commande `podman run` **et** alternative
   `docker compose`, image figée (`postgres:18`) ; procédure testée (`T2-29`).
-- [ ] **EB-2** · Requêtes dérivées (`findByNameContainingIgnoreCase`, `findByPetsKind`) avec un test
+  **FAIT (2026-11-01) :** « Exo Bonus 2 - Profil Postgres ». **Procédure testée** (docker `postgres:18` : l'application démarre avec le
+  profil `postgres` sur `jdbc:postgresql://localhost:5432/postgres`, un human est créé et relu, `\dt` liste `contact_entity`,
+  `human_entity`, `pet_entity` ; `docker compose up -d` testé ; `podman run` testé avec l'image complète `docker.io/library/postgres:18`,
+  sans quoi podman demande de choisir un registre). Driver à ajouter par l'étudiant (`runtimeOnly("org.postgresql:postgresql")`).
+  Le `-v /tmp/data` de 2025 (volume anonyme sans effet) est retiré. Conteneurs de test supprimés après vérification.
+- [x] **EB-2** · Requêtes dérivées (`findByNameContainingIgnoreCase`, `findByPetsKind`) avec un test
   fourni (`T2-31`). `[à trancher]`
+  **FAIT (2026-11-01) :** « Exo Bonus 1 - Requêtes dérivées » (ma décision par défaut, à valider) : `GET /api/v1/humans?name=` et
+  `?petKind=`, indice repliable (`findByNameContainingIgnoreCase`, `findByPetsKind`), classe de test fournie `ExoBonusQueries` (2 tests,
+  rouges sur `main`, verts avec la solution vérifiée hors dépôt). Les tests créent des humans à noms uniques et n'attendent pas
+  un contenu exact (pas de nettoyage nécessaire).

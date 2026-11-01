@@ -728,9 +728,76 @@ Le décommenter (sélectionner les lignes commentées, puis `Ctrl+/`) : il doit 
 ./gradlew :exo12:test --tests 'iut.nantes.exo12.controller.HumanControllerTest$Exo19'
 ```
 
-## Exo Bonus
+## Exo Bonus 1 - Requêtes dérivées
+
+Spring Data génère les requêtes à partir du nom des méthodes du repository (voir les slides « Jpa Repository Custom Query »).
+
+Ajouter deux paramètres optionnels à GET /api/v1/humans :
+
+- `name` : ne renvoie que les humans dont le nom contient la valeur, sans tenir compte des majuscules (`?name=zorg` trouve `Zorglub`),
+- `petKind` : ne renvoie que les humans qui ont au moins un pet de ce type (`?petKind=CAT`).
+
+Sans paramètre, tous les humans sont renvoyés.
+
+<details>
+<summary>Indice</summary>
+
+Ajouter deux méthodes au `HumanRepository`, sans écrire de requête :
+`findByNameContainingIgnoreCase(name: String)` et `findByPetsKind(kind: PetKind)`.
+
+</details>
+
+La classe de test ExoBonusQueries de HumanControllerTest doit passer sans y apporter de modifications.
+
+```bash
+./gradlew :exo12:test --tests 'iut.nantes.exo12.controller.HumanControllerTest$ExoBonusQueries'
+```
+
+## Exo Bonus 2 - Profil Postgres
 
 Créer une configuration application-postgres.yml où la base h2 est remplacée par une base postgresql.
 
-Pour lancer une base postgres sur le port 5432, vous pouvez utiliser la commande suivante :
-`podman run --name postgres -e POSTGRES_USER=username -e POSTGRES_PASSWORD=password -p 5432:5432 -v /tmp/data -d postgres`
+Dans `exo12/build.gradle.kts`, ajouter le driver : `runtimeOnly("org.postgresql:postgresql")`.
+
+Pour lancer une base postgres sur le port 5432, vous pouvez utiliser la commande suivante (avec `docker` ou `podman`) :
+
+```bash
+docker run --name postgres -e POSTGRES_USER=username -e POSTGRES_PASSWORD=password -p 5432:5432 -d postgres:18
+```
+
+Avec podman, l'image doit être donnée en entier : `docker.io/library/postgres:18`.
+
+<details>
+<summary>Avec docker compose</summary>
+
+Dans un fichier `compose.yaml` :
+
+```yaml
+services:
+  postgres:
+    image: postgres:18
+    environment:
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+```
+
+puis `docker compose up -d`.
+
+</details>
+
+Lancer l'application avec le profil `postgres` :
+
+```bash
+SPRING_PROFILES_ACTIVE=postgres ./gradlew :exo12:bootRun
+```
+
+Pour vérifier :
+
+- la console contient `Database JDBC URL [jdbc:postgresql://localhost:5432/postgres]`,
+- créer un human avec POST /api/v1/humans (comme dans les tests), puis le relire avec GET /api/v1/humans,
+- les tables existent dans Postgres : `docker exec postgres psql -U username -d postgres -c '\dt'`
+  (`contact_entity`, `human_entity`, `pet_entity`).
+
+Pour arrêter et supprimer la base : `docker rm -f postgres`.
