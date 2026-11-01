@@ -382,8 +382,16 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
 
 ### Exo 18 — OneToMany bidirectionnel (ancien 39)
 
-- [ ] **E18-1** · Bidirectionnel (`@ManyToOne` + `mappedBy`) ; collections `var MutableList`.
-- [ ] **E18-2** · Idem `E16-2` : le test `exo 17` ne prouve pas la bidirectionnalité.
+- [x] **E18-1** · Bidirectionnel (`@ManyToOne` + `mappedBy`) ; collections `var MutableList`.
+  **FAIT (2026-11-01) :** README : `pet.human` en plus de `human.pets`, rappel propriétaire / inverse (le `@ManyToOne` est toujours
+  propriétaire), indice (slides « Many-To-One » / « One-To-Many », ne pas oublier de renseigner `human` dans la conversion).
+  Vérifié hors dépôt : solution `@OneToMany(mappedBy = "human")` + `@ManyToOne @JoinColumn("human_id")` → tout `exo12` vert ; en
+  oubliant `pet.human` dans la conversion, `Exo17.read the pets` et `Exo18Test` deviennent rouges.
+- [x] **E18-2** · Idem `E16-2` : le test `exo 17` ne prouve pas la bidirectionnalité.
+  **FAIT (2026-11-01) :** pour prouver la bidirectionnalité sans demander d'écrire un 2e test (décision : seulement 2 tests écrits
+  par les étudiants), un test **fourni mais commenté** `Exo18Test` (`@DataJpaTest` + `@Import(DatabaseProxy)`, passe par
+  `DatabaseProxy` donc ne dépend pas du constructeur des entités de l'étudiant) à décommenter, même mécanique que le test de
+  l'exo 19. Conséquence : les entités et le repository doivent être dans `iut.nantes.exo12.repository` (précisé dans l'exo 14).
 
 ### Exo 19 — DELETE d'un pet (ancien 40) ⭐ ?
 

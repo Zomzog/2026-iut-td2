@@ -554,6 +554,8 @@ Pour une entité, préférer une `class` avec des `var` à une `data class`
 L'identifiant est nullable (`Int?`) : il vaut `null` tant que l'entité n'est pas enregistrée en base.
 Il est annoté `@Id` et `@GeneratedValue`.
 
+Ranger les entités et le repository dans le package `iut.nantes.exo12.repository` (les tests suivants l'utilisent).
+
 </details>
 
 La classe de test Exo14 de HumanControllerTest doit passer sans y apporter de modifications.
@@ -675,9 +677,31 @@ La classe de test Exo17 de HumanControllerTest doit passer sans y apporter de mo
 
 ## Exo 18 - OneToMany bidirectionnel
 
-Modifier le OneToMany pour qu'il soit bidirectionnel.
+Modifier le OneToMany pour qu'il soit bidirectionnel :
+on peut faire human.pets, et aussi pet.human.
 
-Le test `exo 17` doit passer.
+Comme pour le OneToOne, un côté est propriétaire et l'autre est l'inverse (`mappedBy`).
+Dans un `@OneToMany` / `@ManyToOne`, le côté propriétaire est toujours le `@ManyToOne` (la clé étrangère est dans la table du pet).
+
+<details>
+<summary>Indice</summary>
+
+Voir les slides « Many-To-One » et « One-To-Many ».
+
+C'est le `@ManyToOne` sur `PetEntity.human` qui enregistre le lien en base :
+dans la conversion de `HumanDto` vers `HumanEntity`, il ne faut pas oublier de renseigner `human` sur chaque pet.
+
+</details>
+
+Le test Exo17 de HumanControllerTest doit toujours passer.
+
+Il ne suffit pas à prouver que la relation est bidirectionnelle (il passe aussi sans).
+Ouvrir `src/test/kotlin/iut/nantes/exo12/repository/Exo18Test.kt` et décommenter tout le fichier (sélectionner tout, puis `Ctrl+/`) :
+ce test doit passer.
+
+```bash
+./gradlew :exo12:test --tests 'iut.nantes.exo12.repository.Exo18Test'
+```
 
 ## Exo 19 - Suppression d'un pet
 
