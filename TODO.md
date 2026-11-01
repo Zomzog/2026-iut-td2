@@ -239,8 +239,13 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
 
 ### Exo 7 — `@Value` (ancien 28)
 
-- [ ] **E7-1** · Aligner l'exemple JSON de l'énoncé sur le test : `appName`, `1.0.1`, `main` (`T2-05`).
-- [ ] **E7-2** · Vérifier `InfoTest.Exo7` (ancien `Exo28`).
+- [x] **E7-1** · Aligner l'exemple JSON de l'énoncé sur le test : `appName`, `1.0.1`, `main` (`T2-05`).
+  **FAIT (2026-11-01) :** exemple JSON aligné sur le test (`appName`, `appVersion`, `1.0.1`, `main`, `123456`) ; ajout d'un
+  lien vers le `application.yml` de l'exo 6 et d'un indice repliable sur l'échappement Kotlin `\${...}` (sinon
+  c'est un template de chaîne).
+- [x] **E7-2** · Vérifier `InfoTest.Exo7` (ancien `Exo28`).
+  **FAIT (2026-11-01) :** test `InfoTest.Exo7` inchangé ; rouge sur `main` ; vert avec un `InfoController` à 4 `@Value`
+  injectés par le constructeur (vérifié hors dépôt, avec le `application.yml` de l'exo 6).
 
 ### Exo 8 — `@ConfigurationProperties` (ancien 29)
 

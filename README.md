@@ -308,18 +308,34 @@ En utilisant des @Value, créer un endpoint GET /api/v1/info qui renvoie la rép
 
 ```json
 {
-    "app-name": "mon application",
-    "app-version": "1.0",
+    "appName": "mon application",
+    "appVersion": "1.0.1",
     "git": {
-        "branch": "master",
+        "branch": "main",
         "commit": "123456"
     }
 }
 ```
 
+Les valeurs viennent du fichier `application.yml` créé à l'exo 6 (si vous l'avez sauté, créez-le maintenant).
+
 Un objet Info est fourni dans la partie Domain pour faciliter la sérialisation.
 
+<details>
+<summary>Indice</summary>
+
+En Kotlin, `$` démarre un template de chaîne : pour que Spring reçoive `${custom.app-name}`,
+il faut écrire `@Value("\${custom.app-name}")` (avec un `\` devant le `$`).
+
+L'injection par le constructeur fonctionne aussi pour `@Value`.
+
+</details>
+
 La classe de test Exo7 de InfoTest doit passer sans y apporter de modifications.
+
+```bash
+./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.InfoTest$Exo7'
+```
 
 ## Exo 8 - ConfigurationProperties
 
