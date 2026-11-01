@@ -249,9 +249,14 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
 
 ### Exo 8 — `@ConfigurationProperties` (ancien 29)
 
-- [ ] **E8-1** · `@EnableConfigurationProperties` ou `@ConfigurationPropertiesScan` ? `[à trancher]`
+- [x] **E8-1** · `@EnableConfigurationProperties` ou `@ConfigurationPropertiesScan` ? `[à trancher]`
   (`T2-23`, `C2-40` ; la slide montre `@EnableConfigurationProperties`).
-- [ ] **E8-2** · `InfoTest.Exo7` doit toujours passer.
+  **FAIT (2026-11-01) :** choix retenu `@EnableConfigurationProperties` sur une classe `@Configuration`, comme la slide
+  (ma décision par défaut, à valider). `@ConfigurationPropertiesScan` sur l'application marche aussi (vérifié) ;
+  il n'est pas cité dans l'énoncé (`C2-40` reste un manque du cours). `T2-23` : alignement slide ↔ correction OK.
+- [x] **E8-2** · `InfoTest.Exo7` doit toujours passer.
+  **FAIT (2026-11-01) :** `InfoTest.Exo7` reste le test de l'exo (il est rouge sur `main` tant que l'exo 7 n'est pas fait) ;
+  vert avec `CustomProperties` (data class + `GitProperties` imbriquée) injectée dans le controller.
 
 ### Exo 9 — profils (ancien 30)
 
