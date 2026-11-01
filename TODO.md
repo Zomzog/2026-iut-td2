@@ -54,8 +54,8 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
   `starter-validation` (exo 0) ; `starter-data-jpa`, `h2`, `kotlin("plugin.jpa")`, module console H2
   de Boot 4 (exos 12-14) ; `starter-data-jpa-test` (exo 16).
   Retirer `actuator`, `flyway-core` et `kotlin-logging` (TD4). Vérifier le groupe Jackson
-  (`tools.jackson` vs `com.fasterxml`, `T0-13`). `[spike]` : `@field:` nécessaire ou non avec
-  Kotlin 2.4 (`T0-12`, flag `-Xannotation-default-target`).
+  (`tools.jackson` vs `com.fasterxml`, `T0-13`). `@field:` : **inutile** en Kotlin 2.4.20
+  (spike de `E0-2`), pas de flag `-Xannotation-default-target`.
 - [ ] **G-03** · **Convention de tests** — `@Nested inner class ExoN` + `@DisplayName("Exo N — titre")`
   (comme TD1). Tests rouges sur `main` mais **qui compilent** ; quand un test ne compile pas avant
   l'exo, le coller depuis l'énoncé (mécanique `Exo8Test` du TD1). Un exo = un test lançable seul.
@@ -78,14 +78,29 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
 
 ### Exo 0 — annotations de validation (ancien 21)
 
-- [ ] **E0-1** · Retirer `@Validated` du `PetController` et le handler `ConstraintViolationException` de
+- [x] **E0-1** · Retirer `@Validated` du `PetController` et le handler `ConstraintViolationException` de
   `ErrorHandler` : en 4.1 la validation est native (`T2-08`, `C2-01`). `[décidé]`
-- [ ] **E0-2** · Énoncé : l'étudiant ajoute `spring-boot-starter-validation` (G-02) et pose des
+  **FAIT (2026-10-25) :** `@Validated` et le handler `ConstraintViolationException` retirés d'`exo0`, ainsi que
+  les imports `jakarta.validation` et `ConditionalOnProperty` devenus inutiles (le module compile sans
+  `starter-validation`, utile pour G-02). État de départ : 15 tests, 9 rouges (`Base.error case`, `Exo0` ×2,
+  `Exo1`, `Exo3`, `Exo4`, `Exo5`, `InfoTest` ×2). `Exo2` est déjà vert, comme prévu pour un refactor.
+- [x] **E0-2** · Énoncé : l'étudiant ajoute `spring-boot-starter-validation` (G-02) et pose des
   `@field:NotBlank` / `@field:Min(0)` sur `PetDto` ; préciser pourquoi `@field:` (slide « Annotation
   target »). Vérifier que `@Valid` est demandé sur le `@RequestBody` (slide « Validation d'objets »).
-- [ ] **E0-3** · Retirer la phrase « Un controller advice est déjà fourni… » ou la réécrire : la réponse
+  **FAIT (2026-11-01) :** `starter-validation` retiré du `build.gradle.kts` d'`exo0` ; l'énoncé (README, exo 0)
+  demande de l'ajouter, de poser `@NotBlank` / `@Min(0)` sur `PetDto` et `@Valid` sur le `@RequestBody`
+  (indice repliable). **`@field:` n'est pas nécessaire en Kotlin 2.4.20** (vérifié par spike + `javap` : une
+  annotation sans cible sur une propriété de constructeur est posée sur le champ **et** le paramètre), donc
+  l'énoncé ne l'impose pas. Conséquence : la slide « Annotation target » (`validation.md`) et la note
+  `T0-12` sont à réviser ; le flag `-Xannotation-default-target` est inutile (voir G-02).
+- [x] **E0-3** · Retirer la phrase « Un controller advice est déjà fourni… » ou la réécrire : la réponse
   d'erreur 400 est un `ProblemDetail` automatique via `ResponseEntityExceptionHandler`. `[décidé]`
-- [ ] **E0-4** · Vérifier `PetControllerTest.Exo0` sans modification (`./gradlew :exo0:test --tests '*Exo0'`).
+  **FAIT (2026-11-01) :** note d'en-tête du README réécrite ; vérifié par spike : un body invalide donne
+  400 `application/problem+json` (`detail` = « Invalid request content. », sans détail par champ).
+- [x] **E0-4** · Vérifier `PetControllerTest.Exo0` sans modification (`./gradlew :exo0:test --tests '*Exo0'`).
+  **FAIT (2026-11-01) :** sur `main`, `Exo0` a 2 tests rouges (âge et nom invalides) et 1 vert (cas valide).
+  Avec la solution (annotations + `@Valid`) dans une copie hors dépôt, les 3 tests sont verts, sans modifier
+  le test. La solution n'est pas dans `main` : elle ira dans le commit `Exo0` de `correction`.
 
 ### Exo 1 — méta-annotation sur `petId` (ancien 22)
 

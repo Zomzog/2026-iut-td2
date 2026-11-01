@@ -24,12 +24,26 @@ Pour lancer un test seul depuis la ligne de commande :
 ./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.PetControllerTest$Exo0'
 ```
 
-> **WARNING:** un controller advice est déjà fourni dans le projet pour gérer les erreurs de validation.
+> **NOTE:** un controller advice (`ErrorHandler`) est déjà fourni dans le projet.
+> Il étend `ResponseEntityExceptionHandler`, qui transforme déjà les erreurs de validation en réponse 400
+> au format `ProblemDetail` : vous n'avez rien à écrire pour gérer ces erreurs.
 
 ## Exo 0 - Validation par annotation
 
+Ajouter la dépendance `org.springframework.boot:spring-boot-starter-validation` dans `exo0/build.gradle.kts`
+(puis recharger le projet Gradle).
+
 À l'aide d'annotations, ajouter une validation pour que l'appel au endpoint POST /api/v1/pets
 retourne un code 400 si le nom est vide ou si l'âge est inférieur à 0.
+
+<details>
+<summary>Indice</summary>
+
+Les contraintes `@NotBlank` et `@Min` (package `jakarta.validation.constraints`) se posent sur les propriétés de `PetDto`.
+
+Pour que Spring valide le body, le paramètre `@RequestBody` du endpoint doit aussi être annoté avec `@Valid`.
+
+</details>
 
 La classe de test Exo0 de PetControllerTest doit passer sans y apporter de modifications.
 
