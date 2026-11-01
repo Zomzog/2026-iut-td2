@@ -648,9 +648,30 @@ data class HumanDto(val humanId: Int?, val name: String, val contact: ContactDto
 
 Créer une Entity (au sens JPA) PetEntity qui correspond aux attributs de PetDto.
 
-À l'aide d'un @OneToMany, lier HumanEntity et PetEntity de manière unidirectionnelle.
+À l'aide d'un @OneToMany, lier HumanEntity et PetEntity de manière unidirectionnelle
+(ie on peut faire human.pets, mais pas pet.human).
 
-Le test `exo 17` doit passer.
+Adapter les conversions entre `HumanDto` et `HumanEntity` pour prendre en compte les pets.
+
+<details>
+<summary>Indice</summary>
+
+Voir les slides « One-To-Many unidirectionnel ».
+
+Pour une collection JPA, utiliser une `var` de type `MutableList` : JPA remplace la liste par la sienne.
+
+Sans `@JoinColumn` sur le `@OneToMany`, JPA crée une table de jointure.
+Avec `@JoinColumn(name = "human_id")`, la clé étrangère est une colonne `human_id` de la table des pets.
+
+Pour le type d'un `PetKind` dans l'entité, `@Enumerated(EnumType.STRING)` enregistre le nom de la valeur.
+
+</details>
+
+La classe de test Exo17 de HumanControllerTest doit passer sans y apporter de modifications.
+
+```bash
+./gradlew :exo12:test --tests 'iut.nantes.exo12.controller.HumanControllerTest$Exo17'
+```
 
 ## Exo 18 - OneToMany bidirectionnel
 

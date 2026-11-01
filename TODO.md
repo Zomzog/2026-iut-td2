@@ -374,7 +374,11 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
 
 ### Exo 17 — OneToMany unidirectionnel (ancien 38)
 
-- [ ] **E17-1** · `PetEntity`, `@OneToMany`, ajout de `pets` à `HumanDto`. Test `exo 17`.
+- [x] **E17-1** · `PetEntity`, `@OneToMany`, ajout de `pets` à `HumanDto`. Test `exo 17`.
+  **FAIT (2026-11-01) :** README : `HumanDto` + `pets`, `PetEntity`, `@OneToMany` unidirectionnel, conversions, indice (slides, `var MutableList`
+  = `C2-28`, `@JoinColumn(name = "human_id")` vs table de jointure, `@Enumerated(STRING)`). Tests `Exo17` (2) rouges sur `main`.
+  Vérifié hors dépôt : tout `exo12` vert (Exo13, 14, 15, 17, `HumanRepositoryTest`) avec un `@OneToMany` LAZY par défaut, grâce à
+  l'open-in-view de Spring Boot (pas d'EAGER nécessaire, contrairement à 2025).
 
 ### Exo 18 — OneToMany bidirectionnel (ancien 39)
 
