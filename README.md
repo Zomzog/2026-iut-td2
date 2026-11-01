@@ -451,7 +451,19 @@ La classe de test Exo11 de PetControllerTest doit passer sans y apporter de modi
 
 À partir de cet exercice, les modifications sont à faire dans le module `exo12`.
 
-Ajouter dans le fichier src/main/resources/application.yml la configuration suivante
+H2 est une base de données écrite en Java, très pratique pour développer : elle démarre avec l'application, sans rien installer.
+
+Dans `exo12/build.gradle.kts`, ajouter les dépendances suivantes (puis recharger le projet Gradle) :
+
+```kotlin
+implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+runtimeOnly("com.h2database:h2")
+runtimeOnly("org.springframework.boot:spring-boot-h2console")
+```
+
+> **NOTE:** `spring-boot-h2console` apporte la console web de H2. Depuis Spring Boot 4, elle est dans un module séparé.
+
+Ajouter dans le fichier src/main/resources/application.yml (sous la clé `spring` déjà présente) la configuration suivante
 
 ```yaml
 spring:
@@ -470,11 +482,19 @@ Pour y accéder, il faut se rendre sur l'URL [http://localhost:8080/h2-console](
 
 À chaque démarrage de l'application, la base de données est réinitialisée.
 
-Pour le constater, vous pouvez lancer la requête suivante avant de relancer le service :
+Pour le vérifier :
 
-```sql
-CREATE TABLE TEST(ID INT PRIMARY KEY, NAME VARCHAR(255));
-```
+1. Lancer l'application (`Exo12Application.kt`, ou `./gradlew :exo12:bootRun`). La console affiche
+   `H2 console available at '/h2-console'`.
+2. Ouvrir la console H2 et se connecter avec le JDBC URL `jdbc:h2:mem:testdb`, l'utilisateur `sa` et le mot de passe `password`.
+3. Lancer la requête suivante, puis `SELECT * FROM TEST` : la requête réussit et ne renvoie aucune ligne.
+
+   ```sql
+   CREATE TABLE TEST(ID INT PRIMARY KEY, NAME VARCHAR(255));
+   ```
+
+4. Arrêter puis relancer l'application, se reconnecter à la console et relancer `SELECT * FROM TEST` :
+   l'erreur `Table "TEST" not found` confirme que la base a été réinitialisée.
 
 ## Exo 13 - Base de données H2 persistante
 

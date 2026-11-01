@@ -303,11 +303,18 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
 
 ### Exo 12 — H2 en mémoire + console (ancien 33)
 
-- [ ] **E12-1** · L'étudiant ajoute `starter-data-jpa`, `h2` et le module console H2 de Boot 4. `[spike]`
+- [x] **E12-1** · L'étudiant ajoute `starter-data-jpa`, `h2` et le module console H2 de Boot 4. `[spike]`
   (artefact exact de la console).
-- [ ] **E12-2** · Config `spring.datasource.*` donnée dans l'énoncé.
-- [ ] **E12-3** · Vérification manuelle explicite : URL de la console, requête SQL à lancer, résultat
+  **FAIT (2026-11-01) :** le spike donne l'artefact exact : `org.springframework.boot:spring-boot-h2console` (console
+  servie sur `/h2-console`, 302 vers la page de connexion, vérifié). L'étudiant ajoute `starter-data-jpa`, `h2` (runtime) et
+  `spring-boot-h2console` (runtime) ; `plugin.jpa` viendra à l'exo 14. Coordonnées dans l'énoncé.
+- [x] **E12-2** · Config `spring.datasource.*` donnée dans l'énoncé.
+  **FAIT (2026-11-01) :** config `spring.datasource.*` + `spring.h2.console.enabled` donnée telle quelle, avec la précision
+  « sous la clé `spring` déjà présente » (le `application.yml` d'`exo12` contient déjà `jpa.hibernate.ddl-auto`).
+- [x] **E12-3** · Vérification manuelle explicite : URL de la console, requête SQL à lancer, résultat
   attendu. `[décidé]`
+  **FAIT (2026-11-01) :** vérification en 4 étapes (log `H2 console available`, connexion avec URL / user / mot de passe,
+  `CREATE TABLE` puis `SELECT`, redémarrage et erreur `Table "TEST" not found`). Pas de test automatisé.
 
 ### Exo 13 — H2 dans un fichier (ancien 34)
 
