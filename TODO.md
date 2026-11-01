@@ -357,11 +357,20 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
 
 ### Exo 16 — OneToOne bidirectionnel (ancien 37)
 
-- [ ] **E16-1** · Passer en bidirectionnel (`mappedBy`).
-- [ ] **E16-2** · Le test `exo 15` passe aussi en unidirectionnel (`T2-14`) : la bidirectionnalité est
+- [x] **E16-1** · Passer en bidirectionnel (`mappedBy`).
+  **FAIT (2026-11-01) :** README exo 16 : explication propriétaire / inverse (`mappedBy`), indice (slides « One-To-One
+  bi-directionnel », `human` nullable côté `ContactEntity`). Vérifié hors dépôt.
+- [x] **E16-2** · Le test `exo 15` passe aussi en unidirectionnel (`T2-14`) : la bidirectionnalité est
   prouvée par le test de l'étape suivante.
-- [ ] **E16-3** · **Nouvel exo : `@DataJpaTest` écrit par l'étudiant** `[décidé : exo distinct]` ;
+  **FAIT (2026-11-01) :** NOTE dans l'énoncé : `Exo15` passe aussi en unidirectionnel, c'est le test de l'exo 16b qui prouve
+  la relation.
+- [x] **E16-3** · **Nouvel exo : `@DataJpaTest` écrit par l'étudiant** `[décidé : exo distinct]` ;
   l'étudiant ajoute `starter-data-jpa-test` (`C2-57`).
+  **FAIT (2026-11-01) :** exo **16b** : l'étudiant ajoute `starter-data-jpa-test` et écrit `HumanRepositoryTest` (`@DataJpaTest`,
+  étapes données : sauver, `flush` + `clear`, relire le contact, vérifier `contact.human`). Vérifié hors dépôt : vert avec
+  `@OneToOne(mappedBy = "contact")`, rouge sans. **Packages Boot 4** donnés dans une NOTE (`DataJpaTest` dans
+  `org.springframework.boot.data.jpa.test.autoconfigure`, `TestEntityManager` dans `org.springframework.boot.jpa.test.autoconfigure`),
+  c'est le point `C2-57`. Pas de test fourni (l'étudiant l'écrit).
 
 ### Exo 17 — OneToMany unidirectionnel (ancien 38)
 

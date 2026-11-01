@@ -594,9 +594,49 @@ La classe de test Exo15 de HumanControllerTest doit passer sans y apporter de mo
 
 ## Exo 16 - OneToOne bidirectionnel
 
-Modifier le OneToOne pour qu'il soit bidirectionnel.
+Modifier le OneToOne pour qu'il soit bidirectionnel :
+on peut faire human.contact.email, et aussi contact.human.name.
 
-Le test `exo 15` doit passer.
+Dans une relation bidirectionnelle, un seul côté est propriétaire (c'est lui qui porte la clé étrangère),
+l'autre côté est l'inverse et le déclare avec `mappedBy`.
+
+<details>
+<summary>Indice</summary>
+
+Voir les slides « One-To-One bi-directionnel ».
+
+Le côté inverse est `ContactEntity` : sa propriété `human` doit être nullable (avec `null` par défaut),
+pour pouvoir créer un contact avant son human.
+
+</details>
+
+La classe de test Exo15 de HumanControllerTest doit toujours passer.
+
+> **NOTE:** ce test passe aussi avec une relation unidirectionnelle : il ne prouve pas que la relation est bidirectionnelle.
+> C'est le rôle de l'exo suivant.
+
+## Exo 16b - Tester la relation
+
+Dans `exo12/build.gradle.kts`, ajouter la dépendance de test `org.springframework.boot:spring-boot-starter-data-jpa-test`.
+
+Écrire une classe de tests `HumanRepositoryTest` (dans `src/test/kotlin/iut/nantes/exo12/repository/`)
+avec `@DataJpaTest`, qui prouve que la relation est bidirectionnelle :
+
+1. enregistrer un human avec son contact avec le repository,
+2. vider le cache de JPA (`flush()` puis `clear()`), pour que la suite relise bien la base,
+3. relire le **contact** depuis la base,
+4. vérifier que `contact.human` est le human enregistré.
+
+> **NOTE:** depuis Spring Boot 4, `@DataJpaTest` et `TestEntityManager` sont dans des packages différents des anciens tutoriels :
+> `org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest` et `org.springframework.boot.jpa.test.autoconfigure.TestEntityManager`.
+
+> **TIP:** `TestEntityManager` fournit `flush()`, `clear()` et `find(classe, id)`, pratique dans un test JPA.
+
+Ce test doit passer. Il ne compile pas (ou échoue) avec la relation unidirectionnelle de l'exo 15.
+
+```bash
+./gradlew :exo12:test --tests 'iut.nantes.exo12.repository.HumanRepositoryTest'
+```
 
 ## Exo 17 - OneToMany
 
