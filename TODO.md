@@ -56,6 +56,11 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
   Retirer `actuator`, `flyway-core` et `kotlin-logging` (TD4). Vérifier le groupe Jackson
   (`tools.jackson` vs `com.fasterxml`, `T0-13`). `@field:` : **inutile** en Kotlin 2.4.20
   (spike de `E0-2`), pas de flag `-Xannotation-default-target`.
+  **FAIT à moitié (2026-11-01) :** `exo0` n'a plus `actuator`, `data-jpa`, `h2`, `plugin.jpa` ; `exo12` n'a plus
+  `actuator`, `data-jpa`, `validation`, `flyway-core`, `h2`, `kotlin-logging`, `plugin.jpa` (l'étudiant les ajoute
+  aux exos 12-14, voir les `E12-*` à `E14-*`) ; `ErrorHandler` d'`exo12` simplifié comme celui d'`exo0` ; Jackson
+  passé à `tools.jackson.module:jackson-module-kotlin` (mêmes résultats de tests). **Reste** : cocher G-02 une fois
+  les exos JPA écrits (les coordonnées exactes doivent être dans l'énoncé).
 - [ ] **G-03** · **Convention de tests** — `@Nested inner class ExoN` + `@DisplayName("Exo N — titre")`
   (comme TD1). Tests rouges sur `main` mais **qui compilent** ; quand un test ne compile pas avant
   l'exo, le coller depuis l'énoncé (mécanique `Exo8Test` du TD1). Un exo = un test lançable seul.

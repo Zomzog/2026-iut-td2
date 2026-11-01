@@ -3,7 +3,6 @@ plugins {
 	kotlin("plugin.spring") version "2.4.20"
 	id("org.springframework.boot") version "4.1.1"
 	id("io.spring.dependency-management") version "1.1.7"
-	kotlin("plugin.jpa") version "2.4.20"
 }
 
 group = "iut.nantes"
@@ -20,12 +19,9 @@ repositories {
 }
 
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter-actuator")
-	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-webmvc")
-	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+	implementation("tools.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
-	runtimeOnly("com.h2database:h2")
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 	testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
