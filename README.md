@@ -218,29 +218,58 @@ La classe de test Exo4 de PetControllerTest doit passer sans y apporter de modif
 
 ## Exo 5 - Surcharger la gestion d'une exception de Spring
 
-Dans le controller advice ErrorHandler, qui étend la gestion des erreurs de Spring.
+Quand le body d'une requête ne peut pas être lu (valeur inconnue pour un enum, JSON mal formé...),
+Spring répond déjà 400 avec un `ProblemDetail`, mais son `detail` est trop vague pour le client de l'API : `Failed to read request`.
 
-Pour trouver la bonne exception à surcharger,
-il faut mettre un point d'arrêt dans la méthode handleException de ResponseEntityExceptionHandler
-et lancer le test Exo5 de PetControllerTest en debug.
+Dans le controller advice `ErrorHandler`, qui étend la gestion des erreurs de Spring (`ResponseEntityExceptionHandler`),
+on veut un message qui indique le champ en erreur et la valeur refusée.
+
+Pour trouver la bonne exception à surcharger, lancer le test `unknown enum value` de la classe Exo5 de PetControllerTest :
+il envoie un `kind` qui n'est pas dans l'enum (`PONY`) et affiche la requête et la réponse.
+Chercher dans la sortie la ligne `Resolved Exception` : elle donne le type de l'exception.
+
+> **TIP:** une autre solution est de mettre un point d'arrêt dans la méthode `handleException` de `ResponseEntityExceptionHandler`
+> et de lancer le test en debug.
 
 <details>
 <summary>Solution</summary>
 
-Dans le cas du test Exo5, on envoie un type PONY qui n'est pas dans l'enum et donne donc lieu à une exception HttpMessageNotReadableException.
+Le type `PONY` n'est pas dans l'enum : la lecture du body échoue avec une `HttpMessageNotReadableException`,
+et `ResponseEntityExceptionHandler` a une méthode `handleHttpMessageNotReadable` qu'on peut surcharger.
 
 </details>
 
-Surcharger la gestion de cette erreur par ResponseEntityExceptionHandler pour remplacer la réponse et l'avoir sous la forme :
+Surcharger la gestion de cette erreur pour que le `detail` du `ProblemDetail` indique le champ et la valeur refusée,
+par exemple `Invalid value 'PONY' for field 'kind'`.
 
-```json
-{
-  "status": 400,
-  "message": "message de l'exception"
-}
-```
+Les autres erreurs de lecture (JSON mal formé, par exemple) doivent continuer à être gérées comme avant.
+
+<details>
+<summary>Indice</summary>
+
+La cause de l'`HttpMessageNotReadableException` (`ex.cause`) est ici une `tools.jackson.databind.exc.InvalidFormatException`.
+Elle donne la valeur refusée (`value`) et le chemin du champ (`path`, une liste dont chaque élément a un `propertyName`).
+
+Pour les autres causes, appeler la méthode du parent (`super`).
+
+`ProblemDetail.forStatusAndDetail(status, detail)` crée le `ProblemDetail`,
+et `handleExceptionInternal(ex, problemDetail, headers, status, request)` construit la réponse.
+
+</details>
 
 La classe de test Exo5 de PetControllerTest doit passer sans y apporter de modifications.
+
+```bash
+./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.PetControllerTest$Exo5'
+```
+
+### Exo 5 - Bonus
+
+Ajouter au `ProblemDetail` une propriété `field` qui contient le nom du champ en erreur (ici `kind`).
+
+> **TIP:** `ProblemDetail.setProperty(nom, valeur)` ajoute une propriété à la réponse JSON.
+
+La classe de test Exo5Bonus de PetControllerTest doit passer sans y apporter de modifications.
 
 ## Exo 6 - Banner.txt pour afficher ses properties
 

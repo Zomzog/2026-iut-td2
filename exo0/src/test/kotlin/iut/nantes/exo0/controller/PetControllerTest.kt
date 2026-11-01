@@ -1,6 +1,6 @@
 package iut.nantes.exo0.controller
 
-import org.hamcrest.Matchers.startsWith
+import org.hamcrest.Matchers.containsString
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.springframework.beans.factory.annotation.Autowired
@@ -292,7 +292,7 @@ class PetControllerTest {
     @Nested
     inner class Exo5 {
         @Test
-        fun `error case invalid age`() {
+        fun `unknown enum value`() {
             mockMvc.post("/api/v1/pets") {
                 contentType = APPLICATION_JSON
                 content = """
@@ -305,10 +305,44 @@ class PetControllerTest {
             }.andDo { print() }
                 .andExpect {
                     status { isBadRequest() }
-                    content { contentType("application/json") }
-                    jsonPath("$.status") { value("400") }
-                    jsonPath("$.message") { startsWith("JSON parse error") }
-                    jsonPath("$.title") { doesNotExist() }
+                    content { contentType("application/problem+json") }
+                    jsonPath("$.status") { value(400) }
+                    jsonPath("$.detail") { value(containsString("kind")) }
+                    jsonPath("$.detail") { value(containsString("PONY")) }
+                }
+        }
+
+        @Test
+        fun `malformed json`() {
+            mockMvc.post("/api/v1/pets") {
+                contentType = APPLICATION_JSON
+                content = """{ "name": """
+            }
+                .andExpect {
+                    status { isBadRequest() }
+                    content { contentType("application/problem+json") }
+                    jsonPath("$.status") { value(400) }
+                }
+        }
+    }
+
+    @Nested
+    inner class Exo5Bonus {
+        @Test
+        fun `field property`() {
+            mockMvc.post("/api/v1/pets") {
+                contentType = APPLICATION_JSON
+                content = """
+                    {
+                        "name": "Pinkie Pie",
+                        "age": 100,
+                        "kind": "PONY"
+                    }
+                """.trimIndent()
+            }
+                .andExpect {
+                    status { isBadRequest() }
+                    jsonPath("$.field") { value("kind") }
                 }
         }
     }

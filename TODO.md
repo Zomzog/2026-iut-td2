@@ -200,17 +200,31 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
 
 ### Exo 5 — surcharge de `HttpMessageNotReadableException` (ancien 26)
 
-- [ ] **E5-1** · Constat vérifié par spike : le 400 `ProblemDetail` est **déjà automatique**
+- [x] **E5-1** · Constat vérifié par spike : le 400 `ProblemDetail` est **déjà automatique**
   (`detail` = « Failed to read request »). L'exo n'est plus « changer le format » mais **enrichir le
   `detail`**. `[décidé]`
-- [ ] **E5-2** · Garder la recherche de l'exception à surcharger (point d'arrêt dans `handleException`
+  **FAIT (2026-11-01) :** README réécrit : le 400 `ProblemDetail` est présenté comme déjà là (`detail` trop vague),
+  l'objectif est un `detail` utile.
+- [x] **E5-2** · Garder la recherche de l'exception à surcharger (point d'arrêt dans `handleException`
   **ou** `logging.level.org.springframework.web=DEBUG`, alternative VS Code, `T2-27`).
-- [ ] **E5-3** · L'étudiant surcharge `handleHttpMessageNotReadable` : le `detail` mentionne le champ
+  **FAIT (2026-11-01) :** deux voies, sans dépendre de l'IDE : la sortie du test (`.andDo { print() }` → `Resolved
+  Exception: Type = …HttpMessageNotReadableException`, vérifié) et le point d'arrêt dans `handleException` (TIP).
+  Le log `logging.level.org.springframework.web: DEBUG` marche aussi (vérifié) mais n'est pas dans l'énoncé :
+  `application.yml` n'existe qu'à l'exo 6. `T2-27` satisfait (aucune procédure propre à IntelliJ).
+- [x] **E5-3** · L'étudiant surcharge `handleHttpMessageNotReadable` : le `detail` mentionne le champ
   (`kind`) et la valeur refusée (`PONY`). Piste : `ex.cause` est un
   `tools.jackson.databind.exc.InvalidFormatException`, `path` donne `[kind]`.
-- [ ] **E5-4** · ⭐ Optionnel : propriété `field` dans le `ProblemDetail`.
-- [ ] **E5-5** · Réécrire le test : plus de `$.message` ni `doesNotExist(title)` ; `startsWith` appliqué
+  **FAIT (2026-11-01) :** consigne + indice repliable (`ex.cause` = `InvalidFormatException`, `value`, `path`, `super`
+  pour les autres causes, `handleExceptionInternal`). Solution vérifiée hors dépôt (`Invalid value 'PONY' for field 'kind'`).
+- [x] **E5-4** · ⭐ Optionnel : propriété `field` dans le `ProblemDetail`.
+  **FAIT (2026-11-01) :** sous-section « Exo 5 - Bonus » + classe de test `Exo5Bonus` (`$.field` = `kind`), vérifiée vert
+  avec `problem.setProperty("field", field)`.
+- [x] **E5-5** · Réécrire le test : plus de `$.message` ni `doesNotExist(title)` ; `startsWith` appliqué
   réellement (bug `T2-01`) ; rouge au départ car le `detail` par défaut ne contient pas `kind`.
+  **FAIT (2026-11-01) :** test `Exo5` réécrit : `unknown enum value` (400, `application/problem+json`, `$.status`, `$.detail`
+  contient `kind` et `PONY`, matchers Hamcrest réellement appliqués via `value(containsString(...))`, fin du bug
+  `startsWith`) et `malformed json` (400 `problem+json`, vert dès le départ, garde-fou contre une surcharge trop
+  large). Rouge sur `main` : `unknown enum value` et `Exo5Bonus`.
 
 ### Exo 6 — `banner.txt` (ancien 27)
 
