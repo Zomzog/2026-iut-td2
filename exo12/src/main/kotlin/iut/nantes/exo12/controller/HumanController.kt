@@ -9,13 +9,12 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class HumanController(val db: DatabaseProxy){
 
-    @GetMapping("/api/v1/human/{human}")
+    @GetMapping("/api/v1/humans/{humanId}")
     fun getHuman(@PathVariable humanId: Int) = db.findHumanById(humanId)?.let {
         ResponseEntity.ok(it)
     } ?: ResponseEntity.notFound().build()
@@ -40,8 +39,8 @@ class HumanController(val db: DatabaseProxy){
     }
 
     @GetMapping("/api/v1/humans")
-    fun getHumans(@RequestParam minAge: Int?, @RequestParam maxAge: Int?): ResponseEntity<List<HumanDto>> {
-        val result = db.findAllHuman()
+    fun getHumans(): ResponseEntity<List<HumanDto>> {
+        val result = db.findAllHumans()
         return ResponseEntity.ok(result)
     }
 }

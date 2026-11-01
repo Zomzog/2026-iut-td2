@@ -330,12 +330,23 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
 
 ### Exo 14 — Entity + `JpaRepository` (ancien 35)
 
-- [ ] **E14-1** · L'étudiant ajoute `kotlin("plugin.jpa")` (G-02) ; entité `HumanEntity`, repository,
+- [x] **E14-1** · L'étudiant ajoute `kotlin("plugin.jpa")` (G-02) ; entité `HumanEntity`, repository,
   mapping DTO ↔ Entity **écrit par l'étudiant** `[décidé]`. Style d'entité (`class`, `id` nullable) à
   confirmer. `[à trancher]`
-- [ ] **E14-2** · Corriger `HumanController` : `@GetMapping("/api/v1/humans/{humanId}")` (`T2-04`).
-- [ ] **E14-3** · `findAllHumans` partout (`T2-06`) ; renommer `PetControllerTest` → `HumanControllerTest` ;
+  **FAIT (2026-11-01) :** README : ajout du plugin `kotlin("plugin.jpa")` (avec la raison), entité + repository + mapping écrits par
+  l'étudiant, indice repliable : `class` avec `var` plutôt que `data class`, id `Int?` avec `@Id @GeneratedValue`. Style
+  d'entité `class` + id nullable : ma décision par défaut (cohérente avec `C2-35`), à valider. Solution vérifiée hors dépôt
+  (`Exo14` vert, rouge sur `main`).
+- [x] **E14-2** · Corriger `HumanController` : `@GetMapping("/api/v1/humans/{humanId}")` (`T2-04`).
+  **FAIT (2026-11-01) :** `@GetMapping("/api/v1/humans/{humanId}")` ; le test `unknown human` vérifie le 404 (jamais 500). Les
+  `@RequestParam minAge/maxAge` inutilisés de `getHumans` sont retirés.
+- [x] **E14-3** · `findAllHumans` partout (`T2-06`) ; renommer `PetControllerTest` → `HumanControllerTest` ;
   isoler les tests (`deleteAll()` ou `@Transactional`, `T2-07`).
+  **FAIT (2026-11-01) :** `findAllHuman` → `findAllHumans` (`DatabaseProxy` et controller) ; `PetControllerTest` → `HumanControllerTest`
+  (`git mv`) avec une classe imbriquée par exo (`Exo14`, `Exo15`, `Exo17`, `Exo19`) ; tests indépendants de l'ordre et des
+  données déjà en base (id lu dans la réponse du POST, lecture par id, `hasItem` sur la liste) donc sans `@Transactional`
+  (qui demanderait `spring-tx` dans le squelette) ni nettoyage ; tests `exo 41` / `exo 44` (TD3) supprimés ; imports morts retirés.
+  Le 404 de `unknown human` et la structure des tests `Exo15`/`Exo17` sont aussi en place pour les exos suivants.
 
 ### Exo 15 — OneToOne unidirectionnel (ancien 36)
 

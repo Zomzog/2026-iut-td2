@@ -529,6 +529,9 @@ La classe de test Exo13Test vérifie que la base est bien stockée dans un fichi
 
 ## Exo 14 - Un CRUD avec une BDD
 
+Dans `exo12/build.gradle.kts`, ajouter le plugin `kotlin("plugin.jpa") version "2.4.20"` dans le bloc `plugins`.
+JPA a besoin d'un constructeur sans argument sur les entités, que Kotlin ne génère pas : ce plugin le fait à votre place.
+
 Créer une Entity (au sens JPA) HumanEntity qui correspond aux attributs de HumanDto.
 
 Créer un repository HumanRepository qui étend JpaRepository.
@@ -539,7 +542,25 @@ Créer un repository HumanRepository qui étend JpaRepository.
 - findHumanById
 - findAllHumans
 
-Le test `exo 14` doit passer.
+Pour cela, il faut convertir un `HumanDto` en `HumanEntity` et inversement : à vous d'écrire ces conversions.
+Les fonctions sur les pets ne servent pas dans ce TD, les laisser telles quelles.
+
+<details>
+<summary>Indice</summary>
+
+Pour une entité, préférer une `class` avec des `var` à une `data class`
+(les méthodes `equals` et `hashCode` générées par `data class` posent problème avec JPA).
+
+L'identifiant est nullable (`Int?`) : il vaut `null` tant que l'entité n'est pas enregistrée en base.
+Il est annoté `@Id` et `@GeneratedValue`.
+
+</details>
+
+La classe de test Exo14 de HumanControllerTest doit passer sans y apporter de modifications.
+
+```bash
+./gradlew :exo12:test --tests 'iut.nantes.exo12.controller.HumanControllerTest$Exo14'
+```
 
 ## Exo 15 - OneToOne
 

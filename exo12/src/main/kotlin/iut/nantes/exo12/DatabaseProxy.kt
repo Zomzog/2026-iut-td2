@@ -26,7 +26,7 @@ class DatabaseProxy() {
         TODO()
     }
 
-    fun findAllHuman(): List<HumanDto> {
+    fun findAllHumans(): List<HumanDto> {
         TODO()
     }
 }
