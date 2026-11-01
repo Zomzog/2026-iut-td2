@@ -575,7 +575,22 @@ Créer une Entity (au sens JPA) ContactEntity qui correspond aux attributs de Co
 À l'aide d'un @OneToOne, lier HumanEntity et ContactEntity de manière unidirectionnelle
 (ie on peut faire human.contact.email, mais pas contact.human.name).
 
-Le test `exo 15` doit passer.
+Adapter les conversions entre `HumanDto` et `HumanEntity` pour prendre en compte le contact.
+
+<details>
+<summary>Indice</summary>
+
+Voir les slides « One-To-One unidirectionnel ».
+
+Enregistrer un human doit aussi enregistrer son contact : regarder l'attribut `cascade` de `@OneToOne`.
+
+</details>
+
+La classe de test Exo15 de HumanControllerTest doit passer sans y apporter de modifications.
+
+```bash
+./gradlew :exo12:test --tests 'iut.nantes.exo12.controller.HumanControllerTest$Exo15'
+```
 
 ## Exo 16 - OneToOne bidirectionnel
 

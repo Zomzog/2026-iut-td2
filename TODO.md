@@ -350,7 +350,10 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
 
 ### Exo 15 — OneToOne unidirectionnel (ancien 36)
 
-- [ ] **E15-1** · `ContactEntity`, `@OneToOne`. Test `exo 15`.
+- [x] **E15-1** · `ContactEntity`, `@OneToOne`. Test `exo 15`.
+  **FAIT (2026-11-01) :** README : `HumanDto` + `contact`, `ContactEntity`, `@OneToOne` unidirectionnel, conversions à adapter, indice
+  (slides « One-To-One unidirectionnel », `cascade`). Tests `Exo15` (2 : création avec contact, lecture du contact par id) rouges
+  sur `main`, verts avec la solution (`@OneToOne(cascade = ALL) @JoinColumn("contact_id")`, vérifié hors dépôt ; `Exo14` reste vert).
 
 ### Exo 16 — OneToOne bidirectionnel (ancien 37)
 
