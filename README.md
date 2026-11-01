@@ -73,14 +73,32 @@ La classe Base, qui teste le fonctionnement de départ de GET /api/v1/pets/{petI
 ./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.PetControllerTest$Exo1'
 ```
 
-## Exo 2 - Request params dans un objet
+## Exo 2 (bonus) - Request params dans un objet
 
-Les "request params" peuvent être groupés dans un objet.
-Il ne faut pas lui ajouter d'annotation (même pas @RequestParam) sans lui fournir d'annotation.
+> **Bonus :** cet exo est optionnel, aucun exo suivant n'en dépend. Faites-le si vous voulez découvrir cette technique.
 
-Créer une classe AgeRange pour remplacer les paramètres de GET /api/v1/pets.
+Quand un endpoint a plusieurs paramètres de requête (query params), on peut les regrouper dans un objet.
+Spring remplit chaque propriété avec le paramètre du même nom.
+Ni l'objet ni le paramètre du controller n'ont besoin d'annotation : pas de `@RequestParam`, pas de `@RequestBody`.
 
-La classe de test Exo2 de PetControllerTest doit passer sans y apporter de modifications.
+```kotlin
+data class Search(val text: String?, val limit: Int?)
+
+@GetMapping("/api/v1/search")
+fun search(search: Search) = "${search.text} ${search.limit}"
+```
+
+`GET /api/v1/search?text=abc&limit=10` appelle `search(Search("abc", 10))`.
+Un paramètre absent de l'URL donne `null` : les propriétés doivent donc être nullables.
+
+Créer une classe `AgeRange` qui regroupe `minAge` et `maxAge`, pour remplacer les deux paramètres de GET /api/v1/pets.
+
+Le comportement ne change pas : la classe de test Exo2 de PetControllerTest passe déjà avant l'exo,
+elle doit continuer à passer après sans y apporter de modifications.
+
+```bash
+./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.PetControllerTest$Exo2'
+```
 
 ## Exo 3 - Validateur personnalisé
 

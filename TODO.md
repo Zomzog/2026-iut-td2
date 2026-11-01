@@ -120,15 +120,25 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
 
 ### Exo 2 — request params dans un objet (ancien 23) ⭐
 
-- [ ] **E2-1** · Passer en **bonus** : l'exo devient un mini-cours dans l'énoncé (comment grouper des
+- [x] **E2-1** · Passer en **bonus** : l'exo devient un mini-cours dans l'énoncé (comment grouper des
   query params dans une `data class` sans annotation, avec un exemple court) qui **propose** de le
   faire. `[décidé]`
-- [ ] **E2-2** · Rester sur `AgeRange` (pas de `Page` : un vrai groupement de pagination passerait par
+  **FAIT (2026-11-01) :** README : titre « Exo 2 (bonus) », encadré « optionnel, aucun exo suivant n'en dépend »,
+  mini-cours + exemple (`Search(text, limit)` sur `GET /api/v1/search`), puis la consigne. Exemple vérifié par
+  spike : `?text=abc&limit=10` → `abc/10`, paramètre absent → `null`.
+- [x] **E2-2** · Rester sur `AgeRange` (pas de `Page` : un vrai groupement de pagination passerait par
   `Pageable`). `[décidé]` Comme le refactor ne change pas le comportement, `Exo2` passe déjà au départ.
-- [ ] **E2-3** · Réécrire la phrase illisible de 2025 (« même pas `@RequestParam` sans lui fournir
+  **FAIT (2026-11-01) :** la consigne reste sur `AgeRange` ; vérifié avec une copie hors dépôt : `Exo2` vert avec
+  `AgeRange` et déjà vert sur `main`.
+- [x] **E2-3** · Réécrire la phrase illisible de 2025 (« même pas `@RequestParam` sans lui fournir
   d'annotation »).
-- [ ] **E2-4** · Le squelette garde les deux `@RequestParam` sur `GET /pets` ; l'exo 3 ne doit plus en
+  **FAIT (2026-11-01) :** phrase remplacée par une explication claire (Spring remplit chaque propriété avec le
+  paramètre du même nom, ni objet ni paramètre n'ont d'annotation, propriétés nullables).
+- [x] **E2-4** · Le squelette garde les deux `@RequestParam` sur `GET /pets` ; l'exo 3 ne doit plus en
   dépendre (voir E3-1).
+  **FAIT (2026-11-01) :** le squelette garde `@RequestParam minAge` / `maxAge` ; rien à changer. **À garder en
+  tête pour E3 :** un étudiant qui a fait l'exo 2 a déjà une classe `AgeRange` ; la validation globale de
+  l'exo 3 (body) devra choisir un autre nom ou réutiliser cette classe.
 
 ### Exo 3 — `@ValidAgeRange` (ancien 24) — à réécrire, voire couper en 2
 
