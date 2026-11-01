@@ -73,9 +73,12 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
 - [ ] **G-06** · **Relecture énoncé ↔ build (`T0-33`)** — coordonnées de dépendances identiques à celles
   de la correction, `curl` copiés-collés et exécutés, aucun paramètre de suivi dans les liens, noms de
   classes cohérents entre consigne et TIP, `rootProject.name = "td2"`.
-- [ ] **G-07** · **Synchroniser les notes Obsidian** — `TD2.md` : numérotation à partir de 0, `T2-18`
+- [x] **G-07** · **Synchroniser les notes Obsidian** — `TD2.md` : numérotation à partir de 0, `T2-18`
   (la correction 2025 utilise `@Target(VALUE_PARAMETER)`, pas une contrainte de classe), décisions du
-  grill. `Cours 2.md` : `C2-62` (slide `orphanRemoval`) déjà ajoutée.
+  grill. `Cours 2.md` : `C2-64` (slide `orphanRemoval`) déjà ajoutée.
+  **FAIT (2026-11-01) :** `TD2.md` (encadré d'avancement, table renumérotée, 31 étapes `T2-*` cochées avec FAIT / DÉCISION), `update.md`
+  (`T0-08`, `T0-12`, `T0-13`, `T0-14`, `T0-16`, `T0-32`, `T0-34`), `Cours 2.md` (nouveaux `C2-67`, `C2-68`, `C2-69` ; la slide `orphanRemoval`
+  est `C2-64`).
 - [ ] **G-08** · **CI** — reporté, voir `T2-39`.
 - [ ] **G-09** · **Ordre et socle / bonus** — à repenser une fois le TD écrit, voir `T2-38`.
 
@@ -395,9 +398,9 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
 
 ### Exo 19 — DELETE d'un pet (ancien 40) ⭐ ?
 
-- [x] **E19-1** · `orphanRemoval = true` : **slide à ajouter au cours** (`C2-62`, déjà dans `Cours 2.md`) ;
+- [x] **E19-1** · `orphanRemoval = true` : **slide à ajouter au cours** (`C2-64`, déjà dans `Cours 2.md`) ;
   l'énoncé y renvoie. `[décidé]`
-  **FAIT (2026-11-01) :** l'énoncé renvoie à « la slide `orphanRemoval` » (`C2-62`, **à écrire dans le cours** : la slide n'existe
+  **FAIT (2026-11-01) :** l'énoncé renvoie à « la slide `orphanRemoval` » (`C2-64`, **à écrire dans le cours** : la slide n'existe
   pas encore dans `jpa2.md`) ; indice : charger le human, retirer le pet de `pets`, enregistrer.
 - [x] **E19-2** · Garder le test commenté (décommenter après l'ajout de `pets` à `HumanDto`) ; corriger la
   phrase et l'indiquer dans l'énoncé (`T2-15`).
