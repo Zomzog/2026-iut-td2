@@ -395,12 +395,20 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
 
 ### Exo 19 — DELETE d'un pet (ancien 40) ⭐ ?
 
-- [ ] **E19-1** · `orphanRemoval = true` : **slide à ajouter au cours** (`C2-62`, déjà dans `Cours 2.md`) ;
+- [x] **E19-1** · `orphanRemoval = true` : **slide à ajouter au cours** (`C2-62`, déjà dans `Cours 2.md`) ;
   l'énoncé y renvoie. `[décidé]`
-- [ ] **E19-2** · Garder le test commenté (décommenter après l'ajout de `pets` à `HumanDto`) ; corriger la
+  **FAIT (2026-11-01) :** l'énoncé renvoie à « la slide `orphanRemoval` » (`C2-62`, **à écrire dans le cours** : la slide n'existe
+  pas encore dans `jpa2.md`) ; indice : charger le human, retirer le pet de `pets`, enregistrer.
+- [x] **E19-2** · Garder le test commenté (décommenter après l'ajout de `pets` à `HumanDto`) ; corriger la
   phrase et l'indiquer dans l'énoncé (`T2-15`).
-- [ ] **E19-3** · `[spike]` : le DELETE passe-t-il sans `@Transactional` (c3) ?
-- [ ] **E19-4** · Socle ou bonus : `[à trancher]` (voir G-09).
+  **FAIT (2026-11-01) :** test `Exo19.delete a pet` conservé commenté ; commentaire et énoncé alignés (« ne compile pas avant
+  l'ajout de `contact` et `pets` à `HumanDto` », consigne `Ctrl+/`) ; import `delete` ajouté pour que le test compile une fois
+  décommenté (`T2-15`). Vérifié hors dépôt : rouge sans `orphanRemoval`, vert avec.
+- [x] **E19-3** · `[spike]` : le DELETE passe-t-il sans `@Transactional` (c3) ?
+  **FAIT (2026-11-01) :** pas besoin de `@Transactional` : avec l'open-in-view de Spring Boot, la suppression passe (vérifié :
+  `orphanRemoval = true` + `save(human)` suffisent). `@Transactional` reste un sujet de c3.
+- [x] **E19-4** · Socle ou bonus : `[à trancher]` (voir G-09).
+  **FAIT (2026-11-01) :** marqué **bonus** dans le README (encadré), en attendant la décision finale `T2-38` / G-09.
 
 ### Bonus
 

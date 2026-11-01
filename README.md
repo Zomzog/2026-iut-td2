@@ -703,13 +703,30 @@ ce test doit passer.
 ./gradlew :exo12:test --tests 'iut.nantes.exo12.repository.Exo18Test'
 ```
 
-## Exo 19 - Suppression d'un pet
+## Exo 19 (bonus) - Suppression d'un pet
+
+> **Bonus :** cet exo est optionnel.
 
 Ajouter un nouveau endpoint DELETE "/api/v1/humans/{humanId}/pets/{petId}" et les services requis.
 
-Ce endpoint permet de supprimer un pet.
+Ce endpoint permet de supprimer un pet et répond 204 (No Content).
 
-Le test `exo 19` doit passer.
+<details>
+<summary>Indice</summary>
+
+Dans `DatabaseProxy`, charger le human, retirer le pet de sa liste `pets`, puis enregistrer le human.
+
+Pour que le pet retiré de la liste soit aussi supprimé de la base, voir la slide `orphanRemoval` :
+c'est une option du `@OneToMany`.
+
+</details>
+
+Dans `HumanControllerTest.kt`, le test de la classe Exo19 est commenté parce qu'il ne compile pas avant l'ajout de `contact` et `pets` à `HumanDto`.
+Le décommenter (sélectionner les lignes commentées, puis `Ctrl+/`) : il doit passer.
+
+```bash
+./gradlew :exo12:test --tests 'iut.nantes.exo12.controller.HumanControllerTest$Exo19'
+```
 
 ## Exo Bonus
 
