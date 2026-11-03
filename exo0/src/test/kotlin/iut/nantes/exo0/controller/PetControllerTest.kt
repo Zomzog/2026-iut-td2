@@ -110,6 +110,24 @@ class PetControllerTest {
         }
 
         @Test
+        fun `invalid path id on put`() {
+            mockMvc.put("/api/v1/pets/-5") {
+                contentType = APPLICATION_JSON
+                content = """
+                    {
+                        "id": -5,
+                        "name": "Kraken",
+                        "age": 3210,
+                        "kind": "OCTOPUS"
+                    }
+                """.trimIndent()
+            }
+                .andExpect {
+                    status { isBadRequest() }
+                }
+        }
+
+        @Test
         fun `happy path`() {
             mockMvc.put("/api/v1/pets/1") {
                 contentType = APPLICATION_JSON
