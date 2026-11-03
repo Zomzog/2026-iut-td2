@@ -4,7 +4,8 @@ import org.hamcrest.Matchers.containsString
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.web.servlet.MockMvc
@@ -13,7 +14,8 @@ import org.springframework.test.web.servlet.post
 import org.springframework.test.web.servlet.put
 import kotlin.test.Test
 
-@WebMvcTest
+@SpringBootTest
+@AutoConfigureMockMvc
 class PetControllerTest {
     @Autowired
     lateinit var mockMvc: MockMvc

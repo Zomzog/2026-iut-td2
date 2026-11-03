@@ -415,16 +415,12 @@ La classe de test Exo7 de InfoTest doit passer sans y apporter de modifications.
 
 ## Exo 8 - ConfigurationProperties
 
-Remplacer l'utilisation des @Value par l'approche avec un @ConfigurationProperties.
+Remplacer l'utilisation des `@Value` par l'approche avec un `@ConfigurationProperties`.
 
 <details>
 <summary>Indice</summary>
 
-Créer une classe `CustomProperties` annotée `@ConfigurationProperties("custom")`, dont les propriétés ont le nom des clés du fichier
-`application.yml` (`app-name` devient `appName`). La partie `git` est un objet imbriqué.
-
-Comme dans le cours, la classe est activée avec `@EnableConfigurationProperties(CustomProperties::class)` sur une classe `@Configuration`.
-Elle devient alors un bean, qu'on injecte dans le `controller` par le constructeur.
+Voir les slides [« ConfigurationProperties »](https://zomzog.fr/iut-spring-kotlin/c2/#/38) et [« Utilisation »](https://zomzog.fr/iut-spring-kotlin/c2/#/39).
 
 </details>
 

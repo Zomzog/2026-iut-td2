@@ -64,7 +64,8 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
   `actuator`, `data-jpa`, `validation`, `flyway-core`, `h2`, `kotlin-logging`, `plugin.jpa` (l'étudiant les ajoute
   aux exos 12-14, voir les `E12-*` à `E14-*`) ; `ErrorHandler` d'`exo12` simplifié comme celui d'`exo0` ; Jackson
   passé à `tools.jackson.module:jackson-module-kotlin` (mêmes résultats de tests). **Reste** : cocher G-02 une fois
-  les exos JPA écrits (les coordonnées exactes doivent être dans l'énoncé).
+  les exos JPA écrits (les coordonnées exactes doivent être dans l'énoncé) ; `mockk` et `springmockk` sont dans
+  `exo0` et `exo12`, mais aucun test ne s'en sert (relevé au grill de l'exo 8, 2026-11-03) : retirer ou garder pour un exo à écrire.
 - [ ] **G-03** · **Convention de tests** — `@Nested inner class ExoN` + `@DisplayName("Exo N — titre")`
   (comme TD1). Tests rouges sur `main` mais **qui compilent** ; quand un test ne compile pas avant
   l'exo, le coller depuis l'énoncé (mécanique `Exo8Test` du TD1). Un exo = un test lançable seul.
@@ -96,10 +97,11 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
   `#/14` (17, 18), `#/15` (18), `#/18` (19). Ceux des exos 1, 3 et Bonus 1 ne bougent pas.
   **AJOUT (2026-11-03) :** exo 4a (19, « RestControllerAdvice »), même méthode (vérifiée : elle redonne 10, 11, 12, 52,
   63-69). Depuis la renumérotation des bonus (E4-8), le « Bonus 1 » ci-dessus est le Bonus 2 (requêtes dérivées).
+  **AJOUT (2026-11-03) :** exo 8 (38 « ConfigurationProperties », 39 « Utilisation »), mêmes numéros sur `main` et `2026-C3`.
 - [ ] **G-11** · **Réduire les indices** — exo 0 fait (E0-5), exo 1 fait (E1-4), 3b en partie (E3-7), exo 4 fait
-  (E4-5 : seul le 4a garde un indice, le lien vers la slide). Autres candidats repérés : pseudo-code du 3b, bloc
-  « Solution » + indice de l'exo 5, indice de l'exo 8 (structure de `CustomProperties`), noms des méthodes du Bonus 2
-  (requêtes dérivées).
+  (E4-5 : seul le 4a garde un indice, le lien vers la slide), exo 8 fait (E8-3 : l'indice ne garde que les liens vers les
+  slides). Autres candidats repérés : pseudo-code du 3b, bloc « Solution » + indice de l'exo 5, noms des méthodes du
+  Bonus 2 (requêtes dérivées).
 
 ## Module `exo0` — validation, erreurs, configuration
 
@@ -351,9 +353,21 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
   **FAIT (2026-11-01) :** choix retenu `@EnableConfigurationProperties` sur une classe `@Configuration`, comme la slide
   (ma décision par défaut, à valider). `@ConfigurationPropertiesScan` sur l'application marche aussi (vérifié) ;
   il n'est pas cité dans l'énoncé (`C2-40` reste un manque du cours). `T2-23` : alignement slide ↔ correction OK.
+  **CORRECTION (2026-11-03) :** « marche aussi » n'était vrai que pour `InfoTest`. Tant que `PetControllerTest` était un
+  `@WebMvcTest`, la `@Configuration` à part **et** `@ConfigurationPropertiesScan` cassaient tout `PetControllerTest`
+  (`No qualifying bean of type 'CustomProperties'` : le slice charge `InfoController`, mais filtre les deux). Réglé par E8-3.
 - [x] **E8-2** · `InfoTest.Exo7` doit toujours passer.
   **FAIT (2026-11-01) :** `InfoTest.Exo7` reste le test de l'exo (il est rouge sur `main` tant que l'exo 7 n'est pas fait) ;
   vert avec `CustomProperties` (data class + `GitProperties` imbriquée) injectée dans le controller.
+- [x] **E8-3** · Indice réduit à un renvoi au cours (G-11) ; la slide doit marcher telle quelle.
+  **FAIT (2026-11-03) :** l'indice ne garde que les liens vers les slides 38 et 39 (G-10). On retire de l'énoncé l'objet
+  imbriqué `git` (absent du cours, la structure du yaml le suggère) et `app-name` → `appName`.
+  `PetControllerTest` passe de `@WebMvcTest` à `@SpringBootTest` + `@AutoConfigureMockMvc`, comme `InfoTest` (le cours c1
+  ne montre que `@SpringBootTest`). Aucun mock : `PetController` n'a pas de service. Vérifié hors dépôt : la solution de la
+  slide (`@Configuration` à part) donne tout vert jusqu'à l'exo 11 ; sur `rework` + solution exo 8, `Exo7`, `Exo7OtherName`
+  et `PetControllerTest.Base` sont verts ; sur `rework` seul, résultats identiques test par test (24 rouges, 12 verts).
+  Même temps de test (le contexte est partagé avec `InfoTest.Exo7`). Consigne inchangée, sans mention de `PetControllerTest`.
+  **Branche `correction` :** le commit `f0c580e` (`@EnableConfigurationProperties` sur `InfoController`) devient inutile.
 
 ### Exo 9 — profils (ancien 30)
 
