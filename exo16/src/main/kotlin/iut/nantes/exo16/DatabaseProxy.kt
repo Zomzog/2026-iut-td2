@@ -2,10 +2,14 @@ package iut.nantes.exo16
 
 import iut.nantes.exo16.controller.HumanDto
 import iut.nantes.exo16.controller.PetDto
+import iut.nantes.exo16.repository.HumanRepository
+import iut.nantes.exo16.repository.toDto
+import iut.nantes.exo16.repository.toEntity
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
 @Service
-class DatabaseProxy() {
+class DatabaseProxy(private val humanRepository: HumanRepository) {
     fun savePet(pet: PetDto): PetDto {
         TODO()
     }
@@ -18,15 +22,12 @@ class DatabaseProxy() {
         TODO()
     }
 
-    fun saveHuman(humanDto: HumanDto): HumanDto {
-        TODO()
-    }
+    fun saveHuman(humanDto: HumanDto): HumanDto =
+        humanRepository.save(humanDto.toEntity()).toDto()
 
-    fun findHumanById(id: Int): HumanDto? {
-        TODO()
-    }
+    fun findHumanById(id: Int): HumanDto? =
+        humanRepository.findByIdOrNull(id)?.toDto()
 
-    fun findAllHumans(): List<HumanDto> {
-        TODO()
-    }
+    fun findAllHumans(): List<HumanDto> =
+        humanRepository.findAll().map { it.toDto() }
 }
