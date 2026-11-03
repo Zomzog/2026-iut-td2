@@ -1,6 +1,7 @@
 package iut.nantes.exo0.controller
 
 import iut.nantes.exo0.errors.ImATeapotException
+import jakarta.validation.constraints.Min
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController
 class PetController(val database : MutableMap<Int, PetDto> = mutableMapOf()){
 
     @GetMapping("/api/v1/pets/{petId}")
-    fun getPet(@PathVariable petId: Int) = database[petId]?.let {
+    fun getPet(@PathVariable @Min(1) petId: Int) = database[petId]?.let {
         ResponseEntity.ok(it)
     } ?: ResponseEntity.notFound().build()
 
