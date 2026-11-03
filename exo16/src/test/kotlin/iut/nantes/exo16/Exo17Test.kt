@@ -1,4 +1,4 @@
-package iut.nantes.exo12
+package iut.nantes.exo16
 
 import assertk.assertThat
 import assertk.assertions.isTrue
@@ -10,7 +10,7 @@ import javax.sql.DataSource
 import kotlin.test.Test
 
 @SpringBootTest
-class Exo13Test {
+class Exo17Test {
     @Autowired
     lateinit var dataSource: DataSource
 

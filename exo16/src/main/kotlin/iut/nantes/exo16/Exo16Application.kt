@@ -1,11 +1,11 @@
-package iut.nantes.exo12
+package iut.nantes.exo16
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class Exo12Application
+class Exo16Application
 
 fun main(args: Array<String>) {
-    runApplication<Exo12Application>(*args)
+    runApplication<Exo16Application>(*args)
 }

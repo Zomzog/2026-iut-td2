@@ -14,7 +14,7 @@ class InfoTest{
     @Nested
     @SpringBootTest
     @AutoConfigureMockMvc
-    inner class Exo7 {
+    inner class Exo12 {
 
         @Autowired
         lateinit var mockMvc: MockMvc
@@ -34,7 +34,7 @@ class InfoTest{
 
         @Nested
         @ActiveProfiles("pony")
-        inner class Exo7OtherName {
+        inner class Exo12OtherName {
 
             @Autowired
             lateinit var mockMvc: MockMvc
@@ -58,7 +58,7 @@ class InfoTest{
     @ActiveProfiles("dev")
     @SpringBootTest
     @AutoConfigureMockMvc
-    inner class Exo9 {
+    inner class Exo14 {
 
         @Autowired
         lateinit var mockMvc: MockMvc

@@ -1,6 +1,6 @@
-package iut.nantes.exo12.controller
+package iut.nantes.exo16.controller
 
-import iut.nantes.exo12.DatabaseProxy
+import iut.nantes.exo16.DatabaseProxy
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping

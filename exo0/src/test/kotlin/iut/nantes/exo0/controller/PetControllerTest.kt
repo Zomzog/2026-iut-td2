@@ -45,7 +45,7 @@ class PetControllerTest {
     }
 
     @Nested
-    inner class Exo0a {
+    inner class Exo0 {
         @Test
         fun `invalid path id on get`() {
             mockMvc.get("/api/v1/pets/0")
@@ -56,7 +56,7 @@ class PetControllerTest {
     }
 
     @Nested
-    inner class Exo0b {
+    inner class Exo1 {
         @Test
         fun `happy path`() {
             mockMvc.post("/api/v1/pets") {
@@ -112,7 +112,7 @@ class PetControllerTest {
     }
 
     @Nested
-    inner class Exo0c {
+    inner class Exo2 {
         @Test
         fun `happy path with owner`() {
             mockMvc.post("/api/v1/pets") {
@@ -179,7 +179,7 @@ class PetControllerTest {
     }
 
     @Nested
-    inner class Exo1 {
+    inner class Exo3 {
 
         @Test
         fun `negative path id on put`() {
@@ -240,31 +240,7 @@ class PetControllerTest {
     }
 
     @Nested
-    inner class Exo2 {
-        @Test
-        fun `happy path`() {
-            mockMvc.get("/api/v1/pets?minAge=2000&maxAge=2010")
-                .andExpect {
-                    status { isOk() }
-                    content { contentType("application/json") }
-                    jsonPath("$[0].name") { value("Kraken") }
-                }
-        }
-
-        @Test
-        fun `max only`() {
-            mockMvc.get("/api/v1/pets?maxAge=2010")
-                .andExpect {
-                    status { isOk() }
-                    content { contentType("application/json") }
-                    jsonPath("$[0].name") { value("Kraken") }
-                    jsonPath("$[1].name") { value("Maurice") }
-                }
-        }
-    }
-
-    @Nested
-    inner class Exo3 {
+    inner class Exo4 {
         private fun createPet(name: String) = mockMvc.post("/api/v1/pets") {
             contentType = APPLICATION_JSON
             content = """
@@ -295,7 +271,7 @@ class PetControllerTest {
     }
 
     @Nested
-    inner class Exo3b {
+    inner class Exo5 {
         private fun search(body: String) = mockMvc.post("/api/v1/pets/search") {
             contentType = APPLICATION_JSON
             content = body
@@ -356,7 +332,7 @@ class PetControllerTest {
     }
 
     @Nested
-    inner class Exo4a {
+    inner class Exo7 {
         @Test
         fun `my first exception`() {
             mockMvc.get("/exception/MyFirstException")
@@ -369,7 +345,7 @@ class PetControllerTest {
     }
 
     @Nested
-    inner class Exo4b {
+    inner class Exo8 {
         @Test
         fun `my exception with body`() {
             mockMvc.get("/exception/MyExceptionWithBody")
@@ -383,7 +359,7 @@ class PetControllerTest {
     }
 
     @Nested
-    inner class Exo4c {
+    inner class Exo9 {
         @Test
         fun `teapot endpoint`() {
             mockMvc.get("/exception/ImATeapotException")
@@ -419,63 +395,6 @@ class PetControllerTest {
 
     @Nested
     inner class Exo10 {
-        private fun search(body: String) = mockMvc.post("/api/v1/pets/search") {
-            contentType = APPLICATION_JSON
-            content = body
-        }
-
-        @Test
-        fun `range equal to max range`() {
-            search("""{ "minAge": 0, "maxAge": 100 }""")
-                .andExpect {
-                    status { isOk() }
-                }
-        }
-
-        @Test
-        fun `range greater than max range`() {
-            search("""{ "minAge": 0, "maxAge": 101 }""")
-                .andExpect {
-                    status { isBadRequest() }
-                }
-        }
-
-        @Test
-        fun `range greater than max range with a high min`() {
-            search("""{ "minAge": 1000, "maxAge": 1101 }""")
-                .andExpect {
-                    status { isBadRequest() }
-                }
-        }
-    }
-
-    @Nested
-    @TestPropertySource(properties = ["custom.api.pets.max-range=5"])
-    inner class Exo11 {
-        private fun search(body: String) = mockMvc.post("/api/v1/pets/search") {
-            contentType = APPLICATION_JSON
-            content = body
-        }
-
-        @Test
-        fun `range equal to configured max range`() {
-            search("""{ "minAge": 0, "maxAge": 5 }""")
-                .andExpect {
-                    status { isOk() }
-                }
-        }
-
-        @Test
-        fun `range greater than configured max range`() {
-            search("""{ "minAge": 0, "maxAge": 6 }""")
-                .andExpect {
-                    status { isBadRequest() }
-                }
-        }
-    }
-
-    @Nested
-    inner class Exo5 {
         @Test
         fun `unknown enum value`() {
             mockMvc.post("/api/v1/pets") {
@@ -512,7 +431,63 @@ class PetControllerTest {
     }
 
     @Nested
-    inner class Exo5Bonus {
+    inner class Exo15 {
+        private fun search(body: String) = mockMvc.post("/api/v1/pets/search") {
+            contentType = APPLICATION_JSON
+            content = body
+        }
+
+        @Test
+        fun `range equal to max range`() {
+            search("""{ "minAge": 0, "maxAge": 100 }""")
+                .andExpect {
+                    status { isOk() }
+                }
+        }
+
+        @Test
+        fun `range greater than max range`() {
+            search("""{ "minAge": 0, "maxAge": 101 }""")
+                .andExpect {
+                    status { isBadRequest() }
+                }
+        }
+
+        @Test
+        fun `range greater than max range with a high min`() {
+            search("""{ "minAge": 1000, "maxAge": 1101 }""")
+                .andExpect {
+                    status { isBadRequest() }
+                }
+        }
+    }
+
+    @Nested
+    inner class Bonus0 {
+        @Test
+        fun `happy path`() {
+            mockMvc.get("/api/v1/pets?minAge=2000&maxAge=2010")
+                .andExpect {
+                    status { isOk() }
+                    content { contentType("application/json") }
+                    jsonPath("$[0].name") { value("Kraken") }
+                }
+        }
+
+        @Test
+        fun `max only`() {
+            mockMvc.get("/api/v1/pets?maxAge=2010")
+                .andExpect {
+                    status { isOk() }
+                    content { contentType("application/json") }
+                    jsonPath("$[0].name") { value("Kraken") }
+                    jsonPath("$[1].name") { value("Maurice") }
+                }
+        }
+    }
+
+    @Nested
+    inner class Bonus2 {
         @Test
         fun `field property`() {
             mockMvc.post("/api/v1/pets") {
@@ -528,6 +503,31 @@ class PetControllerTest {
                 .andExpect {
                     status { isBadRequest() }
                     jsonPath("$.field") { value("kind") }
+                }
+        }
+    }
+
+    @Nested
+    @TestPropertySource(properties = ["custom.api.pets.max-range=5"])
+    inner class Bonus3 {
+        private fun search(body: String) = mockMvc.post("/api/v1/pets/search") {
+            contentType = APPLICATION_JSON
+            content = body
+        }
+
+        @Test
+        fun `range equal to configured max range`() {
+            search("""{ "minAge": 0, "maxAge": 5 }""")
+                .andExpect {
+                    status { isOk() }
+                }
+        }
+
+        @Test
+        fun `range greater than configured max range`() {
+            search("""{ "minAge": 0, "maxAge": 6 }""")
+                .andExpect {
+                    status { isBadRequest() }
                 }
         }
     }

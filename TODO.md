@@ -3,7 +3,8 @@
 Fichier de travail (à supprimer avant publication). On traite les étapes **une par une** : on coche
 `- [x]` quand c'est fait, ou on écrit `**REPORTÉ :**` / `**ABANDONNÉ :**` avec la raison.
 
-- **Numérotation** : exos 0 à 19 + Bonus (ancien exo = nouveau + 21, voir la table).
+- **Numérotation** : exos 0 à 18 + Bonus 0 à 4 depuis le 2026-11-03 (voir la table). Les ID `En-k` et les
+  sections par exo gardent la numérotation d'avant (exos 0 à 14, avec lettres) ; leurs titres donnent le nouveau numéro.
 - **ID** : `G-nn` = transverse, `En-k` = exo n (`En-k` : k-ième étape de l'exo n).
 - **Tags** : `[décidé]` = tranché pendant le grill du 2026-10-25 ; `[à trancher]` = question ouverte ;
   `[spike]` = à vérifier par un essai avant d'écrire l'énoncé.
@@ -13,36 +14,36 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
 
 ## Table des exos
 
-| Exo | Ancien | Module | Sujet | Test de vérification | Socle |
-|---|---|---|---|---|---|
-| 0 | 21 | exo0 | validations simples : 0a chemin, 0b body, 0c objet imbriqué | `Base` + `Exo0a`, `Exo0b`, `Exo0c` | socle |
-| 1 | 22 | exo0 | méta-annotation sur `petId` | `Exo0a` + `Exo1` | socle |
-| 2 | 23 | exo0 | request params dans un objet | `Exo2` | ⭐ bonus `[décidé]` |
-| 3 | 24 | exo0 | `@ValidAgeRange` | `Exo2` + `Exo3` | socle, **à réécrire / couper en 2** `[décidé]` |
-| 4a | 25 | exo0 | `@ExceptionHandler` → 406, `body` chaîne | `Exo4a` | socle |
-| 4b | nouveau | exo0 | `@ExceptionHandler` → 500, `body` JSON `{message, status}` | `Exo4a` + `Exo4b` | socle |
-| 4c | 25 | exo0 | `@ExceptionHandler` → 418 en `ProblemDetail` | `Exo4a` + `Exo4b` + `Exo4c` | socle |
-| 5 | 26 | exo0 | surcharge `HttpMessageNotReadableException` | `Exo5` | socle |
-| 6 | 27 | exo0 | `banner.txt` | visuelle | socle (exo express) |
-| 7 | 28 | exo0 | `@Value` | `InfoTest.Exo7` | socle |
-| 8 | 29 | exo0 | `@ConfigurationProperties` | `InfoTest.Exo7` | socle |
-| 9 | 30 | exo0 | profils | `InfoTest.Exo9` | socle |
-| 10 | 31 | exo0 | paramètre `maxRange` | à écrire | socle |
-| 11 | 32 | exo0 | validateur injecté comme bean | à écrire | ⭐ bonus |
-| 12 | 33 | exo12 | H2 en mémoire + console | manuelle | socle |
-| 13 | 34 | exo12 | H2 dans un fichier | manuelle + TU | socle |
-| 14 | 35 | exo12 | Entity + `JpaRepository` | `exo 14` | socle |
-| 15 | 36 | exo12 | OneToOne unidirectionnel | `exo 15` | socle |
-| 16 | 37 | exo12 | OneToOne bidirectionnel | `exo 15` + test écrit par l'étudiant | socle |
-| 17 | 38 | exo12 | OneToMany unidirectionnel | `exo 17` | socle |
-| 18 | 39 | exo12 | OneToMany bidirectionnel | `exo 17` | socle |
-| 19 | 40 | exo12 | DELETE d'un pet | `exo 19` (commenté) | ⭐ bonus `[à trancher]` |
-| Bonus 1 | nouveau | exo0 | `ImATeapotException` hérite de `ErrorResponseException` | `Exo4c` | ⭐ |
-| Bonus 2 | nouveau | exo12 | requêtes dérivées | `ExoBonusQueries` | ⭐ |
-| Bonus 3 | Bonus | exo12 | profil Postgres | manuelle | ⭐ |
+Renumérotation du 2026-11-03 (G-09) : plus de lettres, exos 0 à 18 puis Bonus 0 à 4 regroupés à la fin du README ;
+module `exo12` renommé `exo16`. Les ID `En-k` et les notes **FAIT** ci-dessous gardent l'**ancienne** numérotation
+(colonne « Avant »). Les exos 15 à 19 et les requêtes dérivées sont partis dans le TD3 (G-12).
 
-> Deux exos s'ajoutent (test écrit par l'étudiant, voir `E3-5` et `E16-3`) : la numérotation sera
-> **refaite après insertion**. Le socle / bonus définitif se rediscute à la fin (`T2-38`).
+| Exo | Avant | Module | Sujet | Test de vérification |
+|---|---|---|---|---|
+| 0 | 0a | exo0 | valider un paramètre d'URL | `Base` + `Exo0` |
+| 1 | 0b | exo0 | valider un `body` | `Exo1` |
+| 2 | 0c | exo0 | valider un objet imbriqué | `Exo1` + `Exo2` |
+| 3 | 1 | exo0 | méta-annotation `@PetId` | `Exo0` + `Exo3` |
+| 4 | 3 | exo0 | `@Capitalized` | `Exo4` |
+| 5 | 3b | exo0 | `@ValidAgeRange` | `Exo5` |
+| 6 | 3c | exo0 | `ValidAgeRangeValidatorTest` | test écrit par l'étudiant |
+| 7 | 4a | exo0 | `@ExceptionHandler` → 406, `body` chaîne | `Exo7` |
+| 8 | 4b | exo0 | `@ExceptionHandler` → 500, `body` JSON `{message, status}` | `Exo7` + `Exo8` |
+| 9 | 4c | exo0 | `@ExceptionHandler` → 418 en `ProblemDetail` | `Exo7` + `Exo8` + `Exo9` |
+| 10 | 5 | exo0 | surcharge `HttpMessageNotReadableException` | `Exo10` |
+| 11 | 6 | exo0 | `banner.txt` | visuelle |
+| 12 | 7 | exo0 | `@Value` | `InfoTest.Exo12` |
+| 13 | 8 | exo0 | `@ConfigurationProperties` | `InfoTest.Exo12` |
+| 14 | 9 | exo0 | profils | `InfoTest.Exo14` |
+| 15 | 10 | exo0 | paramètre `maxRange` | `Exo15` + `Exo5` + `ValidAgeRangeValidatorTest` |
+| 16 | 12 | exo16 | H2 en mémoire + console | manuelle |
+| 17 | 13 | exo16 | H2 dans un fichier | manuelle + `Exo17Test` |
+| 18 | 14 | exo16 | Entity + `JpaRepository` | `HumanControllerTest.Exo18` |
+| Bonus 0 | 2 | exo0 | request params dans un objet (n'importe quand) | `Bonus0` |
+| Bonus 1 | Bonus 1 | exo0 | `ImATeapotException` hérite de `ErrorResponseException` (après 9) | `Exo9` |
+| Bonus 2 | 5 - Bonus | exo0 | propriété `field` dans le `ProblemDetail` (après 10) | `Exo10` + `Bonus2` |
+| Bonus 3 | 11 | exo0 | validateur injecté comme bean (après 15) | `Bonus3` + `Exo5` + `Exo15` |
+| Bonus 4 | Bonus 2 | exo16 | profil Postgres (après 18) | manuelle |
 
 ## Transverse
 
@@ -86,6 +87,10 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
   est `C2-64`).
 - [ ] **G-08** · **CI** — reporté, voir `T2-39`.
 - [ ] **G-09** · **Ordre et socle / bonus** — à repenser une fois le TD écrit, voir `T2-38`.
+  **FAIT en partie (2026-11-03) :** renumérotation sans lettres (exos 0 à 18), bonus regroupés à la fin (Bonus 0 à 4)
+  avec leur contexte (module, exo prérequis), module `exo12` → `exo16`, classes de test renommées (voir la table).
+  Mêmes résultats de tests avant / après (42 tests, mêmes rouges). **Reste :** branche `correction` (commits et
+  module à renommer), notes Obsidian (`TD2.md`), liens éventuels depuis les slides ; G-03 (`@DisplayName`) à aligner.
 - [x] **G-10** · **Liens vers les slides du cours** — chaque slide citée dans le README pointe vers
   `https://zomzog.fr/iut-spring-kotlin/c2/#/n`, avec le titre gardé dans le texte du lien.
   **FAIT (2026-11-03) :** exos 1 (11), 3 (10, 12), 15 (63), 16 (64), 17 (65), 18 (66, 65), 19 (69), Bonus 1 (52).
@@ -119,7 +124,7 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
 
 ## Module `exo0` — validation, erreurs, configuration
 
-### Exo 0 — annotations de validation (ancien 21)
+### Exo 0 — annotations de validation (ancien 21) → **exos 0, 1, 2**
 
 - [x] **E0-1** · Retirer `@Validated` du `PetController` et le handler `ConstraintViolationException` de
   `ErrorHandler` : en 4.1 la validation est native (`T2-08`, `C2-01`). `[décidé]`
@@ -157,7 +162,7 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
   `@Valid` sur `owner`, les deux cas d'erreur d'`Exo0c` sont rouges (201) ; avec la solution, `Base`, `Exo0a`,
   `Exo0b`, `Exo0c` et `Exo1` sont verts. **Reste :** couper le commit `Exo0` de `correction` en 0a / 0b / 0c (G-04).
 
-### Exo 1 — méta-annotation sur `petId` (ancien 22)
+### Exo 1 — méta-annotation sur `petId` (ancien 22) → **exo 3**
 
 - [x] **E1-1** · Énoncé : renvoyer à la slide « Meta annotation » (`MinMax`) ; GET et PUT partagent la
   même annotation sur `petId` (entier > 0).
@@ -181,7 +186,7 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
   Les ids du body et du chemin sont égaux pour que le test ne dépende pas de la comparaison faite par le controller.
   `invalid path id on get` est passé dans `Exo0a`.
 
-### Exo 2 — request params dans un objet (ancien 23) ⭐
+### Exo 2 — request params dans un objet (ancien 23) ⭐ → **Bonus 0**
 
 - [x] **E2-1** · Passer en **bonus** : l'exo devient un mini-cours dans l'énoncé (comment grouper des
   query params dans une `data class` sans annotation, avec un exemple court) qui **propose** de le
@@ -203,7 +208,7 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
   tête pour E3 :** un étudiant qui a fait l'exo 2 a déjà une classe `AgeRange` ; la validation globale de
   l'exo 3 (body) devra choisir un autre nom ou réutiliser cette classe.
 
-### Exo 3 — `@ValidAgeRange` (ancien 24) — à réécrire, voire couper en 2
+### Exo 3 — `@ValidAgeRange` (ancien 24) — à réécrire, voire couper en 2 → **exos 4, 5, 6**
 
 - [x] **E3-1** · **Validation sur un body, pas sur des query params** `[décidé]` : d'abord une
   validation champ par champ, puis une validation globale (« MaxRange »). L'exo ne dépend plus de
@@ -245,7 +250,7 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
   **FAIT (2026-11-03) :** renommé « Exo 3b - Validateur personnalisé sur une classe », en miroir de l'exo 3
   (« … sur un champ ») ; ligne « comme pour l'exo 0, `@Valid` » retirée de l'indice (c'est dans le cours).
 
-### Exo 4 — gestion d'exception personnalisée (ancien 25), coupé en 4a / 4b / 4c
+### Exo 4 — gestion d'exception personnalisée (ancien 25), coupé en 4a / 4b / 4c → **exos 7, 8, 9**
 
 - [x] **E4-1** · L'étudiant écrit `@ExceptionHandler(ImATeapotException::class)` dans `ErrorHandler` et
   retourne un `ProblemDetail` de statut 418. `[décidé]`
@@ -305,7 +310,7 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
   datées (G-10, EB-1, EB-2, notes Obsidian) gardent l'ancien numéro : elles décrivent l'état à leur date. Aucun test
   touché (les classes portent le nom du sujet, `ExoBonusQueries`).
 
-### Exo 5 — surcharge de `HttpMessageNotReadableException` (ancien 26)
+### Exo 5 — surcharge de `HttpMessageNotReadableException` (ancien 26) → **exo 10 + Bonus 2**
 
 - [x] **E5-1** · Constat vérifié par spike : le 400 `ProblemDetail` est **déjà automatique**
   (`detail` = « Failed to read request »). L'exo n'est plus « changer le format » mais **enrichir le
@@ -333,7 +338,7 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
   `startsWith`) et `malformed json` (400 `problem+json`, vert dès le départ, garde-fou contre une surcharge trop
   large). Rouge sur `main` : `unknown enum value` et `Exo5Bonus`.
 
-### Exo 6 — `banner.txt` (ancien 27)
+### Exo 6 — `banner.txt` (ancien 27) → **exo 11**
 
 - [x] **E6-1** · Garder comme **exo express** avec un indice. `[décidé]` Donner le `application.yml`
   (`custom.*`) et la ligne du `banner.txt`.
@@ -344,7 +349,7 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
   **FAIT (2026-11-01) :** vérification décrite : première ligne de la console = `mon application 1.0.1 main 123456`
   (testé hors dépôt avec `./gradlew :exo0:bootRun`). Pas de test automatisé : `@SpringBootTest` coupe la bannière.
 
-### Exo 7 — `@Value` (ancien 28)
+### Exo 7 — `@Value` (ancien 28) → **exo 12**
 
 - [x] **E7-1** · Aligner l'exemple JSON de l'énoncé sur le test : `appName`, `1.0.1`, `main` (`T2-05`).
   **FAIT (2026-11-01) :** exemple JSON aligné sur le test (`appName`, `appVersion`, `1.0.1`, `main`, `123456`) ; ajout d'un
@@ -360,7 +365,7 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
   Pas de test sur `@Value` lui-même : l'exo 8 réutilise `InfoTest.Exo7`, un test qui vise `@Value` y casserait ;
   on fait confiance (vu à la correction). Branche `correction` à mettre à jour à la main.
 
-### Exo 8 — `@ConfigurationProperties` (ancien 29)
+### Exo 8 — `@ConfigurationProperties` (ancien 29) → **exo 13**
 
 - [x] **E8-1** · `@EnableConfigurationProperties` ou `@ConfigurationPropertiesScan` ? `[à trancher]`
   (`T2-23`, `C2-40` ; la slide montre `@EnableConfigurationProperties`).
@@ -383,14 +388,14 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
   Même temps de test (le contexte est partagé avec `InfoTest.Exo7`). Consigne inchangée, sans mention de `PetControllerTest`.
   **Branche `correction` :** le commit `f0c580e` (`@EnableConfigurationProperties` sur `InfoController`) devient inutile.
 
-### Exo 9 — profils (ancien 30)
+### Exo 9 — profils (ancien 30) → **exo 14**
 
 - [x] **E9-1** · `application-dev.yml` ; `InfoTest.Exo9` (ancien `Exo30`) avec `@ActiveProfiles("dev")`.
   **FAIT (2026-11-01) :** README : phrase sur les profils, commande du test, lancement `SPRING_PROFILES_ACTIVE=dev ./gradlew
   :exo0:bootRun` + `curl` (vérifié hors dépôt : profil `dev` actif, `appVersion` = `1.0.2-SNAPSHOT`, `appName` conservé).
   `InfoTest.Exo9` vert avec `application-dev.yml` (et `Exo7` reste vert).
 
-### Exo 10 — `maxRange` (ancien 31)
+### Exo 10 — `maxRange` (ancien 31) → **exo 15**
 
 - [x] **E10-1** · `maxRange` est un **paramètre de l'annotation** (comme `@MinMax(0, 10)` dans la slide),
   pas une valeur en dur dans le validateur. `[décidé en principe]` À rattacher au nouveau design de
@@ -404,7 +409,7 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
   `minAge` élevé → 400). Rouge sur `main` (2 tests), vert avec la solution. Énoncé réécrit : plus de « valeur en dur à
   100 dans le validateur », la valeur est dans l'annotation.
 
-### Exo 11 — validateur comme bean (ancien 32) ⭐
+### Exo 11 — validateur comme bean (ancien 32) ⭐ → **Bonus 3**
 
 - [x] **E11-1** · Bonus. La valeur vient de la config `custom.api.pets.max-range`, injectée par
   constructeur (plus de remarque sur `lateinit`, `T2-28`).
@@ -419,9 +424,9 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
   (écart 6), vert avec la solution. La correction est à écrire dans le commit `Exo11` de `correction` (aucun
   commit de 2025).
 
-## Module `exo12` — JPA
+## Module `exo16` (ancien `exo12`) — JPA
 
-### Exo 12 — H2 en mémoire + console (ancien 33)
+### Exo 12 — H2 en mémoire + console (ancien 33) → **exo 16**
 
 - [x] **E12-1** · L'étudiant ajoute `starter-data-jpa`, `h2` et le module console H2 de Boot 4. `[spike]`
   (artefact exact de la console).
@@ -436,7 +441,7 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
   **FAIT (2026-11-01) :** vérification en 4 étapes (log `H2 console available`, connexion avec URL / user / mot de passe,
   `CREATE TABLE` puis `SELECT`, redémarrage et erreur `Table "TEST" not found`). Pas de test automatisé.
 
-### Exo 13 — H2 dans un fichier (ancien 34)
+### Exo 13 — H2 dans un fichier (ancien 34) → **exo 17**
 
 - [x] **E13-1** · Passer à `jdbc:h2:file:./data/testdb`. Vérification manuelle + **test unitaire** qui
   vérifie que `./data/testdb.mv.db` existe après démarrage du contexte. `[décidé]`
@@ -448,7 +453,7 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
 - [x] **E13-2** · `data/` dans `.gitignore` (déjà fait).
   **FAIT (2026-11-01) :** `data/` était déjà dans le `.gitignore` (copié du TD1) ; rien à ajouter.
 
-### Exo 14 — Entity + `JpaRepository` (ancien 35)
+### Exo 14 — Entity + `JpaRepository` (ancien 35) → **exo 18**
 
 - [x] **E14-1** · L'étudiant ajoute `kotlin("plugin.jpa")` (G-02) ; entité `HumanEntity`, repository,
   mapping DTO ↔ Entity **écrit par l'étudiant** `[décidé]`. Style d'entité (`class`, `id` nullable) à
@@ -468,14 +473,14 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
   (qui demanderait `spring-tx` dans le squelette) ni nettoyage ; tests `exo 41` / `exo 44` (TD3) supprimés ; imports morts retirés.
   Le 404 de `unknown human` et la structure des tests `Exo15`/`Exo17` sont aussi en place pour les exos suivants.
 
-### Exo 15 — OneToOne unidirectionnel (ancien 36)
+### Exo 15 — OneToOne unidirectionnel (ancien 36) → **TD3**
 
 - [x] **E15-1** · `ContactEntity`, `@OneToOne`. Test `exo 15`.
   **FAIT (2026-11-01) :** README : `HumanDto` + `contact`, `ContactEntity`, `@OneToOne` unidirectionnel, conversions à adapter, indice
   (slides « One-To-One unidirectionnel », `cascade`). Tests `Exo15` (2 : création avec contact, lecture du contact par id) rouges
   sur `main`, verts avec la solution (`@OneToOne(cascade = ALL) @JoinColumn("contact_id")`, vérifié hors dépôt ; `Exo14` reste vert).
 
-### Exo 16 — OneToOne bidirectionnel (ancien 37)
+### Exo 16 — OneToOne bidirectionnel (ancien 37) → **TD3**
 
 - [x] **E16-1** · Passer en bidirectionnel (`mappedBy`).
   **FAIT (2026-11-01) :** README exo 16 : explication propriétaire / inverse (`mappedBy`), indice (slides « One-To-One
@@ -492,7 +497,7 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
   `org.springframework.boot.data.jpa.test.autoconfigure`, `TestEntityManager` dans `org.springframework.boot.jpa.test.autoconfigure`),
   c'est le point `C2-57`. Pas de test fourni (l'étudiant l'écrit).
 
-### Exo 17 — OneToMany unidirectionnel (ancien 38)
+### Exo 17 — OneToMany unidirectionnel (ancien 38) → **TD3**
 
 - [x] **E17-1** · `PetEntity`, `@OneToMany`, ajout de `pets` à `HumanDto`. Test `exo 17`.
   **FAIT (2026-11-01) :** README : `HumanDto` + `pets`, `PetEntity`, `@OneToMany` unidirectionnel, conversions, indice (slides, `var MutableList`
@@ -500,7 +505,7 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
   Vérifié hors dépôt : tout `exo12` vert (Exo13, 14, 15, 17, `HumanRepositoryTest`) avec un `@OneToMany` LAZY par défaut, grâce à
   l'open-in-view de Spring Boot (pas d'EAGER nécessaire, contrairement à 2025).
 
-### Exo 18 — OneToMany bidirectionnel (ancien 39)
+### Exo 18 — OneToMany bidirectionnel (ancien 39) → **TD3**
 
 - [x] **E18-1** · Bidirectionnel (`@ManyToOne` + `mappedBy`) ; collections `var MutableList`.
   **FAIT (2026-11-01) :** README : `pet.human` en plus de `human.pets`, rappel propriétaire / inverse (le `@ManyToOne` est toujours
@@ -513,7 +518,7 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
   `DatabaseProxy` donc ne dépend pas du constructeur des entités de l'étudiant) à décommenter, même mécanique que le test de
   l'exo 19. Conséquence : les entités et le repository doivent être dans `iut.nantes.exo12.repository` (précisé dans l'exo 14).
 
-### Exo 19 — DELETE d'un pet (ancien 40) ⭐ ?
+### Exo 19 — DELETE d'un pet (ancien 40) ⭐ ? → **TD3**
 
 - [x] **E19-1** · `orphanRemoval = true` : **slide à ajouter au cours** (`C2-64`, déjà dans `Cours 2.md`) ;
   l'énoncé y renvoie. `[décidé]`
@@ -532,6 +537,9 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
 
 ### Bonus
 
+> Depuis G-09 (2026-11-03) : Bonus 1 = `ErrorResponseException`, Bonus 4 = profil Postgres (EB-1) ;
+> requêtes dérivées (EB-2) parties dans le TD3.
+>
 > Depuis E4-8 : Bonus 1 = `ErrorResponseException` (module `exo0`, voir E4-7), Bonus 2 = requêtes dérivées (EB-2),
 > Bonus 3 = profil Postgres (EB-1).
 

@@ -1,7 +1,7 @@
-package iut.nantes.exo12
+package iut.nantes.exo16
 
-import iut.nantes.exo12.controller.HumanDto
-import iut.nantes.exo12.controller.PetDto
+import iut.nantes.exo16.controller.HumanDto
+import iut.nantes.exo16.controller.PetDto
 import org.springframework.stereotype.Service
 
 @Service

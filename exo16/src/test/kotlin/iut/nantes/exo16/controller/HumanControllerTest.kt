@@ -1,4 +1,4 @@
-package iut.nantes.exo12.controller
+package iut.nantes.exo16.controller
 
 import com.jayway.jsonpath.JsonPath
 import org.hamcrest.Matchers.hasItem
@@ -30,7 +30,7 @@ class HumanControllerTest {
     }
 
     @Nested
-    inner class Exo14 {
+    inner class Exo18 {
         @Test
         fun `create a human`() {
             mockMvc.post("/api/v1/humans") {
