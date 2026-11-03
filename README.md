@@ -24,7 +24,7 @@ Pour lancer un test seul depuis la ligne de commande :
 ./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.PetControllerTest$Exo0'
 ```
 
-> **Remarque :** un `@ControllerAdvice` (`ErrorHandler`) est déjà fourni dans le projet.
+> **Remarque :** un `@RestControllerAdvice` (`ErrorHandler`) est déjà fourni dans le projet.
 > Il étend `ResponseEntityExceptionHandler`, qui transforme déjà les erreurs de validation en réponse 400
 > au format `ProblemDetail` : vous n'avez rien à écrire pour gérer ces erreurs.
 
@@ -117,7 +117,7 @@ La classe de test Exo3 de PetControllerTest doit passer sans y apporter de modif
 ./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.PetControllerTest$Exo3'
 ```
 
-## Exo 3b - Validation globale d'un `body`
+## Exo 3b - Validateur personnalisé sur une classe
 
 Certaines règles portent sur plusieurs champs à la fois : on valide alors l'objet dans son ensemble.
 
@@ -182,18 +182,19 @@ Ces tests n'ont pas besoin de Spring : on appelle directement `isValid`.
 
 > **Astuce :** pour mesurer la couverture dans IntelliJ, clic droit sur la classe de test puis **Run 'ValidAgeRangeValidatorTest' with Coverage**.
 
-## Exo 4 - Gestion d'exception personnalisée dans un `@ControllerAdvice`
+## Exo 4 - Gestion d'exception personnalisée dans un `@RestControllerAdvice`
 
 Quand PUT /api/v1/pets/{petId} vise un animal qui n'existe pas, le `controller` lance `ImATeapotException`.
 Pour l'instant rien ne l'intercepte : l'erreur remonte jusqu'à Spring.
 
-À l'aide du `@ControllerAdvice` `ErrorHandler`, renvoyer une erreur 418 en cas d'exception `ImATeapotException`.
+À l'aide du `@RestControllerAdvice` `ErrorHandler`, renvoyer une erreur 418 en cas d'exception `ImATeapotException`.
 La réponse est un `ProblemDetail`, le format standard des erreurs HTTP (`application/problem+json`, avec un champ `status`).
 
 <details>
 <summary>Indice</summary>
 
-Dans `ErrorHandler`, une méthode annotée `@ExceptionHandler(ImATeapotException::class)` peut retourner directement un `ProblemDetail`.
+Comme dans un `@RestController`, ce que retourne une méthode d'un `@RestControllerAdvice` est écrit dans le corps de la réponse.
+Dans `ErrorHandler`, une méthode annotée `@ExceptionHandler(ImATeapotException::class)` peut donc retourner directement un `ProblemDetail`.
 
 `ProblemDetail.forStatus(418)` crée le `ProblemDetail` pour un statut donné.
 
@@ -210,7 +211,7 @@ La classe de test Exo4 de PetControllerTest doit passer sans y apporter de modif
 Quand le `body` d'une requête ne peut pas être lu (valeur inconnue pour un enum, JSON mal formé...),
 Spring répond déjà 400 avec un `ProblemDetail`, mais son `detail` est trop vague pour le client de l'API : `Failed to read request`.
 
-Dans le `@ControllerAdvice` `ErrorHandler`, qui étend la gestion des erreurs de Spring (`ResponseEntityExceptionHandler`),
+Dans le `@RestControllerAdvice` `ErrorHandler`, qui étend la gestion des erreurs de Spring (`ResponseEntityExceptionHandler`),
 on veut un message qui indique le champ en erreur et la valeur refusée.
 
 Pour trouver la bonne exception à surcharger, lancer le test `unknown enum value` de la classe Exo5 de PetControllerTest :
