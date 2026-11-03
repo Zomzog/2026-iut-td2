@@ -19,7 +19,9 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
 | 1 | 22 | exo0 | méta-annotation sur `petId` | `Exo0a` + `Exo1` | socle |
 | 2 | 23 | exo0 | request params dans un objet | `Exo2` | ⭐ bonus `[décidé]` |
 | 3 | 24 | exo0 | `@ValidAgeRange` | `Exo2` + `Exo3` | socle, **à réécrire / couper en 2** `[décidé]` |
-| 4 | 25 | exo0 | `@ExceptionHandler` → 418 | `Exo4` | socle |
+| 4a | 25 | exo0 | `@ExceptionHandler` → 406, `body` chaîne | `Exo4a` | socle |
+| 4b | nouveau | exo0 | `@ExceptionHandler` → 500, `body` JSON `{message, status}` | `Exo4a` + `Exo4b` | socle |
+| 4c | 25 | exo0 | `@ExceptionHandler` → 418 en `ProblemDetail` | `Exo4a` + `Exo4b` + `Exo4c` | socle |
 | 5 | 26 | exo0 | surcharge `HttpMessageNotReadableException` | `Exo5` | socle |
 | 6 | 27 | exo0 | `banner.txt` | visuelle | socle (exo express) |
 | 7 | 28 | exo0 | `@Value` | `InfoTest.Exo7` | socle |
@@ -35,7 +37,9 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
 | 17 | 38 | exo12 | OneToMany unidirectionnel | `exo 17` | socle |
 | 18 | 39 | exo12 | OneToMany bidirectionnel | `exo 17` | socle |
 | 19 | 40 | exo12 | DELETE d'un pet | `exo 19` (commenté) | ⭐ bonus `[à trancher]` |
-| Bonus | Bonus | exo12 | profil Postgres | manuelle | ⭐ |
+| Bonus 1 | nouveau | exo0 | `ImATeapotException` hérite de `ErrorResponseException` | `Exo4c` | ⭐ |
+| Bonus 2 | nouveau | exo12 | requêtes dérivées | `ExoBonusQueries` | ⭐ |
+| Bonus 3 | Bonus | exo12 | profil Postgres | manuelle | ⭐ |
 
 > Deux exos s'ajoutent (test écrit par l'étudiant, voir `E3-5` et `E16-3`) : la numérotation sera
 > **refaite après insertion**. Le socle / bonus définitif se rediscute à la fin (`T2-38`).
@@ -90,9 +94,12 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
   ou retirées du deck c2. **Reste (à voir à l'exo 15) :** `jpa2.md` / `jpa3.md` passent en tête de c3 (branche
   `2026-C3`, 2026-11-03) ; une fois déployé, les liens des exos 15-19 deviennent `c3/#/12` (15), `#/13` (16),
   `#/14` (17, 18), `#/15` (18), `#/18` (19). Ceux des exos 1, 3 et Bonus 1 ne bougent pas.
-- [ ] **G-11** · **Réduire les indices** — exo 0 fait (E0-5), exo 1 fait (E1-4), 3b en partie (E3-7). Autres
-  candidats repérés : pseudo-code du 3b, indice de l'exo 4 (`ProblemDetail.forStatus`), bloc « Solution » +
-  indice de l'exo 5, indice de l'exo 8 (structure de `CustomProperties`), noms des méthodes du Bonus 1.
+  **AJOUT (2026-11-03) :** exo 4a (19, « RestControllerAdvice »), même méthode (vérifiée : elle redonne 10, 11, 12, 52,
+  63-69). Depuis la renumérotation des bonus (E4-8), le « Bonus 1 » ci-dessus est le Bonus 2 (requêtes dérivées).
+- [ ] **G-11** · **Réduire les indices** — exo 0 fait (E0-5), exo 1 fait (E1-4), 3b en partie (E3-7), exo 4 fait
+  (E4-5 : seul le 4a garde un indice, le lien vers la slide). Autres candidats repérés : pseudo-code du 3b, bloc
+  « Solution » + indice de l'exo 5, indice de l'exo 8 (structure de `CustomProperties`), noms des méthodes du Bonus 2
+  (requêtes dérivées).
 
 ## Module `exo0` — validation, erreurs, configuration
 
@@ -222,7 +229,7 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
   **FAIT (2026-11-03) :** renommé « Exo 3b - Validateur personnalisé sur une classe », en miroir de l'exo 3
   (« … sur un champ ») ; ligne « comme pour l'exo 0, `@Valid` » retirée de l'indice (c'est dans le cours).
 
-### Exo 4 — gestion d'exception personnalisée (ancien 25)
+### Exo 4 — gestion d'exception personnalisée (ancien 25), coupé en 4a / 4b / 4c
 
 - [x] **E4-1** · L'étudiant écrit `@ExceptionHandler(ImATeapotException::class)` dans `ErrorHandler` et
   retourne un `ProblemDetail` de statut 418. `[décidé]`
@@ -240,6 +247,47 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
 - [x] **E4-4** · Retirer du squelette le handler `Exception` qui répond « Failure: … » en 500. `[décidé]`
   **FAIT (2026-11-01) :** handler `Exception` (« Failure: … » en 500) retiré ; `ErrorHandler` est une classe vide qui étend
   `ResponseEntityExceptionHandler`.
+- [x] **E4-5** · **Exo 4 coupé en 4a / 4b / 4c** `[décidé]` (grill du 2026-11-03) — 4a : `body` = chaîne ; 4b : `body`
+  `{ "message": <e.message>, "status": … }` ; 4c : `ProblemDetail`. Une exception par étape, pour que le test de
+  l'étape précédente reste vert. Remplace E4-1 (le 4c en reprend la consigne) ; E4-2 devient le 2e test d'`Exo4c`.
+  **FAIT (2026-11-03) :** squelette : `ExceptionController` (endpoint de démo, 3 GET) ; exceptions `(message: String) :
+  RuntimeException(message)` dans `errors` :
+
+  | Route | Exception | Statut | Message |
+  |---|---|---|---|
+  | GET `/exception/MyFirstException` | `MyFirstException` | 406 | `My first exception` |
+  | GET `/exception/MyExceptionWithBody` | `MyExceptionWithBody` | 500 | `My exception with body` |
+  | GET `/exception/ImATeapotException` | `ImATeapotException` | 418 | `I'm a teapot` |
+  | PUT `/api/v1/pets/{petId}`, animal absent | `ImATeapotException` | 418 | `Pet $petId not found` |
+
+  Noms incohérents voulus (moins monotone) ; statuts variés ; message fixe dans le controller (l'étudiant peut le recopier
+  dans son handler, mais au 4c les deux messages différents l'obligent à utiliser `e.message`). `IllegalArgumentException`
+  (ids différents au PUT) inchangée. README : sections `## Exo 4a` / `4b` / `4c` (au niveau de 3 / 3b / 3c), « sans casser »
+  les précédents ; 4a : indice = lien vers la slide « RestControllerAdvice » (`#/19`) ; 4b : forme du JSON seulement (nom
+  du DTO libre) ; 4c : sans indice, rien sur la dépréciation de `HttpStatus.I_AM_A_TEAPOT` (`@Deprecated(since = "7.0")`,
+  « marked as unused in RFC 9110 » : un simple avertissement), remarque finale sur les 3 formats d'erreur mélangés.
+  Toutes les lettres disparaîtront avec la renumérotation (G-09).
+- [x] **E4-6** · Tests `Exo4a`, `Exo4b`, `Exo4c` (à la place d'`Exo4`, déplacés après `Exo3b`).
+  **FAIT (2026-11-03) :** `Exo4a` : 406, `text/plain` (`contentTypeCompatibleWith`), `body` exact ; `Exo4b` : 500,
+  `application/json`, `$.message`, `$.status` = 500 ; `Exo4c` : GET de démo et PUT d'un animal absent (`/pets/8`), 418,
+  `application/problem+json`, `$.status`, `$.detail`. Vérifié hors dépôt : les 4 tests sont rouges au départ
+  (`ServletException`) ; avec la solution appliquée étape par étape, chaque test passe au vert sans casser les précédents
+  (`ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(e.message)`, `ResponseEntity.internalServerError().body(ErrorDto(e.message, 500))`,
+  `ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(418), e.message)`) ; reste de la suite `exo0` inchangé.
+  **Reste :** branche `correction` à mettre à jour à la main (commits 4a / 4b / 4c / Bonus 1).
+- [x] **E4-7** · **Bonus `ErrorResponseException`** (reprend E4-3) `[décidé]` — « Exo Bonus 1 », en tête des bonus.
+  **FAIT (2026-11-03) :** README « Exo Bonus 1 - Une exception qui porte sa réponse » (module `exo0`, après le 4c) :
+  l'énoncé explique le mécanisme (absent du cours) avec un lien vers la doc Spring « Error Responses » ; consigne : faire
+  hériter `ImATeapotException`, supprimer son handler, sans modifier les controllers ; `Exo4c` doit rester vert. Indice
+  repliable : le `detail` ne vient pas du message. Vérifié hors dépôt : la variante d'E4-3
+  (`ErrorResponseException(HttpStatusCode.valueOf(418))`) fait échouer `Exo4c` (« No value at JSON path $.detail ») :
+  sans `ProblemDetail` fourni, il n'y a pas de `detail`, et `getMessage()` est surchargée (statut + body) ; avec
+  `ErrorResponseException(status, ProblemDetail.forStatusAndDetail(status, message), null)`, `Exo4c` est vert.
+- [x] **E4-8** · **Renumérotation des bonus** — nouveau Bonus 1 (`ErrorResponseException`) ; requêtes dérivées :
+  Bonus 1 → 2 ; profil Postgres : Bonus 2 → 3.
+  **FAIT (2026-11-03) :** titres du README, table ci-dessus, tables des notes Obsidian (`TD2.md`). Les entrées « FAIT »
+  datées (G-10, EB-1, EB-2, notes Obsidian) gardent l'ancien numéro : elles décrivent l'état à leur date. Aucun test
+  touché (les classes portent le nom du sujet, `ExoBonusQueries`).
 
 ### Exo 5 — surcharge de `HttpMessageNotReadableException` (ancien 26)
 
@@ -289,6 +337,12 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
 - [x] **E7-2** · Vérifier `InfoTest.Exo7` (ancien `Exo28`).
   **FAIT (2026-11-01) :** test `InfoTest.Exo7` inchangé ; rouge sur `main` ; vert avec un `InfoController` à 4 `@Value`
   injectés par le constructeur (vérifié hors dépôt, avec le `application.yml` de l'exo 6).
+- [x] **E7-3** · Détecter une réponse écrite en dur ; vérifier l'usage de `@Value` ?
+  **FAIT (2026-11-03) :** énoncé reformulé (d'abord l'`endpoint`, puis la contrainte `@Value` et « pas écrites dans le
+  code ») ; 2e test `InfoTest.Exo7.Exo7OtherName` avec `@ActiveProfiles("pony")` et `src/test/resources/application-pony.yml`
+  (surcharge partielle : `appName`, `appVersion` ; `git` inchangé). Le 2e test n'est pas annoncé dans l'énoncé.
+  Pas de test sur `@Value` lui-même : l'exo 8 réutilise `InfoTest.Exo7`, un test qui vise `@Value` y casserait ;
+  on fait confiance (vu à la correction). Branche `correction` à mettre à jour à la main.
 
 ### Exo 8 — `@ConfigurationProperties` (ancien 29)
 
@@ -449,6 +503,9 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
   **FAIT (2026-11-01) :** marqué **bonus** dans le README (encadré), en attendant la décision finale `T2-38` / G-09.
 
 ### Bonus
+
+> Depuis E4-8 : Bonus 1 = `ErrorResponseException` (module `exo0`, voir E4-7), Bonus 2 = requêtes dérivées (EB-2),
+> Bonus 3 = profil Postgres (EB-1).
 
 - [x] **EB-1** · Profil Postgres : `application-postgres.yml`, commande `podman run` **et** alternative
   `docker compose`, image figée (`postgres:18`) ; procédure testée (`T2-29`).

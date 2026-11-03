@@ -35,7 +35,7 @@ class PetController(val database : MutableMap<Int, PetDto> = mutableMapOf()){
         }
         val previous = database[petId]
         if (previous == null) {
-            throw ImATeapotException()
+            throw ImATeapotException("Pet $petId not found")
         } else {
             database[petId] = pet
         }

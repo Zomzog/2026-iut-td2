@@ -353,6 +353,67 @@ class PetControllerTest {
         }
     }
 
+    @Nested
+    inner class Exo4a {
+        @Test
+        fun `my first exception`() {
+            mockMvc.get("/exception/MyFirstException")
+                .andExpect {
+                    status { isEqualTo(406) }
+                    content { contentTypeCompatibleWith("text/plain") }
+                    content { string("My first exception") }
+                }
+        }
+    }
+
+    @Nested
+    inner class Exo4b {
+        @Test
+        fun `my exception with body`() {
+            mockMvc.get("/exception/MyExceptionWithBody")
+                .andExpect {
+                    status { isEqualTo(500) }
+                    content { contentType("application/json") }
+                    jsonPath("$.message") { value("My exception with body") }
+                    jsonPath("$.status") { value(500) }
+                }
+        }
+    }
+
+    @Nested
+    inner class Exo4c {
+        @Test
+        fun `teapot endpoint`() {
+            mockMvc.get("/exception/ImATeapotException")
+                .andExpect {
+                    status { isEqualTo(418) }
+                    content { contentType("application/problem+json") }
+                    jsonPath("$.status") { value(418) }
+                    jsonPath("$.detail") { value("I'm a teapot") }
+                }
+        }
+
+        @Test
+        fun `update unknown pet`() {
+            mockMvc.put("/api/v1/pets/8") {
+                contentType = APPLICATION_JSON
+                content = """
+                    {
+                        "id": 8,
+                        "name": "Kraken",
+                        "age": 3210,
+                        "kind": "OCTOPUS"
+                    }
+                """.trimIndent()
+            }
+                .andExpect {
+                    status { isEqualTo(418) }
+                    content { contentType("application/problem+json") }
+                    jsonPath("$.status") { value(418) }
+                    jsonPath("$.detail") { value("Pet 8 not found") }
+                }
+        }
+    }
 
     @Nested
     inner class Exo10 {
@@ -407,30 +468,6 @@ class PetControllerTest {
             search("""{ "minAge": 0, "maxAge": 6 }""")
                 .andExpect {
                     status { isBadRequest() }
-                }
-        }
-    }
-
-    @Nested
-    inner class Exo4 {
-
-        @Test
-        fun `happy path`() {
-            mockMvc.put("/api/v1/pets/8") {
-                contentType = APPLICATION_JSON
-                content = """
-                    {
-                        "id": 8,
-                        "name": "Kraken",
-                        "age": 3210,
-                        "kind": "OCTOPUS"
-                    }
-                """.trimIndent()
-            }
-                .andExpect {
-                    status { isEqualTo(418) }
-                    content { contentType("application/problem+json") }
-                    jsonPath("$.status") { value(418) }
                 }
         }
     }

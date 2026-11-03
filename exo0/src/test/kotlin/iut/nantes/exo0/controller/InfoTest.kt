@@ -31,6 +31,27 @@ class InfoTest{
                     jsonPath("$.git.commit") { value("123456") }
                 }
         }
+
+        @Nested
+        @ActiveProfiles("pony")
+        inner class Exo7OtherName {
+
+            @Autowired
+            lateinit var mockMvc: MockMvc
+
+            @Test
+            fun `happy path`() {
+                mockMvc.get("/api/v1/info")
+                    .andExpect {
+                        status { isOk() }
+                        content { contentType("application/json") }
+                        jsonPath("$.appName") { value("my little pony") }
+                        jsonPath("$.appVersion") { value("1.33.7") }
+                        jsonPath("$.git.branch") { value("main") }
+                        jsonPath("$.git.commit") { value("123456") }
+                    }
+            }
+        }
     }
 
     @Nested

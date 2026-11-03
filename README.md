@@ -27,6 +27,7 @@ Pour lancer un test seul depuis la ligne de commande :
 > **Remarque :** un `@RestControllerAdvice` (`ErrorHandler`) est déjà fourni dans le projet.
 > Il étend `ResponseEntityExceptionHandler`, qui transforme déjà les erreurs de validation en réponse 400
 > au format `ProblemDetail` : vous n'avez rien à écrire pour gérer ces erreurs.
+> Ce n'est pas le comportement par défaut de Spring Boot : sans cette classe, les erreurs ne seraient pas des `ProblemDetail`.
 
 ## Exo 0 - Validations simples
 
@@ -228,37 +229,75 @@ Ces tests n'ont pas besoin de Spring : on appelle directement `isValid`.
 
 > **Astuce :** pour mesurer la couverture dans IntelliJ, clic droit sur la classe de test puis **Run 'ValidAgeRangeValidatorTest' with Coverage**.
 
-## Exo 4 - Gestion d'exception personnalisée dans un `@RestControllerAdvice`
+## Exo 4a - Gérer une exception dans un `@RestControllerAdvice`
 
-Quand PUT /api/v1/pets/{petId} vise un animal qui n'existe pas, le `controller` lance `ImATeapotException`.
-Pour l'instant rien ne l'intercepte : l'erreur remonte jusqu'à Spring.
+Le `controller` `ExceptionController` est fourni : chacun de ses `endpoints` lance une exception du package `errors`.
+Pour l'instant rien ne les intercepte : l'erreur remonte jusqu'à Spring.
 
-À l'aide du `@RestControllerAdvice` `ErrorHandler`, renvoyer une erreur 418 en cas d'exception `ImATeapotException`.
-La réponse est un `ProblemDetail`, le format standard des erreurs HTTP (`application/problem+json`, avec un champ `status`).
+Dans le `@RestControllerAdvice` `ErrorHandler`, gérer l'exception `MyFirstException`, lancée par GET /exception/MyFirstException :
+la réponse a le statut 406, et son `body` est simplement le message de l'exception, sous forme de chaîne de caractères.
 
 <details>
 <summary>Indice</summary>
 
-Comme dans un `@RestController`, ce que retourne une méthode d'un `@RestControllerAdvice` est écrit dans le corps de la réponse.
-Dans `ErrorHandler`, une méthode annotée `@ExceptionHandler(ImATeapotException::class)` peut donc retourner directement un `ProblemDetail`.
-
-`ProblemDetail.forStatus(418)` crée le `ProblemDetail` pour un statut donné.
+Voir la slide [« RestControllerAdvice »](https://zomzog.fr/iut-spring-kotlin/c2/#/19).
 
 </details>
 
-La classe de test Exo4 de PetControllerTest doit passer sans y apporter de modifications.
+La classe de test Exo4a de PetControllerTest doit passer sans y apporter de modifications.
 
 ```bash
-./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.PetControllerTest$Exo4'
+./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.PetControllerTest$Exo4a'
+```
+
+## Exo 4b - Une erreur avec un `body` JSON
+
+Une chaîne de caractères est difficile à exploiter pour le client de l'API : on veut maintenant une réponse en JSON.
+
+Dans `ErrorHandler`, gérer l'exception `MyExceptionWithBody`, lancée par GET /exception/MyExceptionWithBody :
+la réponse a le statut 500 et le `body` suivant, où `message` est le message de l'exception.
+
+```json
+{
+  "message": "My exception with body",
+  "status": 500
+}
+```
+
+La classe de test Exo4b de PetControllerTest doit passer sans y apporter de modifications, sans casser la classe Exo4a.
+
+```bash
+./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.PetControllerTest$Exo4b'
+```
+
+## Exo 4c - Une erreur au format `ProblemDetail`
+
+Chaque API peut inventer son format d'erreur, comme à l'exo 4b, mais il existe un format standard : `ProblemDetail`
+(RFC 9457, `application/problem+json`). C'est celui que l'application utilise déjà pour les erreurs de validation.
+
+`ImATeapotException` est lancée par GET /exception/ImATeapotException,
+et aussi par PUT /api/v1/pets/{petId} quand l'animal n'existe pas.
+
+Dans `ErrorHandler`, gérer l'exception `ImATeapotException` : la réponse a le statut 418,
+et c'est un `ProblemDetail` dont le `detail` est le message de l'exception.
+
+> **Remarque :** l'API répond maintenant avec trois formats d'erreur différents (exos 4a, 4b et 4c).
+> Dans une vraie application, on choisirait un seul format, `ProblemDetail`, pour toutes les erreurs.
+> Ici on garde les handlers des exos 4a et 4b pour que leurs tests restent verts.
+
+La classe de test Exo4c de PetControllerTest doit passer sans y apporter de modifications, sans casser les classes Exo4a et Exo4b.
+
+```bash
+./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.PetControllerTest$Exo4c'
 ```
 
 ## Exo 5 - Surcharger la gestion d'une exception de Spring
 
 Quand le `body` d'une requête ne peut pas être lu (valeur inconnue pour un enum, JSON mal formé...),
-Spring répond déjà 400 avec un `ProblemDetail`, mais son `detail` est trop vague pour le client de l'API : `Failed to read request`.
+l'application répond déjà 400 avec un `ProblemDetail` : c'est `ResponseEntityExceptionHandler`, dont hérite `ErrorHandler`,
+qui le construit. Mais son `detail` est trop vague pour le client de l'API : `Failed to read request`.
 
-Dans le `@RestControllerAdvice` `ErrorHandler`, qui étend la gestion des erreurs de Spring (`ResponseEntityExceptionHandler`),
-on veut un message qui indique le champ en erreur et la valeur refusée.
+Dans `ErrorHandler`, on veut un message qui indique le champ en erreur et la valeur refusée.
 
 Pour trouver la bonne exception à surcharger, lancer le test `unknown enum value` de la classe Exo5 de PetControllerTest :
 il envoie un `kind` qui n'est pas dans l'enum (`PONY`) et affiche la requête et la réponse.
@@ -340,7 +379,7 @@ mon application 1.0.1 main 123456
 
 ## Exo 7 - Injection des `properties` avec des `@Value`
 
-En utilisant des `@Value`, créer un `endpoint` GET /api/v1/info qui renvoie la réponse suivante en JSON
+Créer un `endpoint` GET /api/v1/info qui renvoie la réponse suivante en JSON
 
 ```json
 {
@@ -353,7 +392,8 @@ En utilisant des `@Value`, créer un `endpoint` GET /api/v1/info qui renvoie la 
 }
 ```
 
-Les valeurs viennent du fichier `application.yml` créé à l'exo 6 (si vous l'avez sauté, créez-le maintenant).
+Les valeurs ne sont pas écrites dans le code : elles viennent du fichier `application.yml` créé à l'exo 6.
+Elles doivent être injectées avec des `@Value`.
 
 Un objet `Info` est fourni dans le package `domain` pour faciliter la sérialisation.
 
@@ -456,7 +496,7 @@ sans casser les classes Exo3b et ValidAgeRangeValidatorTest.
 ./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.PetControllerTest$Exo10'
 ```
 
-## Exo 11 (bonus) - Validateur en tant que bean
+## Exo 11 - Validateur en tant que bean
 
 > **Bonus :** cet exo est optionnel, aucun exo suivant n'en dépend.
 
@@ -466,13 +506,6 @@ Ici, on veut que l'écart maximum vienne du fichier de configuration plutôt que
 - Ajouter `custom.api.pets.max-range: 100` dans le fichier `application.yml`.
 - Supprimer le paramètre `maxRange` de l'annotation `@ValidAgeRange` (et son utilisation sur `PetSearch`).
 - Dans `ValidAgeRangeValidator`, injecter la valeur par le constructeur avec un `@Value`.
-
-<details>
-<summary>Indice</summary>
-
-Comme à l'exo 7, il faut échapper le `$` en Kotlin : `@Value("\${custom.api.pets.max-range}")`.
-
-</details>
 
 Adapter `ValidAgeRangeValidatorTest` : le validateur reçoit maintenant sa valeur dans son constructeur.
 
@@ -764,7 +797,33 @@ Le décommenter (sélectionner les lignes commentées, puis `Ctrl+/`) : il doit 
 ./gradlew :exo12:test --tests 'iut.nantes.exo12.controller.HumanControllerTest$Exo19'
 ```
 
-## Exo Bonus 1 - Requêtes dérivées
+## Exo Bonus 1 - Une exception qui porte sa réponse
+
+À faire dans le module `exo0`, après l'exo 4c.
+
+Plutôt que d'écrire un `@ExceptionHandler`, une exception peut porter elle-même son statut et son `ProblemDetail` :
+il suffit qu'elle hérite de `ErrorResponseException` (package `org.springframework.web`).
+`ResponseEntityExceptionHandler`, dont hérite `ErrorHandler`, gère déjà ces exceptions : il renvoie le `ProblemDetail` qu'elles portent.
+Voir la documentation de Spring : [Error Responses](https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-ann-rest-exceptions.html).
+
+Faire hériter `ImATeapotException` de `ErrorResponseException`, puis supprimer son `@ExceptionHandler` dans `ErrorHandler`.
+Les `controllers` ne doivent pas être modifiés : `ImATeapotException` se construit toujours avec un message.
+
+<details>
+<summary>Indice</summary>
+
+Le `detail` ne vient pas du message de l'exception : avec `ErrorResponseException(status)`, la réponse n'a pas de `detail`.
+Regarder les constructeurs de `ErrorResponseException` : l'un d'eux reçoit le `ProblemDetail` à renvoyer.
+
+</details>
+
+La classe de test Exo4c de PetControllerTest doit toujours passer sans y apporter de modifications.
+
+```bash
+./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.PetControllerTest$Exo4c'
+```
+
+## Exo Bonus 2 - Requêtes dérivées
 
 Spring Data génère les requêtes à partir du nom des méthodes du `repository` (voir la slide [« Jpa Repository Custom Query »](https://zomzog.fr/iut-spring-kotlin/c2/#/52)).
 
@@ -789,7 +848,7 @@ La classe de test ExoBonusQueries de HumanControllerTest doit passer sans y appo
 ./gradlew :exo12:test --tests 'iut.nantes.exo12.controller.HumanControllerTest$ExoBonusQueries'
 ```
 
-## Exo Bonus 2 - Profil Postgres
+## Exo Bonus 3 - Profil Postgres
 
 Créer une configuration application-postgres.yml où la base h2 est remplacée par une base postgresql.
 
