@@ -36,14 +36,9 @@ Ajouter la dépendance `org.springframework.boot:spring-boot-starter-validation`
 À l'aide d'annotations, ajouter une validation pour que l'appel au endpoint POST /api/v1/pets
 retourne un code 400 si le nom est vide ou si l'âge est inférieur à 0.
 
-<details>
-<summary>Indice</summary>
-
-Les contraintes `@NotBlank` et `@Min` (package `jakarta.validation.constraints`) se posent sur les propriétés de `PetDto`.
-
-Pour que Spring valide le body, le paramètre `@RequestBody` du endpoint doit aussi être annoté avec `@Valid`.
-
-</details>
+Les contraintes standard (package `jakarta.validation.constraints`) sont listées dans la documentation de Hibernate Validator,
+l'implémentation utilisée par Spring Boot :
+[Jakarta Validation constraints](https://docs.hibernate.org/validator/9.1/reference/en-US/html_single/#validator-defineconstraints-spec).
 
 La classe de test Exo0 de PetControllerTest doit passer sans y apporter de modifications.
 
@@ -62,9 +57,6 @@ Créer l'annotation `PetId` qui regroupe la contrainte `@Min`, puis la poser sur
 à côté de `@PathVariable`.
 
 </details>
-
-> **NOTE:** il n'y a pas besoin d'ajouter `@Validated` sur le controller : depuis Spring Framework 6.1,
-> la validation des paramètres d'un endpoint est native. Le 400 est renvoyé par Spring (`HandlerMethodValidationException`).
 
 La classe de test Exo1 de PetControllerTest doit passer sans y apporter de modifications.
 La classe Base, qui teste le fonctionnement de départ de GET /api/v1/pets/{petId}, doit rester verte.
@@ -145,8 +137,6 @@ Poser l'annotation sur la classe `PetSearch`. Le endpoint doit répondre 400 pou
 
 L'annotation se pose cette fois sur une classe : sa cible est `AnnotationTarget.CLASS`,
 et le validateur est un `ConstraintValidator<ValidAgeRange, PetSearch>`.
-
-Comme pour l'exo 0, le paramètre `@RequestBody` du endpoint doit être annoté avec `@Valid`.
 
 </details>
 
