@@ -1,16 +1,13 @@
 package iut.nantes.exo12.controller
 
 import com.jayway.jsonpath.JsonPath
-import iut.nantes.exo12.DatabaseProxy
 import org.hamcrest.Matchers.hasItem
-import org.hamcrest.Matchers.not
 import org.junit.jupiter.api.Nested
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 import kotlin.test.Test
@@ -21,14 +18,11 @@ class HumanControllerTest {
     @Autowired
     lateinit var mockMvc: MockMvc
 
-    @Autowired
-    lateinit var databaseProxy: DatabaseProxy
-
     /** Crée un human via l'API et retourne son identifiant. */
-    private fun createHuman(name: String = "Joe", petKind: String = "DOG"): Int {
+    private fun createHuman(name: String = "Joe"): Int {
         val body = mockMvc.post("/api/v1/humans") {
             contentType = APPLICATION_JSON
-            content = humanJson(name, petKind = petKind)
+            content = humanJson(name)
         }.andExpect {
             status { isCreated() }
         }.andReturn().response.contentAsString
@@ -81,123 +75,9 @@ class HumanControllerTest {
         }
     }
 
-    @Nested
-    inner class Exo15 {
-        @Test
-        fun `create a human with a contact`() {
-            mockMvc.post("/api/v1/humans") {
-                contentType = APPLICATION_JSON
-                content = humanJson("Joe")
-            }.andExpect {
-                status { isCreated() }
-                content { contentType("application/json") }
-                jsonPath("$.name") { value("Joe") }
-                jsonPath("$.contact.email") { value("Joe@Doe.pom") }
-            }
-        }
-
-        @Test
-        fun `read the contact of a human`() {
-            val id = createHuman("Jane")
-
-            mockMvc.get("/api/v1/humans/$id").andExpect {
-                status { isOk() }
-                jsonPath("$.name") { value("Jane") }
-                jsonPath("$.contact.email") { value("Jane@Doe.pom") }
-            }
-        }
-    }
-
-    @Nested
-    inner class Exo17 {
-        @Test
-        fun `create a human with a pet`() {
-            mockMvc.post("/api/v1/humans") {
-                contentType = APPLICATION_JSON
-                content = humanJson("Joe")
-            }.andExpect {
-                status { isCreated() }
-                content { contentType("application/json") }
-                jsonPath("$.name") { value("Joe") }
-                jsonPath("$.contact.email") { value("Joe@Doe.pom") }
-                jsonPath("$.pets[0].name") { value("Java") }
-            }
-        }
-
-        @Test
-        fun `read the pets of a human`() {
-            val id = createHuman("Jane")
-
-            mockMvc.get("/api/v1/humans/$id").andExpect {
-                status { isOk() }
-                jsonPath("$.name") { value("Jane") }
-                jsonPath("$.pets[0].name") { value("Java") }
-                jsonPath("$.pets[0].id") { isNumber() }
-            }
-        }
-    }
-
-    @Nested
-    inner class Exo19 {
-        @Test
-        fun `delete a pet`() {
-            // Décommenter le code ci-dessous après l'ajout de `contact` et `pets` à HumanDto (exos 15 et 17)
-//            val h = databaseProxy.saveHuman(HumanDto(null, "Joe", ContactDto("Joe@Doe.pom"), listOf(PetDto(null, "Java", 3, PetKind.DOG))))
-//            mockMvc.delete("/api/v1/humans/${h.humanId}/pets/${h.pets[0].id}") {
-//            }.andExpect {
-//                status { isNoContent() }
-//            }
-//            mockMvc.get("/api/v1/humans/${h.humanId}") {
-//            }.andExpect {
-//                status { isOk() }
-//                content { contentType("application/json") }
-//                jsonPath("$.name") { value("Joe") }
-//                jsonPath("$.contact.email") { value("Joe@Doe.pom") }
-//                jsonPath("$.pets") { isEmpty() }
-//            }
-        }
-    }
-
-    @Nested
-    inner class ExoBonusQueries {
-        @Test
-        fun `search by name`() {
-            createHuman("Zorglub")
-            createHuman("Averell")
-
-            mockMvc.get("/api/v1/humans?name=zorg").andExpect {
-                status { isOk() }
-                jsonPath("$[*].name") { value(hasItem("Zorglub")) }
-                jsonPath("$[*].name") { value(not(hasItem("Averell"))) }
-            }
-        }
-
-        @Test
-        fun `search by pet kind`() {
-            createHuman("Catlover", petKind = "CAT")
-            createHuman("Doglover", petKind = "DOG")
-
-            mockMvc.get("/api/v1/humans?petKind=CAT").andExpect {
-                status { isOk() }
-                jsonPath("$[*].name") { value(hasItem("Catlover")) }
-                jsonPath("$[*].name") { value(not(hasItem("Doglover"))) }
-            }
-        }
-    }
-
-    private fun humanJson(name: String = "Joe", petName: String = "Java", petKind: String = "DOG") = """
+    private fun humanJson(name: String = "Joe") = """
         {
-            "name": "$name",
-            "contact": {
-                "email": "$name@Doe.pom"
-            },
-            "pets": [
-                {
-                    "name": "$petName",
-                    "age": 3,
-                    "kind": "$petKind"
-                }
-            ]
+            "name": "$name"
         }
     """.trimIndent()
 }

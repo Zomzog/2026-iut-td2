@@ -102,6 +102,20 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
   (E4-5 : seul le 4a garde un indice, le lien vers la slide), exo 8 fait (E8-3 : l'indice ne garde que les liens vers les
   slides). Autres candidats repérés : pseudo-code du 3b, bloc « Solution » + indice de l'exo 5, noms des méthodes du
   Bonus 2 (requêtes dérivées).
+- [x] **G-12** · **Exos 15 à 19 et Bonus 2 (requêtes dérivées) déplacés dans le TD3** — `jpa2.md` / `jpa3.md`
+  n'ont pas été faits en amphi C2 (ils passent en c3), ces exos ne sont plus faisables en TD2.
+  **FAIT (2026-11-03) :** dépôt `../2026-iut-td3` (vide jusque-là, rien de commité) : module `exo0` (package
+  `iut.nantes.exo0`), squelette = fin de l'exo 14 (`HumanEntity`, `HumanRepository`, `DatabaseProxy` repris de la
+  branche `correction`, lue sans y toucher), H2 en mémoire. Renumérotation : 15 → 0, 16 → 1, 16b → 1b, 17 → 2, 18 → 3,
+  19 → 4 (bonus), Bonus 2 → Bonus ; tests `Exo14` → `Base`, `Exo15` → `Exo0`, `Exo17` → `Exo2`, `Exo19` → `Exo4`,
+  `Exo18Test` → `Exo3Test`. Liens des slides en `c3/#/12` à `#/15` et `#/18` (valables une fois `2026-C3` déployé).
+  Vérifié hors dépôt : squelette TD3 5/11 verts (`Base` + `Exo4` encore commenté), solution complète 13/13 verts
+  (`Exo3Test` et `Exo4` décommentés, `HumanRepositoryTest` de l'exo 1b).
+  TD2 : README (sections 15 à 19 et requêtes dérivées retirées, « exos 12 à 14 », Postgres devient Bonus 2, seule la
+  table `human_entity`), `HumanControllerTest` réduit à `Exo14`, `Exo18Test` et `ContactDto` supprimés. Vérifié hors
+  dépôt : `exo12` compile, 6/6 verts avec la solution de `correction`.
+  **Reste :** les sections E15 à E19 et EB-2 ci-dessous concernent désormais le TD3 ; correction du TD3 à créer ;
+  notes Obsidian (`TD2.md`, `Cours 2.md`) à aligner.
 
 ## Module `exo0` — validation, erreurs, configuration
 

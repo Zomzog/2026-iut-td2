@@ -14,7 +14,7 @@ systemProp.https.proxyPort=3128
 
 Importer le projet dans votre IDE en utilisant gradle.
 
-Les modifications sont à faire dans le module `exo0` (exos 0 à 11), puis dans le module `exo12` (exos 12 à 19).
+Les modifications sont à faire dans le module `exo0` (exos 0 à 11), puis dans le module `exo12` (exos 12 à 14).
 
 Les tests fournis ne doivent pas être modifiés, sauf si l'énoncé le demande.
 
@@ -619,7 +619,7 @@ Pour une entité, préférer une `class` avec des `var` à une `data class`
 L'identifiant est nullable (`Int?`) : il vaut `null` tant que l'entité n'est pas enregistrée en base.
 Il est annoté `@Id` et `@GeneratedValue`.
 
-Ranger les entités et `HumanRepository` dans le package `iut.nantes.exo12.repository` (les tests suivants l'utilisent).
+Ranger les entités et `HumanRepository` dans le package `iut.nantes.exo12.repository`.
 
 </details>
 
@@ -627,170 +627,6 @@ La classe de test Exo14 de HumanControllerTest doit passer sans y apporter de mo
 
 ```bash
 ./gradlew :exo12:test --tests 'iut.nantes.exo12.controller.HumanControllerTest$Exo14'
-```
-
-## Exo 15 - OneToOne
-
-Modifier `HumanDto` pour lui ajouter un attribut `contact`
-
-```kotlin
-data class HumanDto(val humanId: Int?, val name: String, val contact: ContactDto)
-```
-
-Créer une `entity` JPA `ContactEntity` qui correspond aux attributs de `ContactDto`.
-
-À l'aide d'un `@OneToOne`, lier `HumanEntity` et `ContactEntity` de manière unidirectionnelle
-(c'est-à-dire qu'on peut faire `human.contact.email`, mais pas `contact.human.name`).
-
-Adapter les conversions entre `HumanDto` et `HumanEntity` pour prendre en compte le contact.
-
-<details>
-<summary>Indice</summary>
-
-Voir la slide [« One-To-One unidirectionnel »](https://zomzog.fr/iut-spring-kotlin/c2/#/63).
-
-Enregistrer un humain doit aussi enregistrer son contact : regarder l'attribut `cascade` de `@OneToOne`.
-
-</details>
-
-La classe de test Exo15 de HumanControllerTest doit passer sans y apporter de modifications.
-
-```bash
-./gradlew :exo12:test --tests 'iut.nantes.exo12.controller.HumanControllerTest$Exo15'
-```
-
-## Exo 16 - OneToOne bidirectionnel
-
-Modifier la relation `@OneToOne` pour qu'elle soit bidirectionnelle :
-on peut faire `human.contact.email`, et aussi `contact.human.name`.
-
-Dans une relation bidirectionnelle, un seul côté est propriétaire (c'est lui qui porte la clé étrangère),
-l'autre côté est l'inverse et le déclare avec `mappedBy`.
-
-<details>
-<summary>Indice</summary>
-
-Voir la slide [« One-To-One bi-directionnel »](https://zomzog.fr/iut-spring-kotlin/c2/#/64).
-
-Le côté inverse est `ContactEntity` : sa propriété `human` doit être nullable (avec `null` par défaut),
-pour pouvoir créer un contact avant son humain.
-
-</details>
-
-La classe de test Exo15 de HumanControllerTest doit toujours passer.
-
-> **Remarque :** ce test passe aussi avec une relation unidirectionnelle : il ne prouve pas que la relation est bidirectionnelle.
-> C'est le rôle de l'exo suivant.
-
-## Exo 16b - Tester la relation
-
-Dans `exo12/build.gradle.kts`, ajouter la dépendance de test `org.springframework.boot:spring-boot-starter-data-jpa-test`.
-
-Écrire une classe de tests `HumanRepositoryTest` (dans `src/test/kotlin/iut/nantes/exo12/repository/`)
-avec `@DataJpaTest`, qui prouve que la relation est bidirectionnelle :
-
-1. enregistrer un humain et son contact avec `HumanRepository`,
-2. vider le cache de JPA (`flush()` puis `clear()`), pour que la suite relise bien la base,
-3. relire le **contact** depuis la base,
-4. vérifier que `contact.human` est l'humain enregistré.
-
-> **Remarque :** depuis Spring Boot 4, `@DataJpaTest` et `TestEntityManager` sont dans des packages différents des anciens tutoriels :
-> `org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest` et `org.springframework.boot.jpa.test.autoconfigure.TestEntityManager`.
-
-> **Astuce :** `TestEntityManager` fournit `flush()`, `clear()` et `find(classe, id)`, pratique dans un test JPA.
-
-Ce test doit passer. Il ne compile pas (ou échoue) avec la relation unidirectionnelle de l'exo 15.
-
-```bash
-./gradlew :exo12:test --tests 'iut.nantes.exo12.repository.HumanRepositoryTest'
-```
-
-## Exo 17 - OneToMany
-
-Modifier `HumanDto` pour lui ajouter un attribut `pets`
-
-```kotlin
-data class HumanDto(val humanId: Int?, val name: String, val contact: ContactDto, val pets: List<PetDto>)
-```
-
-Créer une `entity` JPA `PetEntity` qui correspond aux attributs de `PetDto`.
-
-À l'aide d'un `@OneToMany`, lier `HumanEntity` et `PetEntity` de manière unidirectionnelle
-(c'est-à-dire qu'on peut faire `human.pets`, mais pas `pet.human`).
-
-Adapter les conversions entre `HumanDto` et `HumanEntity` pour prendre en compte les animaux.
-
-<details>
-<summary>Indice</summary>
-
-Voir la slide [« One-To-Many unidirectionnel »](https://zomzog.fr/iut-spring-kotlin/c2/#/65).
-
-Pour une collection JPA, utiliser une `var` de type `MutableList` : JPA remplace la liste par la sienne.
-
-Sans `@JoinColumn` sur le `@OneToMany`, JPA crée une table de jointure.
-Avec `@JoinColumn(name = "human_id")`, la clé étrangère est une colonne `human_id` de la table de `PetEntity`.
-
-Pour le type d'un `PetKind` dans l'entité, `@Enumerated(EnumType.STRING)` enregistre le nom de la valeur.
-
-</details>
-
-La classe de test Exo17 de HumanControllerTest doit passer sans y apporter de modifications.
-
-```bash
-./gradlew :exo12:test --tests 'iut.nantes.exo12.controller.HumanControllerTest$Exo17'
-```
-
-## Exo 18 - OneToMany bidirectionnel
-
-Modifier la relation `@OneToMany` pour qu'elle soit bidirectionnelle :
-on peut faire `human.pets`, et aussi `pet.human`.
-
-Comme pour la relation `@OneToOne`, un côté est propriétaire et l'autre est l'inverse (`mappedBy`).
-Dans un `@OneToMany` / `@ManyToOne`, le côté propriétaire est toujours le `@ManyToOne` (la clé étrangère est dans la table de `PetEntity`).
-
-<details>
-<summary>Indice</summary>
-
-Voir les slides [« Many-To-One »](https://zomzog.fr/iut-spring-kotlin/c2/#/66) et [« One-To-Many unidirectionnel »](https://zomzog.fr/iut-spring-kotlin/c2/#/65).
-
-C'est le `@ManyToOne` sur `PetEntity.human` qui enregistre le lien en base :
-dans la conversion de `HumanDto` vers `HumanEntity`, il ne faut pas oublier de renseigner `human` sur chaque animal.
-
-</details>
-
-Le test Exo17 de HumanControllerTest doit toujours passer.
-
-Il ne suffit pas à prouver que la relation est bidirectionnelle (il passe aussi sans).
-Ouvrir `src/test/kotlin/iut/nantes/exo12/repository/Exo18Test.kt` et décommenter tout le fichier (sélectionner tout, puis `Ctrl+/`) :
-ce test doit passer.
-
-```bash
-./gradlew :exo12:test --tests 'iut.nantes.exo12.repository.Exo18Test'
-```
-
-## Exo 19 (bonus) - Suppression d'un animal
-
-> **Bonus :** cet exo est optionnel.
-
-Ajouter un nouveau `endpoint` DELETE "/api/v1/humans/{humanId}/pets/{petId}" et les services requis.
-
-Ce `endpoint` permet de supprimer un animal et répond 204 (No Content).
-
-<details>
-<summary>Indice</summary>
-
-Dans `DatabaseProxy`, charger l'humain, retirer l'animal de sa liste `pets`, puis enregistrer l'humain.
-
-Pour que l'animal retiré de la liste soit aussi supprimé de la base, voir la slide [`orphanRemoval`](https://zomzog.fr/iut-spring-kotlin/c2/#/69) :
-c'est une option du `@OneToMany`.
-
-</details>
-
-Dans `HumanControllerTest.kt`, le test de la classe Exo19 est commenté parce qu'il ne compile pas avant l'ajout de `contact` et `pets` à `HumanDto`.
-Le décommenter (sélectionner les lignes commentées, puis `Ctrl+/`) : il doit passer.
-
-```bash
-./gradlew :exo12:test --tests 'iut.nantes.exo12.controller.HumanControllerTest$Exo19'
 ```
 
 ## Exo Bonus 1 - Une exception qui porte sa réponse
@@ -819,32 +655,9 @@ La classe de test Exo4c de PetControllerTest doit toujours passer sans y apporte
 ./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.PetControllerTest$Exo4c'
 ```
 
-## Exo Bonus 2 - Requêtes dérivées
+## Exo Bonus 2 - Profil Postgres
 
-Spring Data génère les requêtes à partir du nom des méthodes du `repository` (voir la slide [« Jpa Repository Custom Query »](https://zomzog.fr/iut-spring-kotlin/c2/#/52)).
-
-Ajouter deux paramètres optionnels à GET /api/v1/humans :
-
-- `name` : ne renvoie que les humains dont le nom contient la valeur, sans tenir compte des majuscules (`?name=zorg` trouve `Zorglub`),
-- `petKind` : ne renvoie que les humains qui ont au moins un animal de ce type (`?petKind=CAT`).
-
-Sans paramètre, tous les humains sont renvoyés.
-
-<details>
-<summary>Indice</summary>
-
-Ajouter deux méthodes au `HumanRepository`, sans écrire de requête :
-`findByNameContainingIgnoreCase(name: String)` et `findByPetsKind(kind: PetKind)`.
-
-</details>
-
-La classe de test ExoBonusQueries de HumanControllerTest doit passer sans y apporter de modifications.
-
-```bash
-./gradlew :exo12:test --tests 'iut.nantes.exo12.controller.HumanControllerTest$ExoBonusQueries'
-```
-
-## Exo Bonus 3 - Profil Postgres
+À faire dans le module `exo12`, après l'exo 14.
 
 Créer une configuration application-postgres.yml où la base h2 est remplacée par une base postgresql.
 
@@ -888,7 +701,7 @@ Pour vérifier :
 
 - la console contient `Database JDBC URL [jdbc:postgresql://localhost:5432/postgres]`,
 - créer un humain avec POST /api/v1/humans (comme dans les tests), puis le relire avec GET /api/v1/humans,
-- les tables existent dans Postgres : `docker exec postgres psql -U username -d postgres -c '\dt'`
-  (`contact_entity`, `human_entity`, `pet_entity`).
+- la table existe dans Postgres : `docker exec postgres psql -U username -d postgres -c '\dt'`
+  (`human_entity`).
 
 Pour arrêter et supprimer la base : `docker rm -f postgres`.
