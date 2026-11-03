@@ -20,6 +20,9 @@ repositories {
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-webmvc")
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	runtimeOnly("com.h2database:h2")
+	runtimeOnly("org.springframework.boot:spring-boot-h2console")
 	implementation("tools.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
