@@ -192,13 +192,42 @@ La classe de test Exo5 de PetControllerTest doit passer sans y apporter de modif
 ./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.PetControllerTest$Exo5'
 ```
 
-### Exo 6 - Tester le validateur
+### Exo 6 - Ajout d'un écart maximum (`maxRange`)
 
-Le tableau de vérité ci-dessus décrit toutes les règles de `ValidAgeRangeValidator`.
+Pour ne pas surcharger la base de données, il est souvent utile de limiter l'écart entre deux valeurs.
+
+Ajouter un paramètre `maxRange` à l'annotation @ValidAgeRange, avec `Int.MAX_VALUE` comme valeur par défaut (pas de limite).
+
+Modifier la validation de `PetSearch` pour garantir que l'écart entre l'âge minimum et l'âge maximum
+(quand les deux sont fournis) est inférieur ou égal à `maxRange`.
+
+Utiliser `@ValidAgeRange(maxRange = 100)` sur `PetSearch`.
+
+<details>
+<summary>Indice</summary>
+
+Le validateur reçoit l'annotation dans la méthode `initialize(constraintAnnotation)` de `ConstraintValidator` :
+c'est là qu'on lit `maxRange` pour le garder dans le validateur.
+
+</details>
+
+La classe de test Exo6 de PetControllerTest doit passer sans y apporter de modifications, sans casser la classe Exo5.
+
+```bash
+./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.PetControllerTest$Exo6'
+```
+
+### Exo 7 - Tester le validateur
+
+Le tableau de vérité de l'exo 5 décrit les règles de `ValidAgeRangeValidator`, auxquelles l'exo 6 ajoute `maxRange`.
 
 Créer une classe de tests unitaires `ValidAgeRangeValidatorTest` (dans `src/test/kotlin/iut/nantes/exo0/validation/`)
-qui vérifie le validateur pour chaque case du tableau et couvre à 100% `ValidAgeRangeValidator`.
+qui vérifie le validateur pour chaque case du tableau, ajoute des cas sur `maxRange`
+et couvre à 100% `ValidAgeRangeValidator`.
 Ces tests n'ont pas besoin de Spring : on appelle directement `isValid`.
+
+> **Astuce :** Kotlin permet de créer une instance d'annotation, pour tester un validateur avec un `maxRange` donné :
+> `ValidAgeRangeValidator().apply { initialize(ValidAgeRange(maxRange = 5)) }`.
 
 > **Astuce :** un `@ParameterizedTest` évite d'écrire un test par case. Avec `@CsvSource`, la valeur `null` s'écrit avec
 > `nullValues = ["null"]`. Le second paramètre de `isValid` (le contexte) peut être `null` si votre validateur ne l'utilise pas.
@@ -207,7 +236,7 @@ Ces tests n'ont pas besoin de Spring : on appelle directement `isValid`.
 
 ## Gestion des erreurs
 
-### Exo 7 - Gérer une exception dans un `@RestControllerAdvice`
+### Exo 8 - Gérer une exception dans un `@RestControllerAdvice`
 
 Le `controller` `ExceptionController` est fourni : chacun de ses `endpoints` lance une exception du package `errors`.
 Pour l'instant rien ne les intercepte : l'erreur remonte jusqu'à Spring.
@@ -222,13 +251,13 @@ Voir la slide [« RestControllerAdvice »](https://zomzog.fr/iut-spring-kotlin/c
 
 </details>
 
-La classe de test Exo7 de PetControllerTest doit passer sans y apporter de modifications.
+La classe de test Exo8 de PetControllerTest doit passer sans y apporter de modifications.
 
 ```bash
-./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.PetControllerTest$Exo7'
+./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.PetControllerTest$Exo8'
 ```
 
-### Exo 8 - Une erreur avec un `body` JSON
+### Exo 9 - Une erreur avec un `body` JSON
 
 Une chaîne de caractères est difficile à exploiter pour le client de l'API : on veut maintenant une réponse en JSON.
 
@@ -242,15 +271,15 @@ la réponse a le statut 500 et le `body` suivant, où `message` est le message d
 }
 ```
 
-La classe de test Exo8 de PetControllerTest doit passer sans y apporter de modifications, sans casser la classe Exo7.
+La classe de test Exo9 de PetControllerTest doit passer sans y apporter de modifications, sans casser la classe Exo8.
 
 ```bash
-./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.PetControllerTest$Exo8'
+./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.PetControllerTest$Exo9'
 ```
 
-### Exo 9 - Une erreur au format `ProblemDetail`
+### Exo 10 - Une erreur au format `ProblemDetail`
 
-Chaque API peut inventer son format d'erreur, comme à l'exo 8, mais il existe un format standard : `ProblemDetail`
+Chaque API peut inventer son format d'erreur, comme à l'exo 9, mais il existe un format standard : `ProblemDetail`
 (RFC 9457, `application/problem+json`). C'est celui que l'application utilise déjà pour les erreurs de validation.
 
 `ImATeapotException` est lancée par GET /exception/ImATeapotException,
@@ -259,17 +288,17 @@ et aussi par PUT /api/v1/pets/{petId} quand l'animal n'existe pas.
 Dans `ErrorHandler`, gérer l'exception `ImATeapotException` : la réponse a le statut 418,
 et c'est un `ProblemDetail` dont le `detail` est le message de l'exception.
 
-> **Remarque :** l'API répond maintenant avec trois formats d'erreur différents (exos 7, 8 et 9).
+> **Remarque :** l'API répond maintenant avec trois formats d'erreur différents (exos 8, 9 et 10).
 > Dans une vraie application, on choisirait un seul format, `ProblemDetail`, pour toutes les erreurs.
-> Ici on garde les handlers des exos 7 et 8 pour que leurs tests restent verts.
+> Ici on garde les handlers des exos 8 et 9 pour que leurs tests restent verts.
 
-La classe de test Exo9 de PetControllerTest doit passer sans y apporter de modifications, sans casser les classes Exo7 et Exo8.
+La classe de test Exo10 de PetControllerTest doit passer sans y apporter de modifications, sans casser les classes Exo8 et Exo9.
 
 ```bash
-./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.PetControllerTest$Exo9'
+./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.PetControllerTest$Exo10'
 ```
 
-### Exo 10 - Surcharger la gestion d'une exception de Spring
+### Exo 11 - Surcharger la gestion d'une exception de Spring
 
 Quand le `body` d'une requête ne peut pas être lu (valeur inconnue pour un enum, JSON mal formé...),
 l'application répond déjà 400 avec un `ProblemDetail` : c'est `ResponseEntityExceptionHandler`, dont hérite `ErrorHandler`,
@@ -277,7 +306,7 @@ qui le construit. Mais son `detail` est trop vague pour le client de l'API : `Fa
 
 Dans `ErrorHandler`, on veut un message qui indique le champ en erreur et la valeur refusée.
 
-Pour trouver la bonne exception à surcharger, lancer le test `unknown enum value` de la classe Exo10 de PetControllerTest :
+Pour trouver la bonne exception à surcharger, lancer le test `unknown enum value` de la classe Exo11 de PetControllerTest :
 il envoie un `kind` qui n'est pas dans l'enum (`PONY`) et affiche la requête et la réponse.
 Chercher dans la sortie la ligne `Resolved Exception` : elle donne le type de l'exception.
 
@@ -310,15 +339,15 @@ et `handleExceptionInternal(ex, problemDetail, headers, status, request)` constr
 
 </details>
 
-La classe de test Exo10 de PetControllerTest doit passer sans y apporter de modifications.
+La classe de test Exo11 de PetControllerTest doit passer sans y apporter de modifications.
 
 ```bash
-./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.PetControllerTest$Exo10'
+./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.PetControllerTest$Exo11'
 ```
 
 ## Configuration
 
-### Exo 11 - Banner.txt pour afficher ses `properties`
+### Exo 12 - Banner.txt pour afficher ses `properties`
 
 Au démarrage, Spring Boot affiche une bannière dans la console. Elle peut être remplacée par un fichier `banner.txt`,
 et ce fichier peut contenir des valeurs du fichier de configuration sous la forme `${nom.de.la.propriété}`.
@@ -349,7 +378,7 @@ mon application 1.0.1 main 123456
 
 (Arrêter l'application avec `Ctrl+C` ou le bouton d'arrêt de l'IDE.)
 
-### Exo 12 - Injection des `properties` avec des `@Value`
+### Exo 13 - Injection des `properties` avec des `@Value`
 
 Créer un `endpoint` GET /api/v1/info qui renvoie la réponse suivante en JSON
 
@@ -364,7 +393,7 @@ Créer un `endpoint` GET /api/v1/info qui renvoie la réponse suivante en JSON
 }
 ```
 
-Les valeurs ne sont pas écrites dans le code : elles viennent du fichier `application.yml` créé à l'exo 11.
+Les valeurs ne sont pas écrites dans le code : elles viennent du fichier `application.yml` créé à l'exo 12.
 Elles doivent être injectées avec des `@Value`.
 
 Un objet `Info` est fourni dans le package `domain` pour faciliter la sérialisation.
@@ -379,13 +408,13 @@ L'injection par le constructeur fonctionne aussi pour `@Value`.
 
 </details>
 
-La classe de test Exo12 de InfoTest doit passer sans y apporter de modifications.
+La classe de test Exo13 de InfoTest doit passer sans y apporter de modifications.
 
 ```bash
-./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.InfoTest$Exo12'
+./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.InfoTest$Exo13'
 ```
 
-### Exo 13 - ConfigurationProperties
+### Exo 14 - ConfigurationProperties
 
 Remplacer l'utilisation des `@Value` par l'approche avec un `@ConfigurationProperties`.
 
@@ -396,13 +425,13 @@ Voir les slides [« ConfigurationProperties »](https://zomzog.fr/iut-spring-kot
 
 </details>
 
-La classe de test Exo12 de InfoTest doit toujours passer sans y apporter de modifications.
+La classe de test Exo13 de InfoTest doit toujours passer sans y apporter de modifications.
 
 ```bash
-./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.InfoTest$Exo12'
+./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.InfoTest$Exo13'
 ```
 
-### Exo 14 - `profiles`
+### Exo 15 - `profiles`
 
 Un profil permet de changer la configuration selon l'environnement : le fichier `application-dev.yml` n'est lu
 que si le profil `dev` est actif, et ses valeurs remplacent celles de `application.yml`.
@@ -417,10 +446,10 @@ custom:
         commit: "654321"
 ```
 
-La classe de test Exo14 de InfoTest doit passer sans y apporter de modifications.
+La classe de test Exo15 de InfoTest doit passer sans y apporter de modifications.
 
 ```bash
-./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.InfoTest$Exo14'
+./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.InfoTest$Exo15'
 ```
 
 Pour le voir sur l'application, la lancer avec le profil `dev` :
@@ -432,39 +461,6 @@ curl localhost:8080/api/v1/info
 
 La réponse contient `"appVersion":"1.0.2-SNAPSHOT"`, mais garde `"appName":"mon application"` qui n'est pas redéfini dans le profil.
 Dans l'IDE, ajouter `--spring.profiles.active=dev` aux arguments du programme de la configuration de lancement.
-
-## Validateurs personnalisés (suite)
-
-### Exo 15 - Ajout d'un écart maximum (`maxRange`)
-
-Pour ne pas surcharger la base de données, il est souvent utile de limiter l'écart entre deux valeurs.
-
-Ajouter un paramètre `maxRange` à l'annotation @ValidAgeRange, avec `Int.MAX_VALUE` comme valeur par défaut (pas de limite).
-
-Modifier la validation de `PetSearch` pour garantir que l'écart entre l'âge minimum et l'âge maximum
-(quand les deux sont fournis) est inférieur ou égal à `maxRange`.
-
-Utiliser `@ValidAgeRange(maxRange = 100)` sur `PetSearch`.
-
-<details>
-<summary>Indice</summary>
-
-Le validateur reçoit l'annotation dans la méthode `initialize(constraintAnnotation)` de `ConstraintValidator` :
-c'est là qu'on lit `maxRange` pour le garder dans le validateur.
-
-</details>
-
-Compléter aussi `ValidAgeRangeValidatorTest` avec des cas sur `maxRange`.
-
-> **Astuce :** Kotlin permet de créer une instance d'annotation :
-> `ValidAgeRangeValidator().apply { initialize(ValidAgeRange(maxRange = 5)) }`.
-
-La classe de test Exo15 de PetControllerTest doit passer sans y apporter de modifications,
-sans casser les classes Exo5 et ValidAgeRangeValidatorTest.
-
-```bash
-./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.PetControllerTest$Exo15'
-```
 
 ## Base de données
 
@@ -620,8 +616,8 @@ elle doit continuer à passer après sans y apporter de modifications.
 
 ### Bonus 1 - Une exception qui porte sa réponse
 
-À faire dans le module `exo0`, après l'exo 9 (partie « Gestion des erreurs »).
-À l'exo 9, `ErrorHandler` gère `ImATeapotException` avec un `@ExceptionHandler`
+À faire dans le module `exo0`, après l'exo 10 (partie « Gestion des erreurs »).
+À l'exo 10, `ErrorHandler` gère `ImATeapotException` avec un `@ExceptionHandler`
 qui renvoie un `ProblemDetail` (statut 418).
 
 Plutôt que d'écrire un `@ExceptionHandler`, une exception peut porter elle-même son statut et son `ProblemDetail` :
@@ -640,23 +636,23 @@ Regarder les constructeurs de `ErrorResponseException` : l'un d'eux reçoit le `
 
 </details>
 
-La classe de test Exo9 de PetControllerTest doit toujours passer sans y apporter de modifications.
+La classe de test Exo10 de PetControllerTest doit toujours passer sans y apporter de modifications.
 
 ```bash
-./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.PetControllerTest$Exo9'
+./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.PetControllerTest$Exo10'
 ```
 
 ### Bonus 2 - Indiquer le champ en erreur
 
-À faire dans le module `exo0`, après l'exo 10 (partie « Gestion des erreurs »).
-À l'exo 10, `ErrorHandler` surcharge `handleHttpMessageNotReadable` : quand le `kind` envoyé n'est pas dans l'enum,
+À faire dans le module `exo0`, après l'exo 11 (partie « Gestion des erreurs »).
+À l'exo 11, `ErrorHandler` surcharge `handleHttpMessageNotReadable` : quand le `kind` envoyé n'est pas dans l'enum,
 le `detail` du `ProblemDetail` indique le champ et la valeur refusée (`Invalid value 'PONY' for field 'kind'`).
 
 Ajouter au `ProblemDetail` une propriété `field` qui contient le nom du champ en erreur (ici `kind`).
 
 > **Astuce :** `ProblemDetail.setProperty(nom, valeur)` ajoute une propriété à la réponse JSON.
 
-La classe de test Bonus2 de PetControllerTest doit passer sans y apporter de modifications, sans casser la classe Exo10.
+La classe de test Bonus2 de PetControllerTest doit passer sans y apporter de modifications, sans casser la classe Exo11.
 
 ```bash
 ./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.PetControllerTest$Bonus2'
@@ -664,10 +660,10 @@ La classe de test Bonus2 de PetControllerTest doit passer sans y apporter de mod
 
 ### Bonus 3 - Validateur en tant que bean
 
-À faire dans le module `exo0`, après l'exo 15 (partie « Validateurs personnalisés »).
-Aux exos 5 et 15, l'annotation `@ValidAgeRange` et son validateur `ValidAgeRangeValidator` vérifient un `PetSearch`,
+À faire dans le module `exo0`, après l'exo 13 (`@Value`, partie « Configuration »).
+Aux exos 5 et 6, l'annotation `@ValidAgeRange` et son validateur `ValidAgeRangeValidator` vérifient un `PetSearch`,
 avec un écart maximum donné par le paramètre `maxRange` de l'annotation.
-`ValidAgeRangeValidatorTest` a été écrit aux exos 6 et 15.
+`ValidAgeRangeValidatorTest` a été écrit à l'exo 7.
 
 Spring s'occupe de la création des validateurs (`ConstraintValidator`), ce qui permet d'y injecter des valeurs de Spring.
 Ici, on veut que l'écart maximum vienne du fichier de configuration plutôt que de l'annotation.
@@ -679,7 +675,7 @@ Ici, on veut que l'écart maximum vienne du fichier de configuration plutôt que
 Adapter `ValidAgeRangeValidatorTest` : le validateur reçoit maintenant sa valeur dans son constructeur.
 
 La classe de test Bonus3 de PetControllerTest doit passer sans y apporter de modifications
-(elle fixe `custom.api.pets.max-range` à 5), sans casser les classes Exo5 et Exo15.
+(elle fixe `custom.api.pets.max-range` à 5), sans casser les classes Exo5 et Exo6.
 
 ```bash
 ./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.PetControllerTest$Bonus3'
