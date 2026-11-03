@@ -43,7 +43,18 @@ class PetControllerTest {
     }
 
     @Nested
-    inner class Exo0 {
+    inner class Exo0a {
+        @Test
+        fun `invalid path id on get`() {
+            mockMvc.get("/api/v1/pets/0")
+                .andExpect {
+                    status { isBadRequest() }
+                }
+        }
+    }
+
+    @Nested
+    inner class Exo0b {
         @Test
         fun `happy path`() {
             mockMvc.post("/api/v1/pets") {
@@ -99,18 +110,77 @@ class PetControllerTest {
     }
 
     @Nested
-    inner class Exo1 {
+    inner class Exo0c {
+        @Test
+        fun `happy path with owner`() {
+            mockMvc.post("/api/v1/pets") {
+                contentType = APPLICATION_JSON
+                content = """
+                    {
+                        "name": "Kraken",
+                        "age": 2008,
+                        "kind": "OCTOPUS",
+                        "owner": {
+                            "name": "Zorglub",
+                            "email": "zorglub@example.com"
+                        }
+                    }
+                """.trimIndent()
+            }
+                .andExpect {
+                    status { isCreated() }
+                    jsonPath("$.owner.email") { value("zorglub@example.com") }
+                }
+        }
 
         @Test
-        fun `invalid path id on get`() {
-            mockMvc.get("/api/v1/pets/0")
+        fun `error case invalid owner email`() {
+            mockMvc.post("/api/v1/pets") {
+                contentType = APPLICATION_JSON
+                content = """
+                    {
+                        "name": "Kraken",
+                        "age": 2008,
+                        "kind": "OCTOPUS",
+                        "owner": {
+                            "name": "Zorglub",
+                            "email": "not-an-email"
+                        }
+                    }
+                """.trimIndent()
+            }
                 .andExpect {
                     status { isBadRequest() }
                 }
         }
 
         @Test
-        fun `invalid path id on put`() {
+        fun `error case blank owner name`() {
+            mockMvc.post("/api/v1/pets") {
+                contentType = APPLICATION_JSON
+                content = """
+                    {
+                        "name": "Kraken",
+                        "age": 2008,
+                        "kind": "OCTOPUS",
+                        "owner": {
+                            "name": "",
+                            "email": "zorglub@example.com"
+                        }
+                    }
+                """.trimIndent()
+            }
+                .andExpect {
+                    status { isBadRequest() }
+                }
+        }
+    }
+
+    @Nested
+    inner class Exo1 {
+
+        @Test
+        fun `negative path id on put`() {
             mockMvc.put("/api/v1/pets/-5") {
                 contentType = APPLICATION_JSON
                 content = """
@@ -149,12 +219,12 @@ class PetControllerTest {
         }
 
         @Test
-        fun `invalid path id`() {
+        fun `zero path id on put`() {
             mockMvc.put("/api/v1/pets/0") {
                 contentType = APPLICATION_JSON
                 content = """
                     {
-                        "id": 1,
+                        "id": 0,
                         "name": "Kraken",
                         "age": 3210,
                         "kind": "OCTOPUS"

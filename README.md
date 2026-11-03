@@ -21,32 +21,79 @@ Les tests fournis ne doivent pas être modifiés, sauf si l'énoncé le demande.
 Pour lancer un test seul depuis la ligne de commande :
 
 ```bash
-./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.PetControllerTest$Exo0'
+./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.PetControllerTest$Exo0a'
 ```
 
 > **Remarque :** un `@RestControllerAdvice` (`ErrorHandler`) est déjà fourni dans le projet.
 > Il étend `ResponseEntityExceptionHandler`, qui transforme déjà les erreurs de validation en réponse 400
 > au format `ProblemDetail` : vous n'avez rien à écrire pour gérer ces erreurs.
 
-## Exo 0 - Validation par annotation
+## Exo 0 - Validations simples
 
 Ajouter la dépendance `org.springframework.boot:spring-boot-starter-validation` dans `exo0/build.gradle.kts`
 (puis recharger le projet Gradle).
-
-À l'aide d'annotations, ajouter une validation pour que l'appel au `endpoint` POST /api/v1/pets
-retourne un code 400 si le nom est vide ou si l'âge est inférieur à 0.
 
 Les contraintes standard (package `jakarta.validation.constraints`) sont listées dans la documentation de Hibernate Validator,
 l'implémentation utilisée par Spring Boot :
 [Jakarta Validation constraints](https://docs.hibernate.org/validator/9.1/reference/en-US/html_single/#validator-defineconstraints-spec).
 
-La classe de test Exo0 de PetControllerTest doit passer sans y apporter de modifications.
+### Exo 0a - Valider un paramètre d'URL
+
+L'identifiant `petId` doit obligatoirement être un entier supérieur à 0 dans l'URL du `endpoint` GET /api/v1/pets/{petId}.
+
+À l'aide d'une annotation, ajouter cette validation : un appel avec un `petId` invalide doit retourner un code 400.
+
+La classe de test Exo0a de PetControllerTest doit passer sans y apporter de modifications.
+La classe Base, qui teste le fonctionnement de départ de GET /api/v1/pets/{petId}, doit rester verte.
+
+```bash
+./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.PetControllerTest$Exo0a'
+```
+
+### Exo 0b - Valider un `body`
+
+À l'aide d'annotations, ajouter une validation pour que l'appel au `endpoint` POST /api/v1/pets
+retourne un code 400 si le nom est vide ou si l'âge est inférieur à 0.
+
+La classe de test Exo0b de PetControllerTest doit passer sans y apporter de modifications.
+
+```bash
+./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.PetControllerTest$Exo0b'
+```
+
+### Exo 0c - Valider un objet imbriqué
+
+Un pet peut avoir un propriétaire. Créer la classe `OwnerDto` et l'ajouter à `PetDto` :
+
+```kotlin
+data class OwnerDto(val name: String, val email: String)
+
+data class PetDto(val id: Int?, val name: String, val age: Int, val kind: PetKind, val owner: OwnerDto? = null)
+```
+
+Le propriétaire est facultatif. S'il est fourni, l'appel au `endpoint` POST /api/v1/pets doit retourner un code 400
+si son nom est vide ou si son email n'est pas une adresse valide.
+
+<details>
+<summary>Indice</summary>
+
+Un objet imbriqué se valide de la même manière que le `body` de l'exo 0b.
+
+</details>
+
+La classe de test Exo0c de PetControllerTest doit passer sans y apporter de modifications, sans casser la classe Exo0b.
+
+```bash
+./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.PetControllerTest$Exo0c'
+```
 
 ## Exo 1 - Méta-annotation
 
-L'identifiant `petId` doit obligatoirement être un entier supérieur à 0 dans l'URL des `endpoints` GET /api/v1/pets/{petId} et PUT /api/v1/pets/{petId}.
+Le `endpoint` PUT /api/v1/pets/{petId} doit appliquer la même règle que le GET de l'exo 0a :
+`petId` est un entier supérieur à 0.
 
-Créer une méta-annotation `@PetId` pour que les appels GET et PUT partagent la même règle de validation de `petId` dans l'URL.
+Plutôt que de recopier la contrainte, créer une méta-annotation `@PetId` qui porte la règle, et l'utiliser
+sur `petId` dans les `endpoints` GET et PUT.
 Même si ce n'est qu'une seule contrainte, la centraliser permet de n'avoir qu'un endroit à modifier si la règle change.
 En plus, `@PetId` dit ce que représente le paramètre, là où `@Min(1)` dit seulement comment on le vérifie.
 
@@ -57,8 +104,7 @@ Voir la slide [« Meta annotation »](https://zomzog.fr/iut-spring-kotlin/c2/#/1
 
 </details>
 
-La classe de test Exo1 de PetControllerTest doit passer sans y apporter de modifications.
-La classe Base, qui teste le fonctionnement de départ de GET /api/v1/pets/{petId}, doit rester verte.
+La classe de test Exo1 de PetControllerTest doit passer sans y apporter de modifications, sans casser la classe Exo0a.
 
 ```bash
 ./gradlew :exo0:test --tests 'iut.nantes.exo0.controller.PetControllerTest$Exo1'

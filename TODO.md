@@ -15,8 +15,8 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
 
 | Exo | Ancien | Module | Sujet | Test de vérification | Socle |
 |---|---|---|---|---|---|
-| 0 | 21 | exo0 | annotations de validation | `PetControllerTest.Exo0` | socle |
-| 1 | 22 | exo0 | méta-annotation sur `petId` | `Base` + `Exo1` | socle |
+| 0 | 21 | exo0 | validations simples : 0a chemin, 0b body, 0c objet imbriqué | `Base` + `Exo0a`, `Exo0b`, `Exo0c` | socle |
+| 1 | 22 | exo0 | méta-annotation sur `petId` | `Exo0a` + `Exo1` | socle |
 | 2 | 23 | exo0 | request params dans un objet | `Exo2` | ⭐ bonus `[décidé]` |
 | 3 | 24 | exo0 | `@ValidAgeRange` | `Exo2` + `Exo3` | socle, **à réécrire / couper en 2** `[décidé]` |
 | 4 | 25 | exo0 | `@ExceptionHandler` → 418 | `Exo4` | socle |
@@ -81,6 +81,18 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
   est `C2-64`).
 - [ ] **G-08** · **CI** — reporté, voir `T2-39`.
 - [ ] **G-09** · **Ordre et socle / bonus** — à repenser une fois le TD écrit, voir `T2-38`.
+- [x] **G-10** · **Liens vers les slides du cours** — chaque slide citée dans le README pointe vers
+  `https://zomzog.fr/iut-spring-kotlin/c2/#/n`, avec le titre gardé dans le texte du lien.
+  **FAIT (2026-11-03) :** exos 1 (11), 3 (10, 12), 15 (63), 16 (64), 17 (65), 18 (66, 65), 19 (69), Bonus 1 (52).
+  Numéros calculés depuis `slides/c2.md` de `main` du dépôt `iut-spring-kotlin` (la branche `2026-C3` n'inclut
+  pas `jpa2.md` / `jpa3.md`), pas vérifiés sur le site. Liens vers les slides de l'amphi (`jpa2.md`), pas vers
+  celles de référence (`jpa3.md`, 73-84), qui donnent les solutions. **À refaire** si des slides sont ajoutées
+  ou retirées du deck c2. **Reste (à voir à l'exo 15) :** `jpa2.md` / `jpa3.md` passent en tête de c3 (branche
+  `2026-C3`, 2026-11-03) ; une fois déployé, les liens des exos 15-19 deviennent `c3/#/12` (15), `#/13` (16),
+  `#/14` (17, 18), `#/15` (18), `#/18` (19). Ceux des exos 1, 3 et Bonus 1 ne bougent pas.
+- [ ] **G-11** · **Réduire les indices** — exo 0 fait (E0-5), exo 1 fait (E1-4), 3b en partie (E3-7). Autres
+  candidats repérés : pseudo-code du 3b, indice de l'exo 4 (`ProblemDetail.forStatus`), bloc « Solution » +
+  indice de l'exo 5, indice de l'exo 8 (structure de `CustomProperties`), noms des méthodes du Bonus 1.
 
 ## Module `exo0` — validation, erreurs, configuration
 
@@ -109,6 +121,18 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
   **FAIT (2026-11-01) :** sur `main`, `Exo0` a 2 tests rouges (âge et nom invalides) et 1 vert (cas valide).
   Avec la solution (annotations + `@Valid`) dans une copie hors dépôt, les 3 tests sont verts, sans modifier
   le test. La solution n'est pas dans `main` : elle ira dans le commit `Exo0` de `correction`.
+- [x] **E0-5** · **Exo 0 = validations simples, coupé en 0a / 0b / 0c** `[décidé]` — 0a : `@Min(1)` sur `petId`
+  du GET ; 0b : la validation de body existante (`@NotBlank`, `@Min(0)`, `@Valid`) ; 0c : `OwnerDto` imbriqué
+  dans `PetDto` (cascade `@Valid`). Le 3b n'est pas remonté : il demande un `ConstraintValidator`, vu à l'exo 3.
+  **FAIT (2026-11-03) :** README : section « Exo 0 - Validations simples » (dépendance + lien vers la liste des
+  contraintes de Hibernate Validator, qui remplace l'indice `@NotBlank` / `@Min` / `@Valid`), puis 0a, 0b, 0c.
+  0c donne le code de `OwnerDto` et de `PetDto` (`owner: OwnerDto? = null`, pour que les tests qui construisent
+  `PetDto` compilent toujours) ; indice : « un objet imbriqué se valide de la même manière que le `body` de
+  l'exo 0b » (le lien vers « Object graphs » de Hibernate Validator donnait trop la réponse).
+  Tests : `Exo0` renommé `Exo0b` ; `Exo0a` reprend `invalid path id on get` d'`Exo1` ; `Exo0c` nouveau (owner
+  valide → 201, email invalide → 400, nom vide → 400). Vérifié par spike : tout est rouge au départ ; sans
+  `@Valid` sur `owner`, les deux cas d'erreur d'`Exo0c` sont rouges (201) ; avec la solution, `Base`, `Exo0a`,
+  `Exo0b`, `Exo0c` et `Exo1` sont verts. **Reste :** couper le commit `Exo0` de `correction` en 0a / 0b / 0c (G-04).
 
 ### Exo 1 — méta-annotation sur `petId` (ancien 22)
 
@@ -125,6 +149,14 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
   **FAIT (2026-11-01) :** le test `Base > error case` (GET `/pets/0` → 400) dépendait de l'exo 1 : déplacé dans
   `Exo1` (`invalid path id on get`). `Base` ne garde que le cas nominal et est vert au départ ; l'énoncé ne cite
   plus que `Exo1` (+ « `Base` doit rester verte »), avec la commande Gradle de l'exo.
+- [x] **E1-4** · **Expliquer pourquoi une méta-annotation pour une seule contrainte** `[décidé]` (grill du 2026-11-03).
+  **FAIT (2026-11-03) :** l'énoncé part du GET de l'exo 0a et demande d'appliquer la même règle au PUT sans recopier
+  la contrainte ; nom `@PetId` imposé dans l'énoncé ; deux phrases sur le pourquoi (un seul endroit à modifier si
+  la règle change ; `@PetId` dit ce que représente le paramètre, `@Min(1)` seulement comment on le vérifie).
+  L'indice ne garde que le lien vers la slide « Meta annotation ». Tests `Exo1` : `happy path` + deux PUT invalides,
+  `zero path id on put` (`/pets/0`, body `"id": 0`) et `negative path id on put` (`/pets/-5`, body `"id": -5`).
+  Les ids du body et du chemin sont égaux pour que le test ne dépende pas de la comparaison faite par le controller.
+  `invalid path id on get` est passé dans `Exo0a`.
 
 ### Exo 2 — request params dans un objet (ancien 23) ⭐
 
@@ -186,6 +218,9 @@ Fichier de travail (à supprimer avant publication). On traite les étapes **une
   body invalide).
   **FAIT (2026-11-01) :** ancien `Exo3` (GET avec query params) remplacé par `Exo3` (2 tests : nom capitalisé /
   minuscule) et `Exo3b` (6 tests : sans bornes, max seul, min = max, min > max, min < 0, max < 0).
+- [x] **E3-7** · Titre du 3b : « Validation globale d'un `body` » laissait croire à une validation classique.
+  **FAIT (2026-11-03) :** renommé « Exo 3b - Validateur personnalisé sur une classe », en miroir de l'exo 3
+  (« … sur un champ ») ; ligne « comme pour l'exo 0, `@Valid` » retirée de l'indice (c'est dans le cours).
 
 ### Exo 4 — gestion d'exception personnalisée (ancien 25)
 
