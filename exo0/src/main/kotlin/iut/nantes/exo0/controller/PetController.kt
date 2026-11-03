@@ -50,7 +50,7 @@ class PetController(val database : MutableMap<Int, PetDto> = mutableMapOf()){
     }
 
     @PostMapping("/api/v1/pets/search")
-    fun searchPets(@RequestBody search: PetSearch): ResponseEntity<List<PetDto>> {
+    fun searchPets(@RequestBody @Valid search: PetSearch): ResponseEntity<List<PetDto>> {
         return ResponseEntity.ok(filterByAge(search.minAge, search.maxAge))
     }
 
