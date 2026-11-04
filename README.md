@@ -14,7 +14,7 @@ systemProp.https.proxyPort=3128
 
 Importer le projet dans votre IDE en utilisant gradle.
 
-Les modifications sont à faire dans le module `exo0` (exos 0 à 15), puis dans le module `exo16` (exos 16 à 18).
+Les modifications sont à faire dans le module `exo0` (exos 0 à 15), puis dans le module `exo16` (exos 16 à 19).
 Les bonus, optionnels, sont regroupés à la fin : chacun indique son module et l'exo après lequel le faire.
 
 Les tests fournis ne doivent pas être modifiés, sauf si l'énoncé le demande.
@@ -464,7 +464,7 @@ Dans l'IDE, ajouter `--spring.profiles.active=dev` aux arguments du programme de
 
 ## Base de données
 
-Les exos 16 à 18 se font dans le module `exo16`.
+Les exos 16 à 19 se font dans le module `exo16`.
 
 ### Exo 16 - Base de données H2 en mémoire
 
@@ -579,6 +579,23 @@ La classe de test Exo18 de HumanControllerTest doit passer sans y apporter de mo
 
 ```bash
 ./gradlew :exo16:test --tests 'iut.nantes.exo16.controller.HumanControllerTest$Exo18'
+```
+
+### Exo 19 - Filtrer par nom
+
+Le `endpoint` GET /api/v1/humans renvoie tous les humains. On veut pouvoir les filtrer par nom :
+GET /api/v1/humans?name=Joe ne renvoie que les humains qui s'appellent `Joe`.
+
+Le paramètre de requête `name` est optionnel : s'il est absent, le `endpoint` renvoie la liste complète, comme avant.
+
+Pour chercher par nom, pas besoin d'écrire de requête : ajouter dans `HumanRepository` une méthode dont le nom
+décrit la recherche, Spring Data génère la requête à partir de ce nom.
+Voir la slide [« Jpa Repository Custom Query »](https://zomzog.fr/iut-spring-kotlin/c2/#/52).
+
+La classe de test Exo19 de HumanControllerTest doit passer sans y apporter de modifications, sans casser la classe Exo18.
+
+```bash
+./gradlew :exo16:test --tests 'iut.nantes.exo16.controller.HumanControllerTest$Exo19'
 ```
 
 ## Bonus

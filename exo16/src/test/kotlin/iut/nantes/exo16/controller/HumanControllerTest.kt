@@ -1,7 +1,10 @@
 package iut.nantes.exo16.controller
 
 import com.jayway.jsonpath.JsonPath
+import org.hamcrest.Matchers.everyItem
 import org.hamcrest.Matchers.hasItem
+import org.hamcrest.Matchers.hasItems
+import org.hamcrest.Matchers.`is`
 import org.junit.jupiter.api.Nested
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -71,6 +74,41 @@ class HumanControllerTest {
         fun `unknown human`() {
             mockMvc.get("/api/v1/humans/999999").andExpect {
                 status { isNotFound() }
+            }
+        }
+    }
+
+    @Nested
+    inner class Exo19 {
+        @Test
+        fun `filter by name`() {
+            createHuman("Lucky")
+            createHuman("Rantanplan")
+
+            mockMvc.get("/api/v1/humans?name=Lucky").andExpect {
+                status { isOk() }
+                content { contentType("application/json") }
+                jsonPath("$") { isNotEmpty() }
+                jsonPath("$[*].name") { value(everyItem(`is`("Lucky"))) }
+            }
+        }
+
+        @Test
+        fun `no filter returns every human`() {
+            createHuman("Lucky")
+            createHuman("Rantanplan")
+
+            mockMvc.get("/api/v1/humans").andExpect {
+                status { isOk() }
+                jsonPath("$[*].name") { value(hasItems("Lucky", "Rantanplan")) }
+            }
+        }
+
+        @Test
+        fun `unknown name returns an empty list`() {
+            mockMvc.get("/api/v1/humans?name=Nobody").andExpect {
+                status { isOk() }
+                jsonPath("$") { isEmpty() }
             }
         }
     }
