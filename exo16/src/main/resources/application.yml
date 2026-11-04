@@ -1,6 +1,7 @@
 spring:
   application.name: exo16
   jpa:
+    show-sql: true
     hibernate:
       ddl-auto: create
   datasource:

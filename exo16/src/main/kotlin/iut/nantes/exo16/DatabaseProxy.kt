@@ -32,4 +32,8 @@ class DatabaseProxy(private val humanRepository: HumanRepository) {
         val humans = if (name != null) humanRepository.findAllByName(name) else humanRepository.findAll()
         return humans.map { it.toDto() }
     }
+
+    fun deleteHumansByName(name: String) {
+        humanRepository.deleteAllByName(name)
+    }
 }

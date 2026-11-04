@@ -44,4 +44,10 @@ class HumanController(val db: DatabaseProxy){
         val result = db.findAllHumans(name)
         return ResponseEntity.ok(result)
     }
+
+    @DeleteMapping("/api/v1/humans")
+    fun deleteHumans(@RequestParam name: String): ResponseEntity<Unit> {
+        db.deleteHumansByName(name)
+        return ResponseEntity.noContent().build()
+    }
 }
