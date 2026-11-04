@@ -28,6 +28,8 @@ class DatabaseProxy(private val humanRepository: HumanRepository) {
     fun findHumanById(id: Int): HumanDto? =
         humanRepository.findByIdOrNull(id)?.toDto()
 
-    fun findAllHumans(): List<HumanDto> =
-        humanRepository.findAll().map { it.toDto() }
+    fun findAllHumans(name: String? = null): List<HumanDto> {
+        val humans = if (name != null) humanRepository.findAllByName(name) else humanRepository.findAll()
+        return humans.map { it.toDto() }
+    }
 }
