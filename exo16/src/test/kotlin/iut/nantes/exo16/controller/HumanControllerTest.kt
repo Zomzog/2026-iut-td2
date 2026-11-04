@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 import kotlin.test.Test
@@ -109,6 +110,34 @@ class HumanControllerTest {
             mockMvc.get("/api/v1/humans?name=Nobody").andExpect {
                 status { isOk() }
                 jsonPath("$") { isEmpty() }
+            }
+        }
+    }
+
+    @Nested
+    inner class Exo20 {
+        @Test
+        fun `delete by name`() {
+            createHuman("Dalton")
+            createHuman("Dalton")
+            createHuman("Lucky")
+
+            mockMvc.delete("/api/v1/humans?name=Dalton").andExpect {
+                status { isNoContent() }
+            }
+
+            mockMvc.get("/api/v1/humans?name=Dalton").andExpect {
+                jsonPath("$") { isEmpty() }
+            }
+            mockMvc.get("/api/v1/humans?name=Lucky").andExpect {
+                jsonPath("$") { isNotEmpty() }
+            }
+        }
+
+        @Test
+        fun `name is required`() {
+            mockMvc.delete("/api/v1/humans").andExpect {
+                status { isBadRequest() }
             }
         }
     }

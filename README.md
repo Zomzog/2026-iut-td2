@@ -14,7 +14,7 @@ systemProp.https.proxyPort=3128
 
 Importer le projet dans votre IDE en utilisant gradle.
 
-Les modifications sont à faire dans le module `exo0` (exos 0 à 15), puis dans le module `exo16` (exos 16 à 19).
+Les modifications sont à faire dans le module `exo0` (exos 0 à 15), puis dans le module `exo16` (exos 16 à 20).
 Les bonus, optionnels, sont regroupés à la fin : chacun indique son module et l'exo après lequel le faire.
 
 Les tests fournis ne doivent pas être modifiés, sauf si l'énoncé le demande.
@@ -464,7 +464,7 @@ Dans l'IDE, ajouter `--spring.profiles.active=dev` aux arguments du programme de
 
 ## Base de données
 
-Les exos 16 à 19 se font dans le module `exo16`.
+Les exos 16 à 20 se font dans le module `exo16`.
 
 ### Exo 16 - Base de données H2 en mémoire
 
@@ -596,6 +596,43 @@ La classe de test Exo19 de HumanControllerTest doit passer sans y apporter de mo
 
 ```bash
 ./gradlew :exo16:test --tests 'iut.nantes.exo16.controller.HumanControllerTest$Exo19'
+```
+
+### Exo 20 - Supprimer par nom sans tout charger
+
+Créer un `endpoint` DELETE /api/v1/humans?name=Joe qui supprime tous les humains qui s'appellent `Joe`
+et répond `204 No Content`. Ici le paramètre `name` est obligatoire : un DELETE sans nom ne doit pas vider la table.
+
+Pour voir les requêtes SQL envoyées à la base, ajouter dans `application.yml` (sous `spring.jpa`) :
+
+```yaml
+spring:
+  jpa:
+    show-sql: true
+```
+
+> **Remarque :** une requête qui modifie la base (comme un DELETE) doit s'exécuter dans une transaction :
+> ajouter `@Transactional` (package `org.springframework.transaction.annotation`) sur la méthode du repository.
+> Les transactions seront vues au cours 3.
+
+**Étape 1.** Comme à l'exo 19, ajouter dans `HumanRepository` une méthode `deleteAllByName`
+dont Spring Data génère la requête à partir du nom, et l'utiliser dans le `endpoint`.
+
+Créer deux humains `Joe`, puis appeler le DELETE, et regarder les requêtes dans la console :
+Spring Data commence par un `select` pour charger les humains en mémoire,
+puis envoie un `delete ... where id=?` **par humain**.
+Avec des milliers de lignes, c'est autant de requêtes et d'objets chargés pour rien.
+
+**Étape 2.** Pour supprimer en une seule requête, écrire la requête soi-même avec `@Query`,
+comme sur la slide [« Jpa Custom Query »](https://zomzog.fr/iut-spring-kotlin/c2/#/53), mais avec un `DELETE` en JPQL.
+Une requête `@Query` qui modifie la base doit aussi porter l'annotation `@Modifying`.
+
+Relancer le même scénario : la console ne montre plus qu'un seul `delete ... where name=?`.
+
+La classe de test Exo20 de HumanControllerTest doit passer sans y apporter de modifications, sans casser la classe Exo19.
+
+```bash
+./gradlew :exo16:test --tests 'iut.nantes.exo16.controller.HumanControllerTest$Exo20'
 ```
 
 ## Bonus
