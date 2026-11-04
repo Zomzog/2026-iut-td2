@@ -1,0 +1,5 @@
+spring:
+  application.name: exo16
+  jpa:
+    hibernate:
+      ddl-auto: create
